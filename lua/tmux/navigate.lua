@@ -1,5 +1,5 @@
 local vim = vim
-local tmux = require("tmux")
+local tmux = require("tmux.wrapper")
 
 local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
@@ -18,7 +18,7 @@ local function is_border(border)
 end
 
 local M = {}
-M.navigate = function(direction)
+M.to = function(direction)
 	if is_border(direction) then
 		tmux.change_pane(direction)
 	else

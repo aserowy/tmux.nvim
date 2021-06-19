@@ -1,5 +1,5 @@
 local vim = vim
-local tmux = require("tmux")
+local tmux = require("tmux.wrapper")
 
 local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
@@ -18,7 +18,7 @@ local function is_tmux_target(border)
 end
 
 local M = {}
-M.resize = function(direction)
+M.to = function(direction)
 	local current = winnr()
 	if direction == "h" then
 		local is_border = current == winnr("1l")

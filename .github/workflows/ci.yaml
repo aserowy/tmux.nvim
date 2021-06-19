@@ -1,0 +1,19 @@
+name: ci
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Lint Code Base
+        uses: github/super-linter@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

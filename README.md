@@ -1,7 +1,6 @@
 # tmux.nvim
 
-![GitHub Super-Linter](https://github.com/aserowy/tmux.nvim/workflows/ci/badge.svg)
-
+[![fmt & lints](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml/badge.svg)](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml)
 
 ## contribute
 

@@ -6,14 +6,20 @@ on:
 
 jobs:
   build:
-    name: linting
+    name: checks
     runs-on: ubuntu-latest
 
     steps:
       - name: checkout
         uses: actions/checkout@v2
 
-      - name: lint lua
+      - name: fmt
+        uses: JohnnyMorganz/stylua-action@1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --check .
+
+      - name: lint
         uses: github/super-linter@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

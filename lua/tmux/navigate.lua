@@ -15,7 +15,7 @@ local function has_tmux_target(border)
 		return false
 	end
 
-	if wrapper.is_zoomed() and cfg.options.navigation.persistend_zoom then
+	if wrapper.is_zoomed() and cfg.options.navigation.persist_zoom then
 		return false
 	end
 

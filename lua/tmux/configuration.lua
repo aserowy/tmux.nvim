@@ -6,7 +6,7 @@ local defaults = {
 		cycle_navigation = true,
 
 		-- prevents unzoom tmux when navigating beyond vim border
-		persistend_zoom = false,
+		persist_zoom = false,
 	},
 }
 

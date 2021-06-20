@@ -1,5 +1,5 @@
 local vim = vim
-local tmux = require("tmux.wrapper")
+local wrapper = require("tmux.wrapper")
 
 local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
@@ -14,15 +14,14 @@ local function is_only_window()
 end
 
 local function is_tmux_target(border)
-	return tmux.is_tmux and tmux.has_neighbor(border) or is_only_window()
+	return wrapper.is_tmux and wrapper.has_neighbor(border) or is_only_window()
 end
 
 local M = {}
 function M.to_left()
-	local current = winnr()
-	local is_border = current == winnr("1l")
+	local is_border = winnr() == winnr("1l")
 	if is_border and is_tmux_target("l") then
-		tmux.resize("h")
+		wrapper.resize("h")
 	elseif is_border then
 		wincmd(">")
 	else
@@ -31,11 +30,10 @@ function M.to_left()
 end
 
 function M.to_bottom()
-	local current = winnr()
-	local is_border = current == winnr("1j")
+	local is_border = winnr() == winnr("1j")
 	if is_border and is_tmux_target("j") then
-		tmux.resize("j")
-	elseif is_border and current ~= winnr("1k") then
+		wrapper.resize("j")
+	elseif is_border and winnr() ~= winnr("1k") then
 		wincmd("-")
 	else
 		wincmd("+")
@@ -43,10 +41,9 @@ function M.to_bottom()
 end
 
 function M.to_top()
-	local current = winnr()
-	local is_border = current == winnr("1j")
+	local is_border = winnr() == winnr("1j")
 	if is_border and is_tmux_target("j") then
-		tmux.resize("k")
+		wrapper.resize("k")
 	elseif is_border then
 		wincmd("+")
 	else
@@ -55,10 +52,9 @@ function M.to_top()
 end
 
 function M.to_right()
-	local current = winnr()
-	local is_border = current == winnr("1l")
+	local is_border = winnr() == winnr("1l")
 	if is_border and is_tmux_target("l") then
-		tmux.resize("l")
+		wrapper.resize("l")
 	elseif is_border then
 		wincmd("<")
 	else

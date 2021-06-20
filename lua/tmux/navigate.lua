@@ -1,5 +1,6 @@
 local vim = vim
-local tmux = require("tmux.wrapper")
+local cfg = require("tmux.configuration")
+local wrapper = require("tmux.wrapper")
 
 local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
@@ -9,17 +10,29 @@ local function wincmd(direction)
 	return vim.api.nvim_command("wincmd " .. direction)
 end
 
-local function is_tmux_target(border)
-	return tmux.is_tmux and tmux.has_neighbor(border)
+local function has_tmux_target(border)
+	if not wrapper.is_tmux then
+		return false
+	end
+
+	if wrapper.is_zoomed() and cfg.options.navigation.persistend_zoom then
+		return false
+	end
+
+	if cfg.options.navigation.cycle_navigation then
+		return true
+	end
+
+	return wrapper.has_neighbor(border)
 end
 
 local function is_border(border)
-	return winnr() == winnr("1" .. border) and is_tmux_target(border)
+	return winnr() == winnr("1" .. border) and has_tmux_target(border)
 end
 
 local function navigate_to(direction)
 	if is_border(direction) then
-		tmux.change_pane(direction)
+		wrapper.change_pane(direction)
 	else
 		wincmd(direction)
 	end

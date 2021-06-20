@@ -1,9 +1,9 @@
 local navigate = require("tmux.navigate")
-local options = require("tmux.options")
+local cfg = require("tmux.configuration")
 local resize = require("tmux.resize")
 
 local M = {
-	setup = options.setup,
+	setup = cfg.setup,
 
 	move_left = navigate.to_left,
 	move_bottom = navigate.to_bottom,

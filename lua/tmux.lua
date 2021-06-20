@@ -1,41 +1,18 @@
 local navigate = require("tmux.navigate")
 local resize = require("tmux.resize")
 
-local M = {}
+local M = {
+    move_left = navigate.to_left,
+    move_bottom = navigate.to_bottom,
+    move_top = navigate.to_top,
+    move_right = navigate.to_right,
+    resize_left = resize.to_left,
+    resize_bottom = resize.to_bottom,
+    resize_top = resize.to_top,
+    resize_right = resize.to_right,
+}
+
 M.setup = function(options)
-	print(options)
-end
-
-M.move_left = function()
-	navigate.to("h")
-end
-
-M.move_down = function()
-	navigate.to("j")
-end
-
-M.move_top = function()
-	navigate.to("k")
-end
-
-M.move_right = function()
-	navigate.to("l")
-end
-
-M.resize_left = function()
-	resize.to("h")
-end
-
-M.resize_down = function()
-	resize.to("j")
-end
-
-M.resize_top = function()
-	resize.to("k")
-end
-
-M.resize_right = function()
-	resize.to("l")
 end
 
 return M

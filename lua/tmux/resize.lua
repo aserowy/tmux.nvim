@@ -17,8 +17,7 @@ local function is_tmux_target(border)
 	return tmux.is_tmux and tmux.has_neighbor(border) or is_only_window()
 end
 
-local M = {}
-M.to = function(direction)
+local function resize_to(direction)
 	local current = winnr()
 	if direction == "h" then
 		local is_border = current == winnr("1l")
@@ -57,6 +56,24 @@ M.to = function(direction)
 			wincmd(">")
 		end
 	end
+end
+
+
+local M = {}
+M.to_left = function()
+	resize_to("h")
+end
+
+M.to_bottom = function()
+	resize_to("j")
+end
+
+M.to_top = function()
+	resize_to("k")
+end
+
+M.to_right = function()
+	resize_to("l")
 end
 
 return M

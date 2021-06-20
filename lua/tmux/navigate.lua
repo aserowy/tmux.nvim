@@ -17,13 +17,29 @@ local function is_border(border)
 	return winnr() == winnr("1" .. border) and is_tmux_target(border)
 end
 
-local M = {}
-M.to = function(direction)
+local function navigate_to(direction)
 	if is_border(direction) then
 		tmux.change_pane(direction)
 	else
 		wincmd(direction)
 	end
+end
+
+local M = {}
+M.to_left = function()
+	navigate_to("h")
+end
+
+M.to_bottom = function()
+	navigate_to("j")
+end
+
+M.to_top = function()
+	navigate_to("k")
+end
+
+M.to_right = function()
+	navigate_to("l")
 end
 
 return M

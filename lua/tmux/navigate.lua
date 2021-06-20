@@ -26,19 +26,19 @@ local function navigate_to(direction)
 end
 
 local M = {}
-M.to_left = function()
+function M.to_left()
 	navigate_to("h")
 end
 
-M.to_bottom = function()
+function M.to_bottom()
 	navigate_to("j")
 end
 
-M.to_top = function()
+function M.to_top()
 	navigate_to("k")
 end
 
-M.to_right = function()
+function M.to_right()
 	navigate_to("l")
 end
 

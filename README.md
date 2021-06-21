@@ -18,22 +18,22 @@ Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.n
 
 ```lua
 use({
-    "aserowy/tmux.nvim"
-    config = function()
+        "aserowy/tmux.nvim"
+        config = function()
         require("tmux").setup({
-            -- overwrite default configuration
-            -- here, e.g. to enable default bindings
-            navigation = {
+                -- overwrite default configuration
+                -- here, e.g. to enable default bindings
+                navigation = {
                 -- enables default keybindings (C-hjkl) for normal mode
                 enable_default_keybindings = true,
-            },
-            resize = {
+                },
+                resize = {
                 -- enables default keybindings (A-hjkl) for normal mode
                 enable_default_keybindings = true,
-            }
+                }
+                })
+        end
         })
-    end
-})
 ```
 
 ## configuration
@@ -44,28 +44,30 @@ The following defaults are given:
 {
     navigation = {
         -- cycles to opposite pane while navigating into the border
-        cycle_navigation = true,
+            cycle_navigation = true,
 
         -- enables default keybindings (C-hjkl) for normal mode
-        enable_default_keybindings = false,
+            enable_default_keybindings = false,
 
         -- prevents unzoom tmux when navigating beyond vim border
-        persist_zoom = false,
+            persist_zoom = false,
     },
-    resize = {
-        -- enables default keybindings (A-hjkl) for normal mode
-        enable_default_keybindings = false,
-    }
+               resize = {
+                   -- enables default keybindings (A-hjkl) for normal mode
+                       enable_default_keybindings = false,
+               }
 }
 ```
 
 ## usage
 
-Tmux.nvim uses only `lua` api. If you are not running the default keybindings you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
+Tmux.nvim uses only `lua` api. If you are not running the default keybindings, you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
 
 ### navigation
 
 To enable cycle-free navigation beyond nvim, add the following to your `~/.tmux.conf`:
+
+> It is important to note, that your bindings in nvim must match the defined bindings in tmux! Otherwise the pass through will not have the seamless effect!
 
 ```tmux
 is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
@@ -118,6 +120,19 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 ```
 
 ### resize
+
+Add the following bindings to your `~/.tmux.conf`:
+
+> It is important to note, that your bindings in nvim must match the defined bindings in tmux! Otherwise the pass through will not have the seamless effect!
+
+```tmux
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+
+bind -n 'M-h' if-shell "$is_vim" 'send-keys M-h' 'resize-pane -L 1'
+bind -n 'M-j' if-shell "$is_vim" 'send-keys M-j' 'resize-pane -D 1'
+bind -n 'M-k' if-shell "$is_vim" 'send-keys M-k' 'resize-pane -U 1'
+bind -n 'M-l' if-shell "$is_vim" 'send-keys M-l' 'resize-pane -R 1'
+```
 
 To run custom bindings in nvim, make sure to not set `enable_default_keybindings` to `true`. The following functions are used to resize windows:
 

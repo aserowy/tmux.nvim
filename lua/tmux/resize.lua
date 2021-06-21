@@ -1,4 +1,6 @@
 local vim = vim
+local cfg = require("tmux.configuration")
+local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
 local function winnr(direction)
@@ -18,6 +20,17 @@ local function is_tmux_target(border)
 end
 
 local M = {}
+function M.setup()
+	if cfg.options.resize.enable_default_keybindings then
+		keymaps.register("n", {
+			["<A-h>"] = [[<cmd>lua require'tmux'.resize_left()<cr>]],
+			["<A-j>"] = [[<cmd>lua require'tmux'.resize_bottom()<cr>]],
+			["<A-k>"] = [[<cmd>lua require'tmux'.resize_top()<cr>]],
+			["<A-l>"] = [[<cmd>lua require'tmux'.resize_right()<cr>]],
+		})
+	end
+end
+
 function M.to_left()
 	local is_border = winnr() == winnr("1l")
 	if is_border and is_tmux_target("l") then

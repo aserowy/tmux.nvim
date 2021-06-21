@@ -3,8 +3,6 @@ local cfg = require("tmux.configuration")
 local resize = require("tmux.resize")
 
 local M = {
-	setup = cfg.setup,
-
 	move_left = navigate.to_left,
 	move_bottom = navigate.to_bottom,
 	move_top = navigate.to_top,
@@ -15,5 +13,12 @@ local M = {
 	resize_top = resize.to_top,
 	resize_right = resize.to_right,
 }
+
+function M.setup(options)
+	cfg.setup(options)
+
+	navigate.setup()
+	resize.setup()
+end
 
 return M

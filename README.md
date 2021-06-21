@@ -22,7 +22,15 @@ use({
     config = function()
         require("tmux").setup({
             -- overwrite default configuration
-            -- here
+            -- here, e.g. to enable default bindings
+            navigation = {
+                -- enables default keybindings (C-hjkl) for normal mode
+                enable_default_keybindings = true,
+            },
+            resize = {
+                -- enables default keybindings (A-hjkl) for normal mode
+                enable_default_keybindings = true,
+            }
         })
     end
 })
@@ -38,13 +46,21 @@ The following defaults are given:
         -- cycles to opposite pane while navigating into the border
         cycle_navigation = true,
 
+        -- enables default keybindings (C-hjkl) for normal mode
+        enable_default_keybindings = false,
+
         -- prevents unzoom tmux when navigating beyond vim border
         persist_zoom = false,
     },
+    resize = {
+        -- enables default keybindings (A-hjkl) for normal mode
+        enable_default_keybindings = false,
+    }
 }
 ```
 
 ## usage
+
 
 ## contribute
 

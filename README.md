@@ -17,28 +17,32 @@
 
 - neovim > 0.5
 
+The plugin and `.tmux.conf` scripts are battle tested with
+
+- tmux 3.0a
+
 ## installation
 
 Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.nvim). The config step is only necessary to overwrite configuration defaults.
 
 ```lua
 use({
-        "aserowy/tmux.nvim"
-        config = function()
+    "aserowy/tmux.nvim"
+    config = function()
         require("tmux").setup({
-                -- overwrite default configuration
-                -- here, e.g. to enable default bindings
-                navigation = {
+            -- overwrite default configuration
+            -- here, e.g. to enable default bindings
+            navigation = {
                 -- enables default keybindings (C-hjkl) for normal mode
                 enable_default_keybindings = true,
-                },
-                resize = {
+            },
+            resize = {
                 -- enables default keybindings (A-hjkl) for normal mode
                 enable_default_keybindings = true,
-                }
-                })
-        end
+            }
         })
+    end
+})
 ```
 
 ## configuration
@@ -49,18 +53,18 @@ The following defaults are given:
 {
     navigation = {
         -- cycles to opposite pane while navigating into the border
-            cycle_navigation = true,
+        cycle_navigation = true,
 
         -- enables default keybindings (C-hjkl) for normal mode
-            enable_default_keybindings = false,
+        enable_default_keybindings = false,
 
         -- prevents unzoom tmux when navigating beyond vim border
-            persist_zoom = false,
+        persist_zoom = false,
     },
-               resize = {
-                   -- enables default keybindings (A-hjkl) for normal mode
-                       enable_default_keybindings = false,
-               }
+    resize = {
+        -- enables default keybindings (A-hjkl) for normal mode
+        enable_default_keybindings = false,
+    }
 }
 ```
 

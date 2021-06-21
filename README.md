@@ -34,13 +34,13 @@ The following defaults are given:
 
 ```lua
 {
-	navigation = {
-		-- cycles to opposite pane while navigating into the border
-		cycle_navigation = true,
+    navigation = {
+        -- cycles to opposite pane while navigating into the border
+        cycle_navigation = true,
 
-		-- prevents unzoom tmux when navigating beyond vim border
-		persist_zoom = false,
-	},
+        -- prevents unzoom tmux when navigating beyond vim border
+        persist_zoom = false,
+    },
 }
 ```
 

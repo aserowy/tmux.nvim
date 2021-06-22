@@ -169,5 +169,6 @@ stylua lua/ && luacheck lua/
 
 ## inspiration
 
-- [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)
+- [better-vim-tmux-resizer](https://github.com/RyanMillerC/better-vim-tmux-resizer)
 - [Navigator.nvim](https://github.com/numToStr/Navigator.nvim)
+- [vim-tmux-navigator](https://github.com/christoomey/vim-tmux-navigator)

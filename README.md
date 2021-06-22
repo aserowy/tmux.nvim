@@ -141,6 +141,11 @@ bind -n 'M-h' if-shell "$is_vim" 'send-keys M-h' 'resize-pane -L 1'
 bind -n 'M-j' if-shell "$is_vim" 'send-keys M-j' 'resize-pane -D 1'
 bind -n 'M-k' if-shell "$is_vim" 'send-keys M-k' 'resize-pane -U 1'
 bind -n 'M-l' if-shell "$is_vim" 'send-keys M-l' 'resize-pane -R 1'
+
+bind-key -T copy-mode-vi M-h resize-pane -L 1
+bind-key -T copy-mode-vi M-j resize-pane -D 1
+bind-key -T copy-mode-vi M-k resize-pane -U 1
+bind-key -T copy-mode-vi M-l resize-pane -R 1
 ```
 
 To run custom bindings in nvim, make sure to not set `enable_default_keybindings` to `true`. The following functions are used to resize windows:

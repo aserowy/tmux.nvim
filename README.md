@@ -106,7 +106,6 @@ bind-key -T copy-mode-vi 'C-h' select-pane -L
 bind-key -T copy-mode-vi 'C-j' select-pane -D
 bind-key -T copy-mode-vi 'C-k' select-pane -U
 bind-key -T copy-mode-vi 'C-l' select-pane -R
-bind-key -T copy-mode-vi 'C-\' select-pane -l
 ```
 
 If you are using [tmux plugin manager](https://github.com/tmux-plugins/tpm), you can add the following plugin. On a side note: This plugin sets the default keybindings and does not support cycle-free navigation:

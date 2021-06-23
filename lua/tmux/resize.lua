@@ -7,12 +7,17 @@ local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
 end
 
-local function wincmd(direction)
-	return vim.api.nvim_command("wincmd " .. direction)
+local function resize(axis, direction, step_size)
+    local command = "resize "
+    if axis == "x" then
+        command = "vertical resize "
+    end
+
+	return vim.api.nvim_command(command .. direction .. step_size)
 end
 
 local function is_only_window()
-	return (winnr("1h") == winnr("1l")) == (winnr("1j") == winnr("1k"))
+	return (winnr("1h") == winnr("1l")) and (winnr("1j") == winnr("1k"))
 end
 
 local function is_tmux_target(border)
@@ -36,9 +41,9 @@ function M.to_left()
 	if is_border and is_tmux_target("l") then
 		wrapper.resize("h")
 	elseif is_border then
-		wincmd(">")
+		resize("x", "+", cfg.options.resize.resize_step_x)
 	else
-		wincmd("<")
+		resize("x", "-", cfg.options.resize.resize_step_x)
 	end
 end
 
@@ -47,9 +52,9 @@ function M.to_bottom()
 	if is_border and is_tmux_target("j") then
 		wrapper.resize("j")
 	elseif is_border and winnr() ~= winnr("1k") then
-		wincmd("-")
+		resize("y", "-", cfg.options.resize.resize_step_y)
 	else
-		wincmd("+")
+		resize("y", "+", cfg.options.resize.resize_step_y)
 	end
 end
 
@@ -58,9 +63,9 @@ function M.to_top()
 	if is_border and is_tmux_target("j") then
 		wrapper.resize("k")
 	elseif is_border then
-		wincmd("+")
+		resize("y", "+", cfg.options.resize.resize_step_y)
 	else
-		wincmd("-")
+		resize("y", "-", cfg.options.resize.resize_step_y)
 	end
 end
 
@@ -69,9 +74,9 @@ function M.to_right()
 	if is_border and is_tmux_target("l") then
 		wrapper.resize("l")
 	elseif is_border then
-		wincmd("<")
+		resize("x", "-", cfg.options.resize.resize_step_x)
 	else
-		wincmd(">")
+		resize("x", "+", cfg.options.resize.resize_step_x)
 	end
 end
 

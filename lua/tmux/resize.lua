@@ -8,10 +8,10 @@ local function winnr(direction)
 end
 
 local function resize(axis, direction, step_size)
-    local command = "resize "
-    if axis == "x" then
-        command = "vertical resize "
-    end
+	local command = "resize "
+	if axis == "x" then
+		command = "vertical resize "
+	end
 
 	return vim.api.nvim_command(command .. direction .. step_size)
 end

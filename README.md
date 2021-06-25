@@ -27,7 +27,7 @@ Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.n
 
 ```lua
 use({
-    "aserowy/tmux.nvim"
+    "aserowy/tmux.nvim",
     config = function()
         require("tmux").setup({
             -- overwrite default configuration

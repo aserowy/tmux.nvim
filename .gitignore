@@ -1,3 +1,6 @@
+# nix-shell targets
+.cargo
+
 # Compiled Lua sources
 luac.out
 

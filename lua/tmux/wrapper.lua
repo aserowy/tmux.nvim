@@ -24,7 +24,7 @@ end
 local function execute(arg)
 	local command = string.format("tmux -S %s %s", get_socket(), arg)
 	local handle = assert(io.popen(command), string.format("unable to execute: [%s]", command))
-	local result = handle:read("l")
+	local result = handle:read("*a")
 
 	handle:close()
 
@@ -35,21 +35,36 @@ local M = {
 	is_tmux = TMUX ~= nil,
 }
 
-M.change_pane = function(direction)
+function M.change_pane(direction)
 	execute(string.format("select-pane -t '%s' -%s", TMUX_PANE, tmux_directions[direction]))
 end
 
-M.has_neighbor = function(direction)
+function M.get_buffer(name)
+	return execute(string.format("show-buffer -b %s", name))
+end
+
+function M.get_buffer_names()
+	local buffers = execute([[ list-buffers -F "#{buffer_name}" ]])
+
+	local result = {}
+	for line in buffers:gmatch("([^\n]*)\n?") do
+		table.insert(result, line)
+	end
+
+	return result
+end
+
+function M.has_neighbor(direction)
 	local command = string.format("display-message -p '#{pane_at_%s}'", tmux_borders[direction])
 
-	return execute(command) ~= "1"
+	return not execute(command):find("1")
 end
 
-M.is_zoomed = function()
-	return execute("display-message -p '#{window_zoomed_flag}'") == "1"
+function M.is_zoomed()
+	return execute("display-message -p '#{window_zoomed_flag}'"):find("1")
 end
 
-M.resize = function(direction)
+function M.resize(direction)
 	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
 end
 

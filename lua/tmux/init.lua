@@ -1,5 +1,6 @@
-local navigate = require("tmux.navigate")
 local cfg = require("tmux.configuration")
+local copy = require("tmux.copy")
+local navigate = require("tmux.navigate")
 local resize = require("tmux.resize")
 
 local M = {
@@ -17,6 +18,7 @@ local M = {
 function M.setup(options)
 	cfg.setup(options)
 
+	copy.setup()
 	navigate.setup()
 	resize.setup()
 end

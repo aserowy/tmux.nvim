@@ -13,7 +13,7 @@ end
 
 local function sync_registers(passed_key)
 	for k, v in ipairs(wrapper.get_buffer_names()) do
-		if k == 11 then
+		if k >= 11 then
 			return rtc(passed_key)
 		end
 		sync_register(k - 1, v)
@@ -32,7 +32,7 @@ function M.setup()
 	}, { expr = true, noremap = true })
 
 	keymaps.register("i", {
-		["C-r"] = [[v:lua.tmux.yank("C-r")]],
+		["<C-r>"] = [[v:lua.tmux.yank("<C-r>")]],
 	}, { expr = true, noremap = true })
 
 	_G.tmux = {

@@ -40,7 +40,11 @@ local function has_tmux_target(border)
 		return false
 	end
 
-	return wrapper.has_neighbor(border)
+	if wrapper.has_neighbor(border) then
+		return true
+	else
+		return cfg.options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
+	end
 end
 
 local function is_nvim_border(border)

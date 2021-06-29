@@ -21,8 +21,7 @@ end
 local function maybe_change_window(direction, count)
 	local prev_winnr = winnr()
 	wincmd(direction, count)
-	local is_window_changed = winnr() ~= prev_winnr
-	return is_window_changed
+	return winnr() ~= prev_winnr
 end
 
 local function change_window_with_cycle(direction)
@@ -42,9 +41,8 @@ local function has_tmux_target(border)
 
 	if wrapper.has_neighbor(border) then
 		return true
-	else
-		return cfg.options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
 	end
+	return cfg.options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
 end
 
 local function is_nvim_border(border)

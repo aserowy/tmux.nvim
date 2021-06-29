@@ -18,15 +18,16 @@ local function wincmd(direction, count)
 	return vim.api.nvim_command(count .. "wincmd " .. direction)
 end
 
-local function wincmd_next(direction, count)
+local function maybe_change_window(direction, count)
 	local prev_winnr = winnr()
 	wincmd(direction, count)
-	return winnr() ~= prev_winnr
+	local is_window_changed = winnr() ~= prev_winnr
+	return is_window_changed
 end
 
-local function wincmd_with_wrap(direction)
-	if not wincmd_next(direction, 1) then
-		wincmd_next(opposite_directions[direction], 999)
+local function change_window_with_wrap(direction)
+	if not maybe_change_window(direction, 1) then
+		wincmd(opposite_directions[direction], 999)
 	end
 end
 
@@ -50,7 +51,7 @@ local function navigate_to(direction)
 	if is_nvim_border(direction) and has_tmux_target(direction) then
 		wrapper.change_pane(direction)
 	elseif is_nvim_border(direction) and cfg.options.navigation.cycle_navigation then
-		wincmd_with_wrap(direction)
+		change_window_with_wrap(direction)
 	else
 		wincmd(direction, 1)
 	end

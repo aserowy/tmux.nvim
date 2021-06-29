@@ -25,7 +25,7 @@ local function maybe_change_window(direction, count)
 	return is_window_changed
 end
 
-local function change_window_with_wrap(direction)
+local function change_window_with_cycle(direction)
 	if not maybe_change_window(direction, 1) then
 		wincmd(opposite_directions[direction], 999)
 	end
@@ -55,7 +55,7 @@ local function navigate_to(direction)
 	if is_nvim_border(direction) and has_tmux_target(direction) then
 		wrapper.change_pane(direction)
 	elseif is_nvim_border(direction) and cfg.options.navigation.cycle_navigation then
-		change_window_with_wrap(direction)
+		change_window_with_cycle(direction)
 	else
 		wincmd(direction, 1)
 	end

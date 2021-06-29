@@ -3,8 +3,6 @@ local cfg = require("tmux.configuration")
 local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
-local WINNR_MAX = 999
-
 local opposite_directions = {
 	h = 'l',
 	j = 'k',
@@ -28,7 +26,7 @@ end
 
 local function wincmd_with_wrap(direction)
 	if not wincmd_next(direction, 1) then
-		wincmd_next(opposite_directions[direction], WINNR_MAX)
+		wincmd_next(opposite_directions[direction], 999)
 	end
 end
 
@@ -41,22 +39,20 @@ local function has_tmux_target(border)
 		return false
 	end
 
-	if cfg.options.navigation.cycle_navigation then
-		return true
-	end
-
 	return wrapper.has_neighbor(border)
 end
 
-local function is_border(border)
-	return winnr() == winnr("1" .. border) and has_tmux_target(border)
+local function is_nvim_border(border)
+	return winnr() == winnr("1" .. border)
 end
 
 local function navigate_to(direction)
-	if is_border(direction) then
+	if is_nvim_border(direction) and has_tmux_target(direction) then
 		wrapper.change_pane(direction)
-	else
+	elseif is_nvim_border(direction) and cfg.options.navigation.cycle_navigation then
 		wincmd_with_wrap(direction)
+	else
+		wincmd(direction, 1)
 	end
 end
 

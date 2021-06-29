@@ -68,4 +68,11 @@ function M.resize(direction)
 	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
 end
 
+function M.set_buffer(content)
+    if content:find("^--") ~= nil then
+        content = " " .. content
+    end
+	execute(string.format('set-buffer %q', content))
+end
+
 return M

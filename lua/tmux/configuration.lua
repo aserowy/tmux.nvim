@@ -1,6 +1,11 @@
 local vim = vim
 
 local defaults = {
+	copy_sync = {
+		enable = false,
+		register_offset = 0,
+		sync_deletes = false,
+	},
 	navigation = {
 		-- cycles to opposite pane while navigating into the border
 		cycle_navigation = true,

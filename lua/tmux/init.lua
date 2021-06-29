@@ -9,6 +9,8 @@ local M = {
 	move_top = navigate.to_top,
 	move_right = navigate.to_right,
 
+	post_yank = copy.post_yank,
+
 	resize_left = resize.to_left,
 	resize_bottom = resize.to_bottom,
 	resize_top = resize.to_top,

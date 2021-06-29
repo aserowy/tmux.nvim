@@ -1,4 +1,3 @@
--- aucmd TextYankPost check if 0 then set-buffer
 local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
@@ -27,6 +26,18 @@ function M.setup()
 		return
 	end
 
+	vim.cmd([[
+        if !exists("tmux_autocommands_loaded")
+            let tmux_autocommands_loaded = 1
+            let PostYank = luaeval('require("tmux").post_yank')
+            autocmd TextYankPost * call PostYank(v:event)
+        endif
+    ]])
+
+	_G.tmux = {
+		yank = sync_registers,
+	}
+
 	keymaps.register("n", {
 		['"'] = [[v:lua.tmux.yank('"')]],
 	}, { expr = true, noremap = true })
@@ -34,10 +45,6 @@ function M.setup()
 	keymaps.register("i", {
 		["<C-r>"] = [[v:lua.tmux.yank("<C-r>")]],
 	}, { expr = true, noremap = true })
-
-	_G.tmux = {
-		yank = sync_registers,
-	}
 
 	vim.g.clipboard = {
 		name = "myClipboard",
@@ -51,6 +58,31 @@ function M.setup()
 		},
 	}
 	-- \   'cache_enabled': 1,
+end
+
+function M.post_yank(content)
+	--[[ {
+    ^I['visual'] = true,
+    ^I['inclusive'] = true,
+    ^I['regtype'] = 'V',
+    ^I['regcontents'] = {
+    ^I^I[1] = '^Ivim.cmd([[ ',
+    ^I^I[2] = '        if !exists("tmux_autocommands_loaded")',
+    ^I^I[3] = '            let tmux_autocommands_loaded = 1'
+    ^I},
+    ^I['regname'] = '',
+    ^I['operator'] = 'y'
+    } ]]
+	local copied = ""
+	for index, value in ipairs(content.regcontents) do
+		if index > 1 then
+			copied = copied .. "\n"
+		end
+
+		copied = copied .. value
+	end
+
+	wrapper.set_buffer(copied)
 end
 
 return M

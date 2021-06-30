@@ -47,7 +47,7 @@ function M.get_buffer_names()
 	local buffers = execute([[ list-buffers -F "#{buffer_name}" ]])
 
 	local result = {}
-	for line in buffers:gmatch("([^\n]*)\n?") do
+	for line in buffers:gmatch("([^\n]+)\n?") do
 		table.insert(result, line)
 	end
 

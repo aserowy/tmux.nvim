@@ -78,7 +78,8 @@ function M.setup()
 end
 
 function M.post_yank(content)
-	--[[ if not cfg.copy_sync.sync_deletes or content.regtype then
+	print(content.operator)
+	--[[ if not cfg.copy_sync.sync_deletes or content.operator then
        return
     end ]]
 

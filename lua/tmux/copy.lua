@@ -23,6 +23,7 @@ end
 
 local M = {}
 function M.setup()
+	-- if not wrapper.is_tmux or not cfg.options.copy_sync.enable then
 	if not wrapper.is_tmux then
 		return
 	end
@@ -64,7 +65,7 @@ function M.setup()
 	})
 
 	vim.g.clipboard = {
-		name = "myClipboard",
+		name = "tmuxclipboard",
 		copy = {
 			["+"] = "tmux load-buffer -",
 			["*"] = "tmux load-buffer -",
@@ -78,10 +79,9 @@ function M.setup()
 end
 
 function M.post_yank(content)
-	print(content.operator)
-	--[[ if not cfg.copy_sync.sync_deletes or content.operator then
-       return
-    end ]]
+	if content.operator ~= "y" and not cfg.options.copy_sync.sync_deletes then
+		return
+	end
 
 	local copied = ""
 	for index, value in ipairs(content.regcontents) do

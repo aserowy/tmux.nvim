@@ -23,8 +23,7 @@ end
 
 local M = {}
 function M.setup()
-	-- if not wrapper.is_tmux or not cfg.options.copy_sync.enable then
-	if not wrapper.is_tmux then
+	if not wrapper.is_tmux or not cfg.options.copy_sync.enable then
 		return
 	end
 

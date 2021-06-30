@@ -1,3 +1,4 @@
+local cfg = require("tmux.configuration")
 local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
@@ -35,16 +36,32 @@ function M.setup()
     ]])
 
 	_G.tmux = {
-		yank = sync_registers,
+		sync_registers = sync_registers,
 	}
 
 	keymaps.register("n", {
-		['"'] = [[v:lua.tmux.yank('"')]],
-	}, { expr = true, noremap = true })
+		['"'] = [[v:lua.tmux.sync_registers('"')]],
+		["p"] = [[v:lua.tmux.sync_registers('p')]],
+		["P"] = [[v:lua.tmux.sync_registers('P')]],
+	}, {
+		expr = true,
+		noremap = true,
+	})
 
+	-- double C-r to prevent injection: https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
 	keymaps.register("i", {
-		["<C-r>"] = [[v:lua.tmux.yank("<C-r>")]],
-	}, { expr = true, noremap = true })
+		["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+	}, {
+		expr = true,
+		noremap = true,
+	})
+
+	keymaps.register("c", {
+		["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+	}, {
+		expr = true,
+		noremap = true,
+	})
 
 	vim.g.clipboard = {
 		name = "myClipboard",
@@ -61,18 +78,10 @@ function M.setup()
 end
 
 function M.post_yank(content)
-	--[[ {
-    ^I['visual'] = true,
-    ^I['inclusive'] = true,
-    ^I['regtype'] = 'V',
-    ^I['regcontents'] = {
-    ^I^I[1] = '^Ivim.cmd([[ ',
-    ^I^I[2] = '        if !exists("tmux_autocommands_loaded")',
-    ^I^I[3] = '            let tmux_autocommands_loaded = 1'
-    ^I},
-    ^I['regname'] = '',
-    ^I['operator'] = 'y'
-    } ]]
+	--[[ if not cfg.copy_sync.sync_deletes or content.regtype then
+       return
+    end ]]
+
 	local copied = ""
 	for index, value in ipairs(content.regcontents) do
 		if index > 1 then

@@ -69,10 +69,11 @@ function M.resize(direction)
 end
 
 function M.set_buffer(content)
-    if content:find("^--") ~= nil then
-        content = " " .. content
-    end
-	execute(string.format('set-buffer %q', content))
+	if content:sub(0, 2) == "--" then
+		content = " " .. content
+	end
+	content = content:gsub('"', '\\"')
+	execute(string.format('set-buffer "%s"', content))
 end
 
 return M

@@ -3,6 +3,7 @@ local vim = vim
 local defaults = {
 	copy_sync = {
 		enable = false,
+		redirect_to_clipboard = false,
 		register_offset = 0,
 		sync_deletes = false,
 	},

@@ -15,17 +15,17 @@ local function winnr(direction)
 end
 
 local function wincmd(direction, count)
-	return vim.api.nvim_command(count .. "wincmd " .. direction)
+	return vim.api.nvim_command((count or 1) .. "wincmd " .. direction)
 end
 
-local function maybe_change_window(direction, count)
+local function maybe_change_window(direction)
 	local prev_winnr = winnr()
-	wincmd(direction, count)
+	wincmd(direction)
 	return winnr() ~= prev_winnr
 end
 
 local function change_window_with_cycle(direction)
-	if not maybe_change_window(direction, 1) then
+	if not maybe_change_window(direction) then
 		wincmd(opposite_directions[direction], 999)
 	end
 end
@@ -55,7 +55,7 @@ local function navigate_to(direction)
 	elseif is_nvim_border(direction) and cfg.options.navigation.cycle_navigation then
 		change_window_with_cycle(direction)
 	else
-		wincmd(direction, 1)
+		wincmd(direction)
 	end
 end
 

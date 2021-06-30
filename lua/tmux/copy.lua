@@ -12,11 +12,12 @@ local function sync_register(index, buffer_name)
 end
 
 local function sync_registers(passed_key)
+    local offset = cfg.options.copy_sync.register_offset
 	for k, v in ipairs(wrapper.get_buffer_names()) do
-		if k >= 11 then
+		if k >= 11 - offset then
 			return rtc(passed_key)
 		end
-		sync_register(k - 1, v)
+		sync_register(k - 1 + offset, v)
 	end
 	return rtc(passed_key)
 end

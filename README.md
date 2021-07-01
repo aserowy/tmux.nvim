@@ -35,7 +35,7 @@ use({
             copy_sync = {
                 -- enables copy sync and overwrites all register actions to
                 -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
-                enable = false,
+                enable = true,
             },
             navigation = {
                 -- enables default keybindings (C-hjkl) for normal mode
@@ -107,8 +107,7 @@ Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0`
 
 This has some downsites, on really slow machines, calling registers or pasting can produce minimal input lag by syncing registers in advance to ensure the correctness of state.
 
-bug -- at start tmux add space before
-bug - - at start tmux add ?? before
+bug - at start tmux add space before
 
 ### navigation
 

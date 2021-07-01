@@ -123,7 +123,7 @@ function M.post_yank(content)
 
 	log.debug(copied)
 
-	wrapper.set_buffer(copied)
+	wrapper.set_buffer(copied, cfg.options.copy_sync.redirect_to_clipboard)
 end
 
 return M

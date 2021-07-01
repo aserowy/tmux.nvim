@@ -23,9 +23,9 @@ end
 
 local function execute(arg)
 	local command = string.format("tmux -S %s %s", get_socket(), arg)
+
 	local handle = assert(io.popen(command), string.format("unable to execute: [%s]", command))
 	local result = handle:read("*a")
-
 	handle:close()
 
 	return result
@@ -68,12 +68,17 @@ function M.resize(direction)
 	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
 end
 
-function M.set_buffer(content)
-	if content:sub(0, 2) == "--" then
+function M.set_buffer(content, sync_clipboard)
+	if content:sub(0, 1) == "-" then
 		content = " " .. content
 	end
 	content = content:gsub('"', '\\"')
-	execute(string.format('set-buffer "%s"', content))
+
+	if sync_clipboard ~= nil and sync_clipboard then
+		execute(string.format('set-buffer -w "%s"', content))
+	else
+		execute(string.format('set-buffer "%s"', content))
+	end
 end
 
 return M

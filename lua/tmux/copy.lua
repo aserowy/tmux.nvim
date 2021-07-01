@@ -19,6 +19,8 @@ local function sync_unnamed_register(buffer_name)
 end
 
 local function sync_registers(passed_key)
+	log.debug(string.format("sync_registers: %s", passed_key))
+
 	local offset = cfg.options.copy_sync.register_offset
 	local first_buffer_name = ""
 	for k, v in ipairs(wrapper.get_buffer_names()) do
@@ -26,16 +28,22 @@ local function sync_registers(passed_key)
 			first_buffer_name = v
 		end
 		if k >= 11 - offset then
-			sync_unnamed_register(first_buffer_name)
-			return rtc(passed_key)
+			break
 		end
 		sync_register(tostring(k - 1 + offset), v)
 	end
+
 	sync_unnamed_register(first_buffer_name)
-	return rtc(passed_key)
+
+	if passed_key ~= nil and passed_key ~= "" then
+		return rtc(passed_key)
+	end
 end
 
-local M = {}
+local M = {
+	sync_registers = sync_registers,
+}
+
 function M.setup()
 	if not wrapper.is_tmux or not cfg.options.copy_sync.enable then
 		return
@@ -45,7 +53,10 @@ function M.setup()
         if !exists("tmux_autocommands_loaded")
             let tmux_autocommands_loaded = 1
             let PostYank = luaeval('require("tmux").post_yank')
+            let SyncRegisters = luaeval('require("tmux").sync_registers')
             autocmd TextYankPost * call PostYank(v:event)
+            autocmd CmdlineEnter * call SyncRegisters()
+            autocmd CmdwinEnter : call SyncRegisters()
         endif
     ]])
 

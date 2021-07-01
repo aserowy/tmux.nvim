@@ -17,7 +17,7 @@ end
 
 local M = {}
 function M.debug(message)
-	if cfg.options.debug then
+	if cfg.options.logging then
 		write("debug", message)
 	end
 end

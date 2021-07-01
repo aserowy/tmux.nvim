@@ -10,6 +10,7 @@ local M = {
 	move_right = navigate.to_right,
 
 	post_yank = copy.post_yank,
+	sync_registers = copy.sync_registers,
 
 	resize_left = resize.to_left,
 	resize_bottom = resize.to_bottom,

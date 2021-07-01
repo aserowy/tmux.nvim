@@ -32,6 +32,11 @@ use({
         require("tmux").setup({
             -- overwrite default configuration
             -- here, e.g. to enable default bindings
+            copy_sync = {
+                -- enables copy sync and overwrites all register actions to
+                -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+                enable = false,
+            },
             navigation = {
                 -- enables default keybindings (C-hjkl) for normal mode
                 enable_default_keybindings = true,
@@ -51,6 +56,24 @@ The following defaults are given:
 
 ```lua
 {
+	copy_sync = {
+		-- enables copy sync and overwrites all register actions to
+		-- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+		enable = false,
+
+		-- yanks (and deletes) will get redirected to system clipboard
+		-- by tmux
+		redirect_to_clipboard = false,
+
+		-- offset controls where register sync starts
+		-- e.g. offset 2 lets registers 0 and 1 untouched
+		register_offset = 0,
+
+		-- syncs deletes with tmux clipboard as well, it is adviced to
+		-- do so. Nvim does not allow syncing registers 0 and 1 without
+		-- overwriting the unnamed register. Thus, ddp would not be possible.
+		sync_deletes = true,
+	},
     navigation = {
         -- cycles to opposite pane while navigating into the border
         cycle_navigation = true,
@@ -77,6 +100,15 @@ The following defaults are given:
 ## usage
 
 Tmux.nvim uses only `lua` api. If you are not running the default keybindings, you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
+
+### copy sync
+
+Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instace, switch to the second and p your deletes.
+
+This has some downsites, on really slow machines, calling registers or pasting can produce minimal input lag by syncing registers in advance to ensure the correctness of state.
+
+bug -- at start tmux add space before
+bug - - at start tmux add ?? before
 
 ### navigation
 

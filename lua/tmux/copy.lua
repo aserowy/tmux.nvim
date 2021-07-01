@@ -13,9 +13,9 @@ local function sync_register(index, buffer_name)
 end
 
 local function sync_unnamed_register(buffer_name)
-    if buffer_name ~= nil and buffer_name ~= "" then
-        sync_register("@", buffer_name)
-    end
+	if buffer_name ~= nil and buffer_name ~= "" then
+		sync_register("@", buffer_name)
+	end
 end
 
 local function sync_registers(passed_key)
@@ -26,12 +26,12 @@ local function sync_registers(passed_key)
 			first_buffer_name = v
 		end
 		if k >= 11 - offset then
-            sync_unnamed_register(first_buffer_name)
+			sync_unnamed_register(first_buffer_name)
 			return rtc(passed_key)
 		end
 		sync_register(tostring(k - 1 + offset), v)
 	end
-    sync_unnamed_register(first_buffer_name)
+	sync_unnamed_register(first_buffer_name)
 	return rtc(passed_key)
 end
 

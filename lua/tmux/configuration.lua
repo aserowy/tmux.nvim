@@ -5,7 +5,7 @@ local defaults = {
 	debug = false,
 	copy_sync = {
 		-- enables copy sync and overwrites all register actions to
-		-- sync registers *, +, and 0 till 9 from tmux in advance
+		-- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
 		enable = false,
 
 		-- yanks (and deletes) will get redirected to system clipboard
@@ -16,7 +16,9 @@ local defaults = {
 		-- e.g. offset 2 lets registers 0 and 1 untouched
 		register_offset = 0,
 
-		-- syncs deletes with tmux clipboard as well
+		-- syncs deletes with tmux clipboard as well, it is adived to
+		-- do so. Nvim does not allow syncing registers 0 and 1 without
+		-- overwriting the unnamed register. Thus, ddp would not be possible.
 		sync_deletes = true,
 	},
 	navigation = {

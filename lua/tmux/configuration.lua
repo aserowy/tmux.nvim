@@ -1,7 +1,7 @@
 local vim = vim
 
 local defaults = {
-	logging = true,
+	logging = false,
 
 	copy_sync = {
 		-- enables copy sync and overwrites all register actions to

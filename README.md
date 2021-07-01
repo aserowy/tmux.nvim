@@ -61,8 +61,8 @@ The following defaults are given:
 		-- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
 		enable = false,
 
-		-- yanks (and deletes) will get redirected to system clipboard
-		-- by tmux
+		-- TMUX >= 3.2: yanks (and deletes) will get redirected to system
+		-- clipboard by tmux
 		redirect_to_clipboard = false,
 
 		-- offset controls where register sync starts
@@ -105,7 +105,9 @@ Tmux.nvim uses only `lua` api. If you are not running the default keybindings, y
 
 Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instace, switch to the second and p your deletes.
 
-This has some downsites, on really slow machines, calling registers or pasting can produce minimal input lag by syncing registers in advance to ensure the correctness of state.
+This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state.
+
+To redirect copies (and deletes) to clipboard, tmux must have the capability to do so. The plugin will just set -w on set-buffer. If your tmux need more configuration check out [tmux-yank](https://github.com/tmux-plugins/tmux-yank) for an easy setup.
 
 bug - at start tmux add space before
 

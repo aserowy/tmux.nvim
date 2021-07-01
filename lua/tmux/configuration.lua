@@ -8,8 +8,8 @@ local defaults = {
 		-- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
 		enable = false,
 
-		-- yanks (and deletes) will get redirected to system clipboard
-		-- by tmux
+		-- TMUX >= 3.2: yanks (and deletes) will get redirected to system
+		-- clipboard by tmux
 		redirect_to_clipboard = false,
 
 		-- offset controls where register sync starts

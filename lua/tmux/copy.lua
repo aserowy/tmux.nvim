@@ -1,5 +1,6 @@
 local cfg = require("tmux.configuration")
 local keymaps = require("tmux.keymaps")
+local log = require("tmux.log")
 local wrapper = require("tmux.wrapper")
 
 local function rtc(str)
@@ -80,6 +81,8 @@ function M.setup()
 end
 
 function M.post_yank(content)
+	log.debug(content)
+
 	if content.operator ~= "y" and not cfg.options.copy_sync.sync_deletes then
 		return
 	end
@@ -92,6 +95,8 @@ function M.post_yank(content)
 
 		copied = copied .. value
 	end
+
+	log.debug(copied)
 
 	wrapper.set_buffer(copied)
 end

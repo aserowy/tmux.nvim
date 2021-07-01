@@ -1,6 +1,7 @@
 local vim = vim
 
 local defaults = {
+    debug = false,
 	copy_sync = {
 		enable = false,
 		redirect_to_clipboard = false,

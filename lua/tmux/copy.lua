@@ -49,7 +49,8 @@ function M.setup()
 		noremap = true,
 	})
 
-	-- double C-r to prevent injection: https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
+	-- double C-r to prevent injection: 
+    -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
 	keymaps.register("i", {
 		["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
 	}, {

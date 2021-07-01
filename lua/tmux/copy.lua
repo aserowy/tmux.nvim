@@ -9,17 +9,29 @@ end
 
 local function sync_register(index, buffer_name)
 	local content = wrapper.get_buffer(buffer_name)
-	vim.fn.setreg(tostring(index), content)
+	vim.fn.setreg(index, content)
+end
+
+local function sync_unnamed_register(buffer_name)
+    if buffer_name ~= nil and buffer_name ~= "" then
+        sync_register("@", buffer_name)
+    end
 end
 
 local function sync_registers(passed_key)
 	local offset = cfg.options.copy_sync.register_offset
+	local first_buffer_name = ""
 	for k, v in ipairs(wrapper.get_buffer_names()) do
+		if k == 1 then
+			first_buffer_name = v
+		end
 		if k >= 11 - offset then
+            sync_unnamed_register(first_buffer_name)
 			return rtc(passed_key)
 		end
-		sync_register(k - 1 + offset, v)
+		sync_register(tostring(k - 1 + offset), v)
 	end
+    sync_unnamed_register(first_buffer_name)
 	return rtc(passed_key)
 end
 
@@ -77,7 +89,6 @@ function M.setup()
 			["*"] = "tmux save-buffer -",
 		},
 	}
-	-- \   'cache_enabled': 1,
 end
 
 function M.post_yank(content)
@@ -92,13 +103,12 @@ function M.post_yank(content)
 		if index > 1 then
 			copied = copied .. "\n"
 		end
-
 		copied = copied .. value
 	end
 
-    if content.regtype == "V" then
-        copied = copied .. "\n"
-    end
+	if content.regtype == "V" then
+		copied = copied .. "\n"
+	end
 
 	log.debug(copied)
 

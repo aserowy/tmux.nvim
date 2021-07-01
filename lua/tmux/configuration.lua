@@ -17,7 +17,7 @@ local defaults = {
 		register_offset = 0,
 
 		-- syncs deletes with tmux clipboard as well
-		sync_deletes = false,
+		sync_deletes = true,
 	},
 	navigation = {
 		-- cycles to opposite pane while navigating into the border

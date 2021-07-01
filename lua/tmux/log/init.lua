@@ -10,8 +10,8 @@ local function write(severity, message)
 	os.execute("mkdir -p " .. log_dir)
 
 	local logs = io.open(log_dir .. "tmuxnvim.log", "a")
-	logs:write(severity)
-	logs:write(convert(message))
+	logs:write(os.date("%c") .. "\t" .. severity .. "\n")
+	logs:write(convert(message) .. "\n")
 	io.close(logs)
 end
 

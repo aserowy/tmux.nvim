@@ -96,6 +96,10 @@ function M.post_yank(content)
 		copied = copied .. value
 	end
 
+    if content.regtype == "V" then
+        copied = copied .. "\n"
+    end
+
 	log.debug(copied)
 
 	wrapper.set_buffer(copied)

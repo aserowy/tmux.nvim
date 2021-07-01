@@ -12,7 +12,7 @@ local function sync_register(index, buffer_name)
 end
 
 local function sync_registers(passed_key)
-    local offset = cfg.options.copy_sync.register_offset
+	local offset = cfg.options.copy_sync.register_offset
 	for k, v in ipairs(wrapper.get_buffer_names()) do
 		if k >= 11 - offset then
 			return rtc(passed_key)
@@ -49,8 +49,8 @@ function M.setup()
 		noremap = true,
 	})
 
-	-- double C-r to prevent injection: 
-    -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
+	-- double C-r to prevent injection:
+	-- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
 	keymaps.register("i", {
 		["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
 	}, {

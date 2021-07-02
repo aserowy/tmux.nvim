@@ -21,8 +21,7 @@ end
 local function wincmd_with_cycle(direction)
 	local prev_winnr = winnr()
 	wincmd(direction)
-	local did_window_move = winnr() ~= prev_winnr
-	if not did_window_move then
+	if winnr() == prev_winnr then
 		wincmd(opposite_directions[direction], 999)
 	end
 end

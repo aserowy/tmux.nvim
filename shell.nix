@@ -4,6 +4,7 @@ mkShell rec {
   buildInputs = [
     cargo
     lua51Packages.luacheck
+    pkgs.nodePackages.prettier
   ];
   shellHook = ''
     cargo install --root $PWD/.cargo stylua
@@ -11,6 +12,6 @@ mkShell rec {
     PATH=$PWD/.cargo/bin:$PATH
 
     # format and check -> fac :)
-    alias fac="stylua lua/ && luacheck lua/"
+    alias fac="prettier --write README.md && stylua lua/ && luacheck lua/"
   '';
 }

@@ -5,6 +5,10 @@
 
 ## features
 
+### copy from nvim to nvim to tmux
+
+<https://user-images.githubusercontent.com/8199164/124225235-5f984200-db07-11eb-9cff-ab73be12b4b1.mp4>
+
 ### navigating from nvim into tmux panes
 
 <https://user-images.githubusercontent.com/8199164/122721161-a026ce80-d270-11eb-9a27-2beff9910e69.mp4>

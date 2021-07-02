@@ -69,6 +69,7 @@ function M.resize(direction)
 end
 
 function M.set_buffer(content, sync_clipboard)
+    -- FIX: https://github.com/tmux/tmux/issues/2764
 	if content:sub(0, 1) == "-" then
 		content = " " .. content
 	end

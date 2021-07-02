@@ -14,15 +14,19 @@ local function winnr(direction)
 	return vim.api.nvim_call_function("winnr", { direction })
 end
 
+local function is_nvim_border(border)
+	return winnr() == winnr("1" .. border)
+end
+
 local function wincmd(direction, count)
 	return vim.api.nvim_command((count or 1) .. "wincmd " .. direction)
 end
 
 local function wincmd_with_cycle(direction)
-	local prev_winnr = winnr()
-	wincmd(direction)
-	if winnr() == prev_winnr then
+	if is_nvim_border(direction) then
 		wincmd(opposite_directions[direction], 999)
+	else
+		wincmd(direction)
 	end
 end
 
@@ -39,10 +43,6 @@ local function has_tmux_target(border)
 		return true
 	end
 	return cfg.options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
-end
-
-local function is_nvim_border(border)
-	return winnr() == winnr("1" .. border)
 end
 
 local function navigate_to(direction)

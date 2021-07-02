@@ -19,7 +19,7 @@
 
 The plugin and `.tmux.conf` scripts are battle tested with
 
-- tmux 3.0a
+- tmux 3.2a
 
 ## installation
 
@@ -32,6 +32,11 @@ use({
         require("tmux").setup({
             -- overwrite default configuration
             -- here, e.g. to enable default bindings
+            copy_sync = {
+                -- enables copy sync and overwrites all register actions to
+                -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+                enable = true,
+            },
             navigation = {
                 -- enables default keybindings (C-hjkl) for normal mode
                 enable_default_keybindings = true,
@@ -51,6 +56,24 @@ The following defaults are given:
 
 ```lua
 {
+    copy_sync = {
+        -- enables copy sync and overwrites all register actions to
+        -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+        enable = false,
+
+        -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
+        -- clipboard by tmux
+        redirect_to_clipboard = false,
+
+        -- offset controls where register sync starts
+        -- e.g. offset 2 lets registers 0 and 1 untouched
+        register_offset = 0,
+
+        -- syncs deletes with tmux clipboard as well, it is adviced to
+        -- do so. Nvim does not allow syncing registers 0 and 1 without
+        -- overwriting the unnamed register. Thus, ddp would not be possible.
+        sync_deletes = true,
+    },
     navigation = {
         -- cycles to opposite pane while navigating into the border
         cycle_navigation = true,
@@ -77,6 +100,16 @@ The following defaults are given:
 ## usage
 
 Tmux.nvim uses only `lua` api. If you are not running the default keybindings, you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
+
+### copy sync
+
+> A workaround for [tmux/issue 2764](https://github.com/tmux/tmux/issues/2764) is currently active. Thus, if data for sync starts with a minus (i know lua comments...) tmux.nvim adds one space in front to be able to sync the string.
+
+Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instance, switch to the second and p your deletes.
+
+This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state.
+
+To redirect copies (and deletes) to clipboard, tmux must have the capability to do so. The plugin will just set -w on set-buffer. If your tmux need more configuration check out [tmux-yank](https://github.com/tmux-plugins/tmux-yank) for an easy setup.
 
 ### navigation
 
@@ -126,10 +159,10 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ```lua
 {
-    [[<cmd>lua require'tmux'.move_left()<cr>]],
-    [[<cmd>lua require'tmux'.move_bottom()<cr>]],
-    [[<cmd>lua require'tmux'.move_top()<cr>]],
-    [[<cmd>lua require'tmux'.move_right()<cr>]],
+    [[<cmd>lua requirel("tmux").move_left()<cr>]],
+    [[<cmd>lua requirel("tmux").move_bottom()<cr>]],
+    [[<cmd>lua requirel("tmux").move_top()<cr>]],
+    [[<cmd>lua requirel("tmux").move_right()<cr>]],
 }
 ```
 
@@ -157,10 +190,10 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ```lua
 {
-    [[<cmd>lua require'tmux'.resize_left()<cr>]],
-    [[<cmd>lua require'tmux'.resize_bottom()<cr>]],
-    [[<cmd>lua require'tmux'.resize_top()<cr>]],
-    [[<cmd>lua require'tmux'.resize_right()<cr>]],
+    [[<cmd>lua requirel("tmux").resize_left()<cr>]],
+    [[<cmd>lua requirel("tmux").resize_bottom()<cr>]],
+    [[<cmd>lua requirel("tmux").resize_top()<cr>]],
+    [[<cmd>lua requirel("tmux").resize_right()<cr>]],
 }
 ```
 
@@ -173,6 +206,13 @@ stylua lua/ && luacheck lua/
 ```
 
 ## inspiration
+
+### clipboard harmonization
+
+- [Clipboard integration between tmux, nvim, zsh, x11, across SSH sessions](https://blog.landofcrispy.com/index.php/2021/01/06/clipboard-integration-between-tmux-nvim-zsh-x11-across-ssh-sessions/)
+- [Everything you need to know about Tmux copy paste - Ubuntu](http://www.rushiagr.com/blog/2016/06/16/everything-you-need-to-know-about-tmux-copy-pasting-ubuntu/)
+
+### navigation & resizing
 
 - [better-vim-tmux-resizer](https://github.com/RyanMillerC/better-vim-tmux-resizer)
 - [Navigator.nvim](https://github.com/numToStr/Navigator.nvim)

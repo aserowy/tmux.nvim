@@ -19,7 +19,7 @@
 
 The plugin and `.tmux.conf` scripts are battle tested with
 
-- tmux 3.0a
+- tmux 3.2a
 
 ## installation
 
@@ -105,7 +105,7 @@ Tmux.nvim uses only `lua` api. If you are not running the default keybindings, y
 
 > A workaround for [tmux/issue 2764](https://github.com/tmux/tmux/issues/2764) is currently active. Thus, if data for sync starts with a minus (i know lua comments...) tmux.nvim adds one space in front to be able to sync the string.
 
-Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instace, switch to the second and p your deletes.
+Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instance, switch to the second and p your deletes.
 
 This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state.
 

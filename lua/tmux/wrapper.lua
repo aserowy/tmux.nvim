@@ -21,8 +21,8 @@ local function get_socket()
 	return vim.split(TMUX, ",")[1]
 end
 
-local function execute(arg)
-	local command = string.format("tmux -S %s %s", get_socket(), arg)
+local function execute(arg, pre)
+	local command = string.format("%s tmux -S %s %s", pre or "", get_socket(), arg)
 
 	local handle = assert(io.popen(command), string.format("unable to execute: [%s]", command))
 	local result = handle:read("*a")
@@ -67,18 +67,15 @@ end
 function M.resize(direction)
 	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
 end
-
+-- test
 function M.set_buffer(content, sync_clipboard)
-	-- FIX: https://github.com/tmux/tmux/issues/2764
-	if content:sub(0, 1) == "-" then
-		content = " " .. content
-	end
+	content = content:gsub("\\", "\\\\\\\\")
 	content = content:gsub('"', '\\"')
 
 	if sync_clipboard ~= nil and sync_clipboard then
-		execute(string.format('set-buffer -w "%s"', content))
+		execute("load-buffer -w -", string.format('echo -n "%s" | ', content))
 	else
-		execute(string.format('set-buffer "%s"', content))
+		execute("load-buffer -", string.format('echo -n "%s" | ', content))
 	end
 end
 

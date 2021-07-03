@@ -67,7 +67,7 @@ end
 function M.resize(direction)
 	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
 end
--- test
+
 function M.set_buffer(content, sync_clipboard)
 	content = content:gsub("\\", "\\\\\\\\")
 	content = content:gsub('"', '\\"')

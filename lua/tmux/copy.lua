@@ -40,6 +40,22 @@ local function sync_registers(passed_key)
 	end
 end
 
+local function resolve_content(regtype, regcontents)
+	local result = ""
+	for index, value in ipairs(regcontents) do
+		if index > 1 then
+			result = result .. "\n"
+		end
+		result = result .. value
+	end
+
+	if regtype == "V" then
+		result = result .. "\n"
+	end
+
+	return result
+end
+
 local M = {
 	sync_registers = sync_registers,
 }
@@ -105,25 +121,18 @@ end
 function M.post_yank(content)
 	log.debug(content)
 
+	if content.regname ~= "" then
+		return
+	end
 	if content.operator ~= "y" and not cfg.options.copy_sync.sync_deletes then
 		return
 	end
 
-	local copied = ""
-	for index, value in ipairs(content.regcontents) do
-		if index > 1 then
-			copied = copied .. "\n"
-		end
-		copied = copied .. value
-	end
+	local buffer_content = resolve_content(content.regtype, content.regcontents)
 
-	if content.regtype == "V" then
-		copied = copied .. "\n"
-	end
+	log.debug(buffer_content)
 
-	log.debug(copied)
-
-	wrapper.set_buffer(copied, cfg.options.copy_sync.redirect_to_clipboard)
+	wrapper.set_buffer(buffer_content, cfg.options.copy_sync.redirect_to_clipboard)
 end
 
 return M

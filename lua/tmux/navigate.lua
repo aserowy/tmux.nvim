@@ -4,10 +4,10 @@ local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
 local opposite_directions = {
-	h = 'l',
-	j = 'k',
-	k = 'j',
-	l = 'h',
+	h = "l",
+	j = "k",
+	k = "j",
+	l = "h",
 }
 
 local function winnr(direction)

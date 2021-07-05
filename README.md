@@ -19,7 +19,7 @@
 
 ## requirements
 
-- neovim > 0.5
+- neovim >= 0.5
 
 The plugin and `.tmux.conf` scripts are battle tested with
 

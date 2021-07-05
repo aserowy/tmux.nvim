@@ -30,5 +30,23 @@ describe("version comparing", function()
 	it("check equals", function()
 		local result = compare.with(generate(1, 1, 1), generate(1, 1, 1))
 		assert.are.same({ result = 0 }, result)
+
+		result = compare.with(generate(1, 1, 1), generate(1, 1, 0))
+		assert.are.same({ result = 1 }, result)
+
+		result = compare.with(generate(1, 1, 1), generate(1, 0, 1))
+		assert.are.same({ result = 1 }, result)
+
+		result = compare.with(generate(1, 1, 1), generate(0, 1, 1))
+		assert.are.same({ result = 1 }, result)
+
+		result = compare.with(generate(1, 1, 0), generate(1, 1, 1))
+		assert.are.same({ result = -1 }, result)
+
+		result = compare.with(generate(1, 0, 1), generate(1, 1, 1))
+		assert.are.same({ result = -1 }, result)
+
+		result = compare.with(generate(0, 1, 1), generate(1, 1, 1))
+		assert.are.same({ result = -1 }, result)
 	end)
 end)

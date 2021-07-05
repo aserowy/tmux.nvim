@@ -28,7 +28,11 @@ local function validate(version)
 end
 
 local function compare_by(key, base, relative)
-	if base[key] == relative[key] then
+	if base[key] > relative[key] then
+		return 1
+	elseif base[key] < relative[key] then
+		return -1
+	else
 		return 0
 	end
 end
@@ -47,8 +51,8 @@ function M.with(base, relative)
 
 	for _, value in ipairs(keys) do
 		local compared = compare_by(value, base, relative)
-		if compared > 0 then
-			print(compared)
+		if compared ~= 0 then
+			return { result = compared }
 		end
 	end
 

@@ -14,6 +14,11 @@ mkShell rec {
     LUA_PATH=$PWD/lua/?.lua;$LUA_PATH
 
     # format and check -> fac :)
-    alias fac="prettier --write README.md && stylua lua/ && luacheck lua/ && busted --verbose"
+    alias fac="prettier --write README.md \
+        && stylua lua/ \
+        && luacheck lua/ \
+        && stylua spec/ \
+        && luacheck spec/ \
+        && busted --verbose"
   '';
 }

@@ -27,6 +27,7 @@ function M.parse_version(value)
 	if index_patch ~= nil then
 		patch = get_order(value:sub(index_patch))
 	end
+
 	return {
 		major = tonumber(value:sub(1, index_dot - 1)),
 		minor = minor,

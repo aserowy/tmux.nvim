@@ -21,6 +21,9 @@ describe("version parsing", function()
 		result = parser.parse_version("0.9ab")
 		assert.are.same({}, result)
 
+		result = parser.parse_version("0.9;")
+		assert.are.same({}, result)
+
 		result = parser.parse_version("090")
 		assert.are.same({}, result)
 

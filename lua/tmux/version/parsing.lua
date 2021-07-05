@@ -5,7 +5,8 @@ local function get_order(char)
 	return string.byte(char) - string.byte("a") + 1
 end
 
-local function parse_version(value)
+local M = {}
+function M.parse_version(value)
 	local validation = "^%d+%.%d+[a-z]?$"
 	if value == nil or value:match(validation) == nil then
 		-- TODO: Add error debug
@@ -31,11 +32,6 @@ local function parse_version(value)
 		minor = minor,
 		patch = patch,
 	}
-end
-
-local M = {}
-function M.new(value)
-	return parse_version(value)
 end
 
 return M

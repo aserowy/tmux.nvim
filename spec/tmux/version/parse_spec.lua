@@ -6,51 +6,51 @@ describe("version parsing", function()
 	end)
 
 	it("check invalid version validation", function()
-		local result = parse.to_version(nil)
+		local result = parse.from(nil)
 		assert.are.same({}, result)
 
-		result = parse.to_version("")
+		result = parse.from("")
 		assert.are.same({}, result)
 
-		result = parse.to_version("a.0a")
+		result = parse.from("a.0a")
 		assert.are.same({}, result)
 
-		result = parse.to_version("0.aa")
+		result = parse.from("0.aa")
 		assert.are.same({}, result)
 
-		result = parse.to_version("0.9ab")
+		result = parse.from("0.9ab")
 		assert.are.same({}, result)
 
-		result = parse.to_version("0.9;")
+		result = parse.from("0.9;")
 		assert.are.same({}, result)
 
-		result = parse.to_version("090")
+		result = parse.from("090")
 		assert.are.same({}, result)
 
-		result = parse.to_version("a3.0")
+		result = parse.from("a3.0")
 		assert.are.same({}, result)
 	end)
 
 	it("check parsing to semantic version (only numbers)", function()
-		local result = parse.to_version("1.0")
+		local result = parse.from("1.0")
 		assert.are.same({ major = 1, minor = 0, patch = 0 }, result)
 
-		result = parse.to_version("1.1")
+		result = parse.from("1.1")
 		assert.are.same({ major = 1, minor = 1, patch = 0 }, result)
 
-		result = parse.to_version("01.01")
+		result = parse.from("01.01")
 		assert.are.same({ major = 1, minor = 1, patch = 0 }, result)
 
-		result = parse.to_version("21.21")
+		result = parse.from("21.21")
 		assert.are.same({ major = 21, minor = 21, patch = 0 }, result)
 
-		result = parse.to_version("1.1a")
+		result = parse.from("1.1a")
 		assert.are.same({ major = 1, minor = 1, patch = 1 }, result)
 
-		result = parse.to_version("1.1c")
+		result = parse.from("1.1c")
 		assert.are.same({ major = 1, minor = 1, patch = 3 }, result)
 
-		result = parse.to_version("1.1z")
+		result = parse.from("1.1z")
 		assert.are.same({ major = 1, minor = 1, patch = 26 }, result)
 	end)
 end)

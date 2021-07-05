@@ -6,7 +6,7 @@ local function get_order(char)
 end
 
 local M = {}
-function M.to_version(value)
+function M.from(value)
 	local validation = "^%d+%.%d+[a-z]?$"
 	if value == nil or value:match(validation) == nil then
 		-- TODO: Add error debug

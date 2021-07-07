@@ -1,5 +1,6 @@
 local config = require("tmux.configuration")
 local copy = require("tmux.copy")
+local log = require("tmux.log")
 local navigate = require("tmux.navigate")
 local resize = require("tmux.resize")
 local wrapper = require("tmux.wrapper")
@@ -20,11 +21,19 @@ local M = {
 }
 
 function M.setup(options)
+	log.debug("setup wrapper")
 	wrapper.setup()
+
+	log.debug("setup config")
 	config.setup(options)
 
+	log.debug("setup copy")
 	copy.setup()
+
+	log.debug("setup navigate")
 	navigate.setup()
+
+	log.debug("setup resize")
 	resize.setup()
 end
 

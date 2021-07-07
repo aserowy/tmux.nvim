@@ -5,6 +5,7 @@ local function get_logdir()
 	if log_dir == nil then
 		log_dir = vim.fn.stdpath("data") .. "/logs/"
 	end
+	return log_dir
 end
 
 local function convert(...)

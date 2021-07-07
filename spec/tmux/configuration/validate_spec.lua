@@ -3,6 +3,8 @@ describe("configuration validation", function()
 	local validate
 
 	setup(function()
+		require("spec.tmux.mocks.log_mock").setup()
+
 		options = require("tmux.configuration.options")
 		validate = require("tmux.configuration.validate")
 	end)

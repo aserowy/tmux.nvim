@@ -40,11 +40,10 @@ local function get_version()
 	local result = execute("-V")
 	local version = result:sub(result:find(" ") + 1)
 
-	return version
+	return version:gsub("[^%.%w]", "")
 end
 
 local M = {}
-
 function M.setup()
 	M.is_tmux = get_tmux() ~= nil
 	M.version = get_version()

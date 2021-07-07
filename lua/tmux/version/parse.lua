@@ -1,3 +1,5 @@
+local log = require("tmux.log")
+
 local function get_order(char)
 	if char == nil or char == "" then
 		return 0
@@ -7,9 +9,13 @@ end
 
 local M = {}
 function M.from(value)
-	local validation = "^%d+%.%d+[a-z]?$"
-	if value == nil or value:match(validation) == nil then
-		-- TODO: Add error debug
+	if value == nil then
+		log.error("nil could not get parsed!")
+		return {}
+	end
+
+	if value:match("^%d+%.%d+[a-z]?$") == nil then
+		log.error(value .. " could not get parsed!")
 		return {}
 	end
 

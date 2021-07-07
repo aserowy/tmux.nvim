@@ -1,3 +1,4 @@
+local log = require("tmux.log")
 local options = require("tmux.configuration.options")
 local validate = require("tmux.configuration.validate")
 local wrapper = require("tmux.wrapper")
@@ -8,6 +9,8 @@ local M = {
 
 function M.setup(custom)
 	M.options.set(vim.tbl_deep_extend("force", {}, M.options, custom or {}))
+
+	log.debug(wrapper.version)
 
 	validate.options(wrapper.version, M.options)
 end

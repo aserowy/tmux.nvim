@@ -2,6 +2,8 @@ describe("version parsing", function()
 	local parse
 
 	setup(function()
+		require("spec.tmux.mocks.log_mock").setup()
+
 		parse = require("tmux.version.parse")
 	end)
 

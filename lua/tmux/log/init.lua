@@ -3,7 +3,7 @@ local options = require("tmux.configuration.options")
 local log_dir
 local function get_logdir()
 	if log_dir == nil then
-		log_dir = vim.fn.stdpath("data") .. "/logs/"
+		log_dir = vim.fn.stdpath("cache") .. "/"
 	end
 	return log_dir
 end

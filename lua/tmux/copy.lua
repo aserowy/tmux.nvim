@@ -1,4 +1,4 @@
-local cfg = require("tmux.configuration")
+local options = require("tmux.configuration.options")
 local keymaps = require("tmux.keymaps")
 local log = require("tmux.log")
 local wrapper = require("tmux.wrapper")
@@ -21,7 +21,7 @@ end
 local function sync_registers(passed_key)
 	log.debug(string.format("sync_registers: %s", passed_key))
 
-	local offset = cfg.options.copy_sync.register_offset
+	local offset = options.copy_sync.register_offset
 	local first_buffer_name = ""
 	for k, v in ipairs(wrapper.get_buffer_names()) do
 		if k == 1 then
@@ -61,7 +61,7 @@ local M = {
 }
 
 function M.setup()
-	if not wrapper.is_tmux or not cfg.options.copy_sync.enable then
+	if not wrapper.is_tmux or not options.copy_sync.enable then
 		return
 	end
 
@@ -124,7 +124,7 @@ function M.post_yank(content)
 	if content.regname ~= "" then
 		return
 	end
-	if content.operator ~= "y" and not cfg.options.copy_sync.sync_deletes then
+	if content.operator ~= "y" and not options.copy_sync.sync_deletes then
 		return
 	end
 
@@ -132,7 +132,7 @@ function M.post_yank(content)
 
 	log.debug(buffer_content)
 
-	wrapper.set_buffer(buffer_content, cfg.options.copy_sync.redirect_to_clipboard)
+	wrapper.set_buffer(buffer_content, options.copy_sync.redirect_to_clipboard)
 end
 
 return M

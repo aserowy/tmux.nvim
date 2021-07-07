@@ -1,8 +1,5 @@
 local vim = vim
 
-local TMUX = os.getenv("TMUX")
-local TMUX_PANE = os.getenv("TMUX_PANE")
-
 local tmux_directions = {
 	h = "L",
 	j = "D",
@@ -17,8 +14,16 @@ local tmux_borders = {
 	l = "right",
 }
 
+local function get_tmux()
+	return os.getenv("TMUX")
+end
+
+local function get_tmux_pane()
+	return os.getenv("TMUX_PANE")
+end
+
 local function get_socket()
-	return vim.split(TMUX, ",")[1]
+	return vim.split(get_tmux(), ",")[1]
 end
 
 local function execute(arg, pre)
@@ -31,12 +36,22 @@ local function execute(arg, pre)
 	return result
 end
 
-local M = {
-	is_tmux = TMUX ~= nil,
-}
+local function get_version()
+	local result = execute("-V")
+	local version = result:sub(result:find(" ") + 1)
+
+	return version
+end
+
+local M = {}
+
+function M.setup()
+	M.is_tmux = get_tmux() ~= nil
+	M.version = get_version()
+end
 
 function M.change_pane(direction)
-	execute(string.format("select-pane -t '%s' -%s", TMUX_PANE, tmux_directions[direction]))
+	execute(string.format("select-pane -t '%s' -%s", get_tmux_pane(), tmux_directions[direction]))
 end
 
 function M.get_buffer(name)
@@ -65,7 +80,7 @@ function M.is_zoomed()
 end
 
 function M.resize(direction)
-	execute(string.format("resize-pane -t '%s' -%s 1", TMUX_PANE, tmux_directions[direction]))
+	execute(string.format("resize-pane -t '%s' -%s 1", get_tmux_pane(), tmux_directions[direction]))
 end
 
 function M.set_buffer(content, sync_clipboard)

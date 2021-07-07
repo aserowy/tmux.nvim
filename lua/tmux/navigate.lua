@@ -1,5 +1,6 @@
 local vim = vim
-local cfg = require("tmux.configuration")
+
+local options = require("tmux.configuration.options")
 local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
@@ -35,20 +36,20 @@ local function has_tmux_target(border)
 		return false
 	end
 
-	if wrapper.is_zoomed() and cfg.options.navigation.persist_zoom then
+	if wrapper.is_zoomed() and options.navigation.persist_zoom then
 		return false
 	end
 
 	if wrapper.has_neighbor(border) then
 		return true
 	end
-	return cfg.options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
+	return options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
 end
 
 local function navigate_to(direction)
 	if is_nvim_border(direction) and has_tmux_target(direction) then
 		wrapper.change_pane(direction)
-	elseif is_nvim_border(direction) and cfg.options.navigation.cycle_navigation then
+	elseif is_nvim_border(direction) and options.navigation.cycle_navigation then
 		wincmd_with_cycle(direction)
 	else
 		wincmd(direction)
@@ -57,7 +58,7 @@ end
 
 local M = {}
 function M.setup()
-	if cfg.options.navigation.enable_default_keybindings then
+	if options.navigation.enable_default_keybindings then
 		keymaps.register("n", {
 			["<C-h>"] = [[<cmd>lua require'tmux'.move_left()<cr>]],
 			["<C-j>"] = [[<cmd>lua require'tmux'.move_bottom()<cr>]],

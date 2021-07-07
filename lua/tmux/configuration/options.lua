@@ -1,6 +1,4 @@
-local vim = vim
-
-local defaults = {
+local M = {
 	logging = false,
 
 	copy_sync = {
@@ -43,14 +41,11 @@ local defaults = {
 	},
 }
 
-local M = {
-	options = {},
-}
-
-function M.setup(options)
-	M.options = vim.tbl_deep_extend("force", {}, defaults, options or {})
+function M.set(options)
+	M.logging = options.logging
+	M.copy_sync = options.copy_sync
+	M.navigation = options.navigation
+	M.resize = options.resize
 end
-
-M.setup()
 
 return M

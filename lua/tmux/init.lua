@@ -1,7 +1,8 @@
-local cfg = require("tmux.configuration")
+local config = require("tmux.configuration")
 local copy = require("tmux.copy")
 local navigate = require("tmux.navigate")
 local resize = require("tmux.resize")
+local wrapper = require("tmux.wrapper")
 
 local M = {
 	move_left = navigate.to_left,
@@ -19,7 +20,8 @@ local M = {
 }
 
 function M.setup(options)
-	cfg.setup(options)
+	wrapper.setup()
+	config.setup(options)
 
 	copy.setup()
 	navigate.setup()

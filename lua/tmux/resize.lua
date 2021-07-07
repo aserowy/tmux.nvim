@@ -1,5 +1,6 @@
 local vim = vim
-local cfg = require("tmux.configuration")
+
+local options = require("tmux.configuration.options")
 local keymaps = require("tmux.keymaps")
 local wrapper = require("tmux.wrapper")
 
@@ -26,7 +27,7 @@ end
 
 local M = {}
 function M.setup()
-	if cfg.options.resize.enable_default_keybindings then
+	if options.resize.enable_default_keybindings then
 		keymaps.register("n", {
 			["<A-h>"] = [[<cmd>lua require'tmux'.resize_left()<cr>]],
 			["<A-j>"] = [[<cmd>lua require'tmux'.resize_bottom()<cr>]],
@@ -41,9 +42,9 @@ function M.to_left()
 	if is_border and is_tmux_target("l") then
 		wrapper.resize("h")
 	elseif is_border then
-		resize("x", "+", cfg.options.resize.resize_step_x)
+		resize("x", "+", options.resize.resize_step_x)
 	else
-		resize("x", "-", cfg.options.resize.resize_step_x)
+		resize("x", "-", options.resize.resize_step_x)
 	end
 end
 
@@ -52,9 +53,9 @@ function M.to_bottom()
 	if is_border and is_tmux_target("j") then
 		wrapper.resize("j")
 	elseif is_border and winnr() ~= winnr("1k") then
-		resize("y", "-", cfg.options.resize.resize_step_y)
+		resize("y", "-", options.resize.resize_step_y)
 	else
-		resize("y", "+", cfg.options.resize.resize_step_y)
+		resize("y", "+", options.resize.resize_step_y)
 	end
 end
 
@@ -63,9 +64,9 @@ function M.to_top()
 	if is_border and is_tmux_target("j") then
 		wrapper.resize("k")
 	elseif is_border then
-		resize("y", "+", cfg.options.resize.resize_step_y)
+		resize("y", "+", options.resize.resize_step_y)
 	else
-		resize("y", "-", cfg.options.resize.resize_step_y)
+		resize("y", "-", options.resize.resize_step_y)
 	end
 end
 
@@ -74,9 +75,9 @@ function M.to_right()
 	if is_border and is_tmux_target("l") then
 		wrapper.resize("l")
 	elseif is_border then
-		resize("x", "-", cfg.options.resize.resize_step_x)
+		resize("x", "-", options.resize.resize_step_x)
 	else
-		resize("x", "+", cfg.options.resize.resize_step_x)
+		resize("x", "+", options.resize.resize_step_x)
 	end
 end
 

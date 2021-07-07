@@ -3,8 +3,8 @@ function M.new(value)
 	return require("tmux.version.parse").from(value)
 end
 
-function M.compare(self, relative)
-	return require("tmux.version.compare").with(self, relative)
+function M.compare(base, relative)
+	return require("tmux.version.compare").with(base, relative)
 end
 
 return M

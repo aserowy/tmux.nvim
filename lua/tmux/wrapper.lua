@@ -46,13 +46,13 @@ end
 local M = {}
 function M.setup()
 	M.is_tmux = get_tmux() ~= nil
-    if not M.is_tmux then
-        return false
-    end
+	if not M.is_tmux then
+		return false
+	end
 
 	M.version = get_version()
 
-    return true
+	return true
 end
 
 function M.change_pane(direction)

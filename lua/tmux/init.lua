@@ -23,9 +23,9 @@ local M = {
 function M.setup(options)
 	log.debug("setup wrapper")
 	if not wrapper.setup() then
-        log.information("setup for wrapper failed")
-        return
-    end
+		log.information("setup for wrapper failed")
+		return
+	end
 
 	log.debug("setup config")
 	config.setup(options)

@@ -32,6 +32,10 @@ function M.debug(message)
 	log("debug", message)
 end
 
+function M.information(message)
+	log("information", message)
+end
+
 function M.warning(message)
 	log("warning", message)
 end

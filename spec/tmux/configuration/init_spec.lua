@@ -15,9 +15,11 @@ describe("configuration", function()
 
 	it("check default overwrites", function()
 		config.setup({ copy_sync = { enable = true } })
-
 		local result = require("tmux.configuration")
-
 		assert.are.same(true, result.options.copy_sync.enable)
+
+		config.setup({}, { file = "debug" })
+		result = require("tmux.configuration")
+		assert.are.same("debug", result.logging.file)
 	end)
 end)

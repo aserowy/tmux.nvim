@@ -1,5 +1,7 @@
 local vim = vim
 
+local log = require("tmux.log")
+
 local tmux_directions = {
 	h = "L",
 	j = "D",
@@ -46,11 +48,16 @@ end
 local M = {}
 function M.setup()
 	M.is_tmux = get_tmux() ~= nil
+
+	log.debug(M.is_tmux)
+
 	if not M.is_tmux then
 		return false
 	end
 
 	M.version = get_version()
+
+	log.debug(M.version)
 
 	return true
 end

@@ -20,7 +20,7 @@ local M = {
 	resize_right = resize.to_right,
 }
 
-function M.setup(options)
+function M.setup(options, logging)
 	log.debug("setup wrapper")
 	if not wrapper.setup() then
 		log.information("setup for wrapper failed")
@@ -28,7 +28,7 @@ function M.setup(options)
 	end
 
 	log.debug("setup config")
-	config.setup(options)
+	config.setup(options, logging)
 
 	log.debug("setup copy")
 	copy.setup()

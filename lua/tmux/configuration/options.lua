@@ -1,3 +1,16 @@
+local function copy(source, target)
+	if source == nil or target == nil then
+		return
+	end
+	for index, _ in pairs(source) do
+		if target[index] ~= nil and type(source[index]) == "table" and type(target[index]) == "table" then
+			copy(source[index], target[index])
+		elseif target[index] ~= nil and type(source[index]) == type(target[index]) then
+			source[index] = target[index]
+		end
+	end
+end
+
 local M = {
 	copy_sync = {
 		-- enables copy sync and overwrites all register actions to
@@ -40,9 +53,10 @@ local M = {
 }
 
 function M.set(options)
-	M.copy_sync = options.copy_sync
-	M.navigation = options.navigation
-	M.resize = options.resize
+	if options == nil or options == "" then
+		return
+	end
+	copy(M, options)
 end
 
 return M

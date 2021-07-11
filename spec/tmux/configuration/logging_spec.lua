@@ -10,9 +10,6 @@ end
 local function validate(configuration)
 	for index, value in pairs(configuration) do
 		if index ~= "set" then
-			if not contains({ "nvim", "file" }, index) then
-				return false
-			end
 			if not contains({ "disabled", "debug", "information", "warning", "error" }, value) then
 				return false
 			end
@@ -60,6 +57,15 @@ describe("configuration logging", function()
 		})
 		local result = require("tmux.configuration.logging")
 		assert.are.same("disabled", result.nvim)
+		assert.are.same(true, validate(result))
+	end)
+
+	it("check adding options for new channels", function()
+		config.set({
+			test_channel = "error",
+		})
+		local result = require("tmux.configuration.logging")
+		assert.are.same("error", result.test_channel)
 		assert.are.same(true, validate(result))
 	end)
 end)

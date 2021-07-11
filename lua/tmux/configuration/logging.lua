@@ -16,11 +16,8 @@ function M.set(options)
 	if options == nil or options == "" then
 		return
 	end
-	for index, _ in pairs(M) do
-		if
-			options[index] ~= nil
-			and contains({ "disabled", "debug", "information", "warning", "error" }, options[index])
-		then
+	for index, _ in pairs(options) do
+		if contains({ "disabled", "debug", "information", "warning", "error" }, options[index]) then
 			M[index] = options[index]
 		end
 	end

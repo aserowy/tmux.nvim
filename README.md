@@ -161,10 +161,10 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ```lua
 {
-    [[<cmd>lua requirel("tmux").move_left()<cr>]],
-    [[<cmd>lua requirel("tmux").move_bottom()<cr>]],
-    [[<cmd>lua requirel("tmux").move_top()<cr>]],
-    [[<cmd>lua requirel("tmux").move_right()<cr>]],
+    [[<cmd>lua require("tmux").move_left()<cr>]],
+    [[<cmd>lua require("tmux").move_bottom()<cr>]],
+    [[<cmd>lua require("tmux").move_top()<cr>]],
+    [[<cmd>lua require("tmux").move_right()<cr>]],
 }
 ```
 
@@ -192,10 +192,10 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ```lua
 {
-    [[<cmd>lua requirel("tmux").resize_left()<cr>]],
-    [[<cmd>lua requirel("tmux").resize_bottom()<cr>]],
-    [[<cmd>lua requirel("tmux").resize_top()<cr>]],
-    [[<cmd>lua requirel("tmux").resize_right()<cr>]],
+    [[<cmd>lua require("tmux").resize_left()<cr>]],
+    [[<cmd>lua require("tmux").resize_bottom()<cr>]],
+    [[<cmd>lua require("tmux").resize_top()<cr>]],
+    [[<cmd>lua require("tmux").resize_right()<cr>]],
 }
 ```
 

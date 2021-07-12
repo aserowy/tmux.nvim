@@ -1,22 +1,20 @@
-local log = require("tmux.log")
+local channels = require("tmux.log.channels")
+local config = require("tmux.configuration.logging")
 
-local function log_mock(...)
-	print(...)
+local M = {
+	backet = "",
+}
+
+local function extend_backet(sev, message)
+	M.backet = M.backet .. "\n" .. sev .. ": " .. message
 end
 
-local M = {}
 function M.setup()
-	log.debug = function(message)
-		log_mock("debug", message)
-	end
+	channels.add("busted", extend_backet)
 
-	log.warning = function(message)
-		log_mock("warning", message)
-	end
-
-	log.error = function(message)
-		log_mock("error", message)
-	end
+	config.set({
+		busted = "debug",
+	})
 end
 
 return M

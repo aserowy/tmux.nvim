@@ -25,6 +25,16 @@ describe("configuration logging", function()
 		config = require("tmux.configuration.logging")
 	end)
 
+	it("check default values", function()
+		local defaults = {
+			nvim = "warning",
+			file = "disabled",
+		}
+		for key, _ in pairs(defaults) do
+			assert.are.same(defaults[key], config[key])
+		end
+	end)
+
 	it("check invalid values", function()
 		config.set(nil)
 		local result = require("tmux.configuration.logging")

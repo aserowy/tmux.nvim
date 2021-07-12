@@ -5,6 +5,30 @@ describe("configuration options", function()
 		config = require("tmux.configuration.options")
 	end)
 
+	it("check default values", function()
+		local defaults = {
+			copy_sync = {
+				enable = false,
+				redirect_to_clipboard = false,
+				register_offset = 0,
+				sync_deletes = true,
+			},
+			navigation = {
+				cycle_navigation = true,
+				enable_default_keybindings = false,
+				persist_zoom = false,
+			},
+			resize = {
+				enable_default_keybindings = false,
+				resize_step_x = 1,
+				resize_step_y = 1,
+			},
+		}
+		for key, _ in pairs(defaults) do
+			assert.are.same(defaults[key], config[key])
+		end
+	end)
+
 	it("check invalid values", function()
 		config.set(nil)
 		local result = require("tmux.configuration.options")

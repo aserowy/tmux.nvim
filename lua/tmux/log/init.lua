@@ -1,3 +1,5 @@
+local channels = require("tmux.log.channels")
+
 local function convert(...)
 	return require("tmux.log.convert").to_string(...)
 end
@@ -5,10 +7,14 @@ end
 local function log(severity, message)
 	local converted = convert(message)
 
-	require("tmux.log.channels").log(severity, converted)
+	channels.log(severity, converted)
 end
 
 local M = {}
+function M.setup()
+	channels.add("file", require("tmux.log.channels.file").write)
+end
+
 function M.debug(message)
 	log("debug", message)
 end

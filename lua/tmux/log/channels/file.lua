@@ -8,9 +8,9 @@ local function get_logdir()
 end
 
 local M = {}
-function M.write(prefix, message)
+function M.write(sev, message)
 	local logs = io.open(get_logdir() .. "tmuxnvim.log", "a")
-	logs:write(prefix .. "\n")
+	logs:write(require("tmux.log.time").now() .. " " .. sev .. "\n")
 	logs:write(message .. "\n")
 	io.close(logs)
 end

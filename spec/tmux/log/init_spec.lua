@@ -1,3 +1,12 @@
+insulate("log setup", function()
+	it("check default channel registration", function()
+		require("tmux.log").setup()
+
+		local channels = require("tmux.log.channels")
+		assert.is_true(channels.current["file"] ~= nil)
+	end)
+end)
+
 describe("log", function()
 	local log
 	local message = ""

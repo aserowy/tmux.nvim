@@ -12,6 +12,12 @@ describe("log channels", function()
 
 		local test_channel = require("tmux.log.channels")
 		assert.are.same({ file = nil }, test_channel.current)
+
+		channels.add("file", nil)
+		assert.are.same({ file = nil }, test_channel.current)
+
+		channels.add("test", nil)
+		assert.are.same({ file = nil, test = nil }, test_channel.current)
 	end)
 
 	it("check channels", function()
@@ -21,7 +27,7 @@ describe("log channels", function()
 		end)
 
 		called = 0
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, called)
 
 		require("tmux.configuration.logging").set({
@@ -29,7 +35,7 @@ describe("log channels", function()
 		})
 
 		called = 0
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(1, called)
 	end)
 
@@ -43,27 +49,27 @@ describe("log channels", function()
 			call_count = call_count + 1
 		end
 		channels.add(nil, increment)
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 
 		channels.add(1, increment)
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 
 		channels.add("test3", nil)
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 
 		channels.add("test4", "test")
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 
 		channels.add("test5", 0)
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 
 		channels.add("test6", {})
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 		assert.are.same(0, call_count)
 	end)
 
@@ -88,7 +94,7 @@ describe("log channels", function()
 		channels.add("test4", increment)
 		channels.add("test5", increment)
 
-		channels.log("warning", "prefix", "message")
+		channels.log("warning", "message")
 
 		assert.are.same(4, call_count)
 	end)

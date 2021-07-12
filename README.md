@@ -201,10 +201,12 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ## contribute
 
-Contributed code must pass [luacheck](https://github.com/mpeterv/luacheck) and be formatted with [stylua](https://github.com/johnnymorganz/stylua).
+Contributed code must pass [luacheck](https://github.com/mpeterv/luacheck) and be formatted with [stylua](https://github.com/johnnymorganz/stylua). Besides formatting, all tests have to pass. Tests are written for [busted](https://github.com/Olivine-Labs/busted).
+
+If you are using nix-shell, you can start a nix-shell and run `fac` (format and check).
 
 ```sh
-stylua lua/ && luacheck lua/
+stylua lua/ && luacheck lua/ && busted --verbose
 ```
 
 ## inspiration

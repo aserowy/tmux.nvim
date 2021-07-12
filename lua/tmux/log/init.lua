@@ -1,19 +1,11 @@
-local log_options = require("tmux.configuration.logging")
-
 local function convert(...)
 	return require("tmux.log.convert").to_string(...)
 end
 
-local function write(severity, message)
-	local prefix = os.date("%c") .. "\t" .. severity
-	local converted = convert(message)
-	require("tmux.log.channel.file").write(prefix, converted)
-end
-
 local function log(severity, message)
-	if log_options.logging then
-		write(severity, message)
-	end
+	local converted = convert(message)
+
+	require("tmux.log.channels").log(severity, converted)
 end
 
 local M = {}

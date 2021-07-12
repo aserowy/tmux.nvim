@@ -1,3 +1,4 @@
+local config = require("tmux.configuration.logging")
 local severity = require("tmux.log.severity")
 
 local M = {
@@ -14,11 +15,10 @@ function M.add(channel, func)
 	M.current[channel] = func
 end
 
-function M.log(sev, prefix, message)
+function M.log(sev, message)
 	for key, value in pairs(M.current) do
-		--TODO: resolve severity for key and inject as barrier, sev
-		if severity.check(sev, key) then
-			value(prefix, message)
+		if severity.check(config[key], sev) then
+			value(sev, message)
 		end
 	end
 end

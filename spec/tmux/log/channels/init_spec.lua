@@ -14,6 +14,25 @@ describe("log channels", function()
 		assert.are.same({ file = nil }, test_channel.current)
 	end)
 
+	it("check channels", function()
+		local called = 0
+		channels.add("test", function()
+			called = called + 1
+		end)
+
+		called = 0
+		channels.log("warning", "prefix", "message")
+		assert.are.same(0, called)
+
+		require("tmux.configuration.logging").set({
+			test = "warning",
+		})
+
+		called = 0
+		channels.log("warning", "prefix", "message")
+		assert.are.same(1, called)
+	end)
+
 	it("check ignoring invalid channels", function()
 		require("tmux.log.severity").check = function(_, _)
 			return true

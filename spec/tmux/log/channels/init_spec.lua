@@ -49,8 +49,13 @@ describe("log channels", function()
 	end)
 
 	it("check log channels by severity", function()
-		require("tmux.log.severity").check = function(_, channel)
-			return channel ~= "test1"
+		local invalidate_first = true
+		require("tmux.log.severity").check = function(_, _)
+			if invalidate_first then
+				invalidate_first = false
+				return false
+			end
+			return true
 		end
 
 		local call_count = 0

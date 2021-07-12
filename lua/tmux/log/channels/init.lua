@@ -16,6 +16,7 @@ end
 
 function M.log(sev, prefix, message)
 	for key, value in pairs(M.current) do
+		--TODO: resolve severity for key and inject as barrier, sev
 		if severity.check(sev, key) then
 			value(prefix, message)
 		end

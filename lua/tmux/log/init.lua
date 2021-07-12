@@ -12,7 +12,9 @@ end
 
 local M = {}
 function M.setup()
-	channels.add("file", require("tmux.log.channels.file").write)
+	channels.add("file", function(sev, msg)
+		require("tmux.log.channels.file").write(sev, msg)
+	end)
 end
 
 function M.debug(message)

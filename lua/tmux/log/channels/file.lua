@@ -9,7 +9,7 @@ end
 
 local M = {}
 function M.write(sev, message)
-	local logs = io.open(get_logdir() .. "tmuxnvim.log", "a")
+	local logs = io.open(get_logdir() .. "tmux.nvim.log", "a")
 	logs:write(require("tmux.log.time").now() .. " " .. sev .. "\n")
 	logs:write(message .. "\n")
 	io.close(logs)

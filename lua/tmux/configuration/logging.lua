@@ -1,6 +1,6 @@
 local M = {
 	nvim = "warning",
-	file = "disabled",
+	file = "warning",
 }
 
 function M.set(options)

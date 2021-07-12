@@ -28,7 +28,7 @@ describe("configuration logging", function()
 	it("check default values", function()
 		local defaults = {
 			nvim = "warning",
-			file = "disabled",
+			file = "warning",
 		}
 		for key, _ in pairs(defaults) do
 			assert.are.same(defaults[key], config[key])

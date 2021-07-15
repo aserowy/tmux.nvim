@@ -2,10 +2,11 @@ with import <nixpkgs> { };
 mkShell rec {
   name = "neocode";
   buildInputs = [
-    stylua
     lua51Packages.busted
     lua51Packages.luacheck
     nodePackages.prettier
+    stylua
+    sumneko-lua-language-server
   ];
   shellHook = ''
     export LUA_PATH="$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"

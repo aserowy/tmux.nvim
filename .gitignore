@@ -1,4 +1,5 @@
 # nix-shell targets
+.direnv
 .cargo
 
 # Compiled Lua sources

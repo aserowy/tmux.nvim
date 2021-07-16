@@ -6,40 +6,40 @@ local resize = require("tmux.resize")
 local wrapper = require("tmux.wrapper")
 
 local M = {
-	move_left = navigate.to_left,
-	move_bottom = navigate.to_bottom,
-	move_top = navigate.to_top,
-	move_right = navigate.to_right,
+    move_left = navigate.to_left,
+    move_bottom = navigate.to_bottom,
+    move_top = navigate.to_top,
+    move_right = navigate.to_right,
 
-	post_yank = copy.post_yank,
-	sync_registers = copy.sync_registers,
+    post_yank = copy.post_yank,
+    sync_registers = copy.sync_registers,
 
-	resize_left = resize.to_left,
-	resize_bottom = resize.to_bottom,
-	resize_top = resize.to_top,
-	resize_right = resize.to_right,
+    resize_left = resize.to_left,
+    resize_bottom = resize.to_bottom,
+    resize_top = resize.to_top,
+    resize_right = resize.to_right,
 }
 
 function M.setup(options, logging)
-	log.setup()
+    log.setup()
 
-	log.debug("setup wrapper")
-	if not wrapper.setup() then
-		log.information("setup for wrapper failed")
-		return
-	end
+    log.debug("setup wrapper")
+    if not wrapper.setup() then
+        log.information("setup for wrapper failed")
+        return
+    end
 
-	log.debug("setup config")
-	config.setup(options, logging)
+    log.debug("setup config")
+    config.setup(options, logging)
 
-	log.debug("setup copy")
-	copy.setup()
+    log.debug("setup copy")
+    copy.setup()
 
-	log.debug("setup navigate")
-	navigate.setup()
+    log.debug("setup navigate")
+    navigate.setup()
 
-	log.debug("setup resize")
-	resize.setup()
+    log.debug("setup resize")
+    resize.setup()
 end
 
 return M

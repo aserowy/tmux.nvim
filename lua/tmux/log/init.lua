@@ -1,36 +1,36 @@
 local channels = require("tmux.log.channels")
 
 local function convert(...)
-	return require("tmux.log.convert").to_string(...)
+    return require("tmux.log.convert").to_string(...)
 end
 
 local function log(severity, message)
-	local converted = convert(message)
+    local converted = convert(message)
 
-	channels.log(severity, converted)
+    channels.log(severity, converted)
 end
 
 local M = {}
 function M.setup()
-	channels.add("file", function(sev, msg)
-		require("tmux.log.channels.file").write(sev, msg)
-	end)
+    channels.add("file", function(sev, msg)
+        require("tmux.log.channels.file").write(sev, msg)
+    end)
 end
 
 function M.debug(message)
-	log("debug", message)
+    log("debug", message)
 end
 
 function M.information(message)
-	log("information", message)
+    log("information", message)
 end
 
 function M.warning(message)
-	log("warning", message)
+    log("warning", message)
 end
 
 function M.error(message)
-	log("error", message)
+    log("error", message)
 end
 
 return M

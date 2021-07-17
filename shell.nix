@@ -3,6 +3,7 @@ mkShell rec {
   name = "neocode";
   buildInputs = [
     lua51Packages.busted
+    lua51Packages.luacov
     lua51Packages.luacheck
     nodePackages.prettier
     stylua
@@ -17,6 +18,6 @@ mkShell rec {
         && luacheck lua/ \
         && stylua spec/ \
         && luacheck spec/ \
-        && busted --verbose"
+        && busted --verbose -c"
   '';
 }

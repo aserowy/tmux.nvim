@@ -31,7 +31,7 @@ local function wincmd_with_cycle(direction)
     end
 end
 
-local function has_tmux_target(border)
+local function has_tmux_target()
     if not wrapper.is_tmux then
         return false
     end
@@ -40,16 +40,13 @@ local function has_tmux_target(border)
         return false
     end
 
-    if wrapper.has_neighbor(border) then
-        return true
-    end
-    return options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
+    return true
 end
 
 local function navigate_to(direction)
-    if is_nvim_border(direction) and has_tmux_target(direction) then
+    if is_nvim_border(direction) and has_tmux_target() then
         wrapper.change_pane(direction)
-    elseif is_nvim_border(direction) and options.navigation.cycle_navigation then
+    elseif is_nvim_border(direction) then
         wincmd_with_cycle(direction)
     else
         wincmd(direction)

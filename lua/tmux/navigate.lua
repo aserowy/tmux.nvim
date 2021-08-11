@@ -40,10 +40,11 @@ local function has_tmux_target(border)
         return false
     end
 
-    if wrapper.has_neighbor(border) then
+    if wrapper.should_select_pane(border, options.navigation.cycle_navigation) then
         return true
     end
-    return options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
+
+    return false
 end
 
 local function navigate_to(direction)

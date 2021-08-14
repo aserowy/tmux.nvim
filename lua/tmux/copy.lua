@@ -105,17 +105,19 @@ function M.setup()
         noremap = true,
     })
 
-    vim.g.clipboard = {
-        name = "tmuxclipboard",
-        copy = {
-            ["+"] = "tmux load-buffer -",
-            ["*"] = "tmux load-buffer -",
-        },
-        paste = {
-            ["+"] = "tmux save-buffer -",
-            ["*"] = "tmux save-buffer -",
-        },
-    }
+    if options.copy_sync.sync_clipboard then
+        vim.g.clipboard = {
+            name = "tmuxclipboard",
+            copy = {
+                ["+"] = "tmux load-buffer -",
+                ["*"] = "tmux load-buffer -",
+            },
+            paste = {
+                ["+"] = "tmux save-buffer -",
+                ["*"] = "tmux save-buffer -",
+            },
+        }
+    end
 end
 
 function M.post_yank(content)

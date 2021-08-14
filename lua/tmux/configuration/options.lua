@@ -25,6 +25,11 @@ local M = {
         -- e.g. offset 2 lets registers 0 and 1 untouched
         register_offset = 0,
 
+        -- sync clipboard overwrites vim.g.clipboard to handle * and +
+        -- registers. If you sync your system clipboard without tmux, disable
+        -- this option!
+        sync_clipboard = true,
+
         -- syncs deletes with tmux clipboard as well, it is adviced to
         -- do so. Nvim does not allow syncing registers 0 and 1 without
         -- overwriting the unnamed register. Thus, ddp would not be possible.

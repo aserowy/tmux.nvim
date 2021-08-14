@@ -12,6 +12,7 @@ describe("configuration options", function()
                 redirect_to_clipboard = false,
                 register_offset = 0,
                 sync_deletes = true,
+                sync_clipboard = true,
             },
             navigation = {
                 cycle_navigation = true,
@@ -65,6 +66,14 @@ describe("configuration options", function()
         })
         local result = require("tmux.configuration.options")
         assert.are.same(5, result.resize.resize_step_x)
+
+        config.set({
+            copy_sync = {
+                sync_clipboard = false,
+            },
+        })
+        result = require("tmux.configuration.options")
+        assert.are.same(false, result.copy_sync.sync_clipboard)
 
         config.set({
             copy_sync = {

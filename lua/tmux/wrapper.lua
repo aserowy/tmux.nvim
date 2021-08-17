@@ -81,26 +81,6 @@ function M.get_buffer_names()
     return result
 end
 
-function M.should_select_pane(direction, cycle_navigation)
-    local number_of_panes = tonumber(execute("display -p '#{window_panes}'"))
-    local pane_index = tonumber(execute("display -p '#{pane_index}'"))
-    local is_direction_left_or_top = direction == "k" or direction == "h"
-    local is_direction_right_or_bottom = direction == "j" or direction == "l"
-    local not_selectable_left_or_top = is_direction_left_or_top and pane_index == 0
-    local not_selectable_right_or_bottom = is_direction_right_or_bottom and pane_index == number_of_panes
-
-    if not_selectable_left_or_top and cycle_navigation == false then
-        return false
-    end
-    if not_selectable_right_or_bottom and cycle_navigation == false then
-        return false
-    end
-    if pane_index == number_of_panes then
-        return false
-    end
-    return true
-end
-
 function M.has_neighbor(direction)
     local command = string.format("display-message -p '#{pane_at_%s}'", tmux_borders[direction])
 

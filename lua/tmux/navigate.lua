@@ -38,7 +38,8 @@ local function has_tmux_target(border)
     if wrapper.is_zoomed() and options.navigation.persist_zoom then
         return false
     end
-    -- FIX: Workaround for #24 but ignoring cycle_navigation = false, fix for both only with tmux -S <YOUR_SOCKET> display -p '#{window_layout}'
+    -- FIX: Workaround for #24 but ignoring cycle_navigation = false,
+    -- fix for both only with tmux -S <YOUR_SOCKET> display -p '#{window_layout}'
     if wrapper.is_zoomed() then
         return true
     end

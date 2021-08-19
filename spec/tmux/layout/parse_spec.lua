@@ -2,7 +2,25 @@ describe("parse layout", function()
     local parser
 
     setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+
         parser = require("tmux.layout.parse")
+    end)
+
+    it("check invalid layouts", function()
+        local layout = parser.parse(nil)
+        assert.are.same(nil, layout)
+
+        layout = parser.parse("")
+        assert.are.same(nil, layout)
+
+        local display = "623b,311x61,0,0{}"
+        layout = parser.parse(display)
+        assert.are.same(nil, layout)
+
+        display = "623b,3,0,0{234x61,0,0,11}"
+        layout = parser.parse(display)
+        assert.are.same(nil, layout)
     end)
 
     it("check width and height", function()

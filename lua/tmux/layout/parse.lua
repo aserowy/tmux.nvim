@@ -1,6 +1,12 @@
+local log = require("tmux.log")
+
 local M = {}
 
 function M.parse(display)
+    if display == "" or display == nil then
+        return nil
+    end
+
     local panes = {}
     for pane in display:gmatch("(%d+x%d+,%d+,%d+,%d+)") do
         table.insert(panes, {
@@ -11,9 +17,18 @@ function M.parse(display)
             height = tonumber(pane:match("%d+x(%d+)")),
         })
     end
+    if #panes == 0 then
+        log.error("window_layout returned no valid panes")
+        return nil
+    end
 
-    local width = display:match("(%d+)x%d+")
-    local height = display:match("%d+x(%d+)")
+    local width = display:match("^%w+,(%d+)x%d+")
+    local height = display:match("^%w+,%d+x(%d+)")
+
+    if width == nil and height == nil then
+        log.error("window_layout returned invalid format")
+        return nil
+    end
 
     return {
         width = tonumber(width),

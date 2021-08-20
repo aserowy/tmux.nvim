@@ -3,7 +3,6 @@ describe("parse layout", function()
 
     setup(function()
         require("spec.tmux.mocks.log_mock").setup()
-
         parser = require("tmux.layout.parse")
     end)
 

@@ -1,30 +1,56 @@
---[[
-932b,311x61,0,0{
-    117x61,0,0[
-        117x30,0,0,11,
-        117x30,0,31{
-            58x30,0,31,27,
-            58x30,59,31,30
-        }
-    ],
-    116x61,118,0[
-        116x30,118,0,26,
-        116x15,118,31,28,
-        116x14,118,47,29
-    ],
-    76x61,235,0[
-        76x30,235,0{
-            38x30,235,0,20,
-            37x30,274,0[
-                37x15,274,0,22,
-                37x14,274,16{
-                    18x14,274,16,23,
-                    18x14,293,16,24
-                }
-            ]
-        },
-        76x15,235,31,21,
-        76x14,235,47,25
-    ]
+local tmux = require("tmux.wrapper")
+local parse = require("tmux.layout.parse")
+
+local direction_checks = {
+    ["h"] = function(_, pane)
+        return pane.x == 0
+    end,
+    ["j"] = function(layout, pane)
+        return pane.y + pane.height == layout.height
+    end,
+    ["k"] = function(_, pane)
+        return pane.y == 0
+    end,
+    ["l"] = function(layout, pane)
+        return pane.x + pane.width == layout.width
+    end,
 }
-]]
+
+local function get_pane(id, panes)
+    for _, pane in pairs(panes) do
+        if pane.id == id then
+            return pane
+        end
+    end
+    return nil
+end
+
+local function check_is_border(display, id, direction)
+    local layout = parse.parse(display)
+    if layout == nil then
+        return nil
+    end
+
+    local pane = get_pane(id, layout.panes)
+    if pane == nil then
+        return nil
+    end
+
+    local check = direction_checks[direction]
+    if check ~= nil then
+        return check(layout, pane)
+    end
+
+    return nil
+end
+
+local M = {}
+
+function M.is_border(direction)
+    local display = tmux.get_window_layout()
+    local id = tmux.get_current_pane_id()
+
+    return check_is_border(display, id, direction)
+end
+
+return M

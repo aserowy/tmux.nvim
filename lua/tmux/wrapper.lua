@@ -45,7 +45,10 @@ local function get_version()
     return version:gsub("[^%.%w]", "")
 end
 
-local M = {}
+local M = {
+    get_current_pane_id = get_tmux_pane,
+}
+
 function M.setup()
     M.is_tmux = get_tmux() ~= nil
 
@@ -79,6 +82,10 @@ function M.get_buffer_names()
     end
 
     return result
+end
+
+function M.get_window_layout()
+    execute("display -p '#{window_layout}'")
 end
 
 function M.has_neighbor(direction)

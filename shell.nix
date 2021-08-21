@@ -5,6 +5,7 @@ mkShell rec {
     lua51Packages.busted
     lua51Packages.luacov
     lua51Packages.luacheck
+    nodePackages.dockerfile-language-server-nodejs
     nodePackages.prettier
     stylua
     sumneko-lua-language-server
@@ -14,6 +15,8 @@ mkShell rec {
 
     # format and check -> fac :)
     alias fac="prettier --write README.md \
+        && stylua .dev/ \
+        && luacheck .dev/ \
         && stylua lua/ \
         && luacheck lua/ \
         && stylua spec/ \

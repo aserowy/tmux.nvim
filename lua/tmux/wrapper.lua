@@ -9,13 +9,6 @@ local tmux_directions = {
     l = "R",
 }
 
-local tmux_borders = {
-    h = "left",
-    j = "bottom",
-    k = "top",
-    l = "right",
-}
-
 local function get_tmux()
     return os.getenv("TMUX")
 end
@@ -85,13 +78,7 @@ function M.get_buffer_names()
 end
 
 function M.get_window_layout()
-    execute("display -p '#{window_layout}'")
-end
-
-function M.has_neighbor(direction)
-    local command = string.format("display-message -p '#{pane_at_%s}'", tmux_borders[direction])
-
-    return not execute(command):find("1")
+    return execute("display-message -p '#{window_layout}'")
 end
 
 function M.is_zoomed()

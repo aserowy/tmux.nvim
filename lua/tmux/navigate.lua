@@ -1,7 +1,8 @@
 local vim = vim
 
-local options = require("tmux.configuration.options")
+local layout = require("tmux.layout")
 local keymaps = require("tmux.keymaps")
+local options = require("tmux.configuration.options")
 local wrapper = require("tmux.wrapper")
 
 local opposite_directions = {
@@ -38,15 +39,10 @@ local function has_tmux_target(border)
     if wrapper.is_zoomed() and options.navigation.persist_zoom then
         return false
     end
-    -- FIX: Workaround for #24 but ignoring cycle_navigation = false,
-    -- fix for both only with tmux -S <YOUR_SOCKET> display -p '#{window_layout}'
-    if wrapper.is_zoomed() then
+    if layout.is_border(border) then
         return true
     end
-    if wrapper.has_neighbor(border) then
-        return true
-    end
-    return options.navigation.cycle_navigation and wrapper.has_neighbor(opposite_directions[border])
+    return options.navigation.cycle_navigation and layout.is_border(opposite_directions[border])
 end
 
 local function navigate_to(direction)

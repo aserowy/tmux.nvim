@@ -8,7 +8,7 @@ VOLUME [ "/workspace" ]
 
 WORKDIR /root
 ADD .tmux.conf .
-RUN mkdir .config/nvim/
+RUN mkdir -p .config/nvim/
 ADD init.lua .config/nvim/
 
 ENTRYPOINT [ "/bin/sh" ]

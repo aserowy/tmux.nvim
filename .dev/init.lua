@@ -12,7 +12,7 @@ require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
 
     use({
-        "~/src/",
+        "/workspace/",
         config = function()
             require("tmux").setup({
                 copy_sync = {

@@ -13,6 +13,13 @@ mkShell rec {
   shellHook = ''
     export LUA_PATH="$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"
 
+    FULLPATH=$(realpath $0)
+    BASEDIR=$(dirname $FULLPATH)
+
+    # test environment
+    alias tb="docker build -t tmnv-te $BASEDIR/.dev"
+    alias te="docker run -it -v $BASEDIR:/workspace tmnv-te"
+
     # format and check -> fac :)
     alias fac="prettier --write README.md \
         && stylua .dev/ \

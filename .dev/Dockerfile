@@ -1,10 +1,12 @@
-FROM nixos/nix
+FROM nixpkgs/nix:latest
 
 RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs
 RUN nix-channel --update
 
 RUN nix-env -iA nixpkgs.git
+RUN nix-env -iA nixpkgs.gnugrep
 RUN nix-env -iA nixpkgs.neovim
+RUN nix-env -iA nixpkgs.ps
 RUN nix-env -iA nixpkgs.tmux
 
 RUN mkdir /workspace

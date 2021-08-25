@@ -1,3 +1,4 @@
+# hadolint ignore=DL3007
 FROM nixpkgs/nix:latest
 
 RUN nix-channel --add https://nixos.org/channels/nixpkgs-unstable nixpkgs

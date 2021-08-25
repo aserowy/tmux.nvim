@@ -4,8 +4,11 @@ local function convert(...)
     return require("tmux.log.convert").to_string(...)
 end
 
-local function log(severity, message)
+local function log(severity, message, obj)
     local converted = convert(message)
+    if obj then
+        converted = converted .. convert(obj)
+    end
 
     channels.log(severity, converted)
 end
@@ -17,20 +20,20 @@ function M.setup()
     end)
 end
 
-function M.debug(message)
-    log("debug", message)
+function M.debug(message, obj)
+    log("debug", message, obj)
 end
 
-function M.information(message)
-    log("information", message)
+function M.information(message, obj)
+    log("information", message, obj)
 end
 
-function M.warning(message)
-    log("warning", message)
+function M.warning(message, obj)
+    log("warning", message, obj)
 end
 
-function M.error(message)
-    log("error", message)
+function M.error(message, obj)
+    log("error", message, obj)
 end
 
 return M

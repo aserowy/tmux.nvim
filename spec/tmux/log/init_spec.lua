@@ -98,4 +98,26 @@ describe("log", function()
         log.error("test")
         assert.are.same("error - test", message)
     end)
+
+    it("check object arguments", function()
+        require("tmux.configuration.logging").set({
+            busted = "debug",
+        })
+        message = ""
+
+        log.debug("test: ", nil)
+        assert.are.same("debug - test: ", message)
+
+        log.debug("test: ", true)
+        assert.are.same("debug - test: true", message)
+
+        log.information("test: ", true)
+        assert.are.same("information - test: true", message)
+
+        log.warning("test: ", true)
+        assert.are.same("warning - test: true", message)
+
+        log.error("test: ", true)
+        assert.are.same("error - test: true", message)
+    end)
 end)

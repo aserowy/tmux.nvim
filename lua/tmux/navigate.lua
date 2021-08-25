@@ -43,7 +43,7 @@ local function has_tmux_target(border)
     if not layout.is_border(border) then
         return true
     end
-    return options.navigation.cycle_navigation and layout.is_border(opposite_directions[border])
+    return options.navigation.cycle_navigation
 end
 
 local function navigate_to(direction)

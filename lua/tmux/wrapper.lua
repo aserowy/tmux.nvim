@@ -38,9 +38,7 @@ local function get_version()
     return version:gsub("[^%.%w]", "")
 end
 
-local M = {
-    get_current_pane_id = get_tmux_pane,
-}
+local M = {}
 
 function M.setup()
     M.is_tmux = get_tmux() ~= nil
@@ -75,6 +73,10 @@ function M.get_buffer_names()
     end
 
     return result
+end
+
+function M.get_current_pane_id()
+    return tonumber(get_tmux_pane():sub(2))
 end
 
 function M.get_window_layout()

@@ -3,6 +3,8 @@ local log = require("tmux.log")
 local M = {}
 
 function M.parse(display)
+    log.debug("parse: ", display or "nil")
+
     if display == "" or display == nil then
         return nil
     end
@@ -30,11 +32,15 @@ function M.parse(display)
         return nil
     end
 
-    return {
+    local result = {
         width = tonumber(width),
         height = tonumber(height),
         panes = panes,
     }
+
+    log.debug("parse > ", result)
+
+    return result
 end
 
 return M

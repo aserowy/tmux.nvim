@@ -1,7 +1,8 @@
 local vim = vim
 
-local layout = require("tmux.layout")
 local keymaps = require("tmux.keymaps")
+local layout = require("tmux.layout")
+local log = require("tmux.log")
 local options = require("tmux.configuration.options")
 local wrapper = require("tmux.wrapper")
 
@@ -39,13 +40,15 @@ local function has_tmux_target(border)
     if wrapper.is_zoomed() and options.navigation.persist_zoom then
         return false
     end
-    if layout.is_border(border) then
+    if not layout.is_border(border) then
         return true
     end
     return options.navigation.cycle_navigation and layout.is_border(opposite_directions[border])
 end
 
 local function navigate_to(direction)
+    log.debug("navigate_to: " .. direction)
+
     if is_nvim_border(direction) and has_tmux_target(direction) then
         wrapper.change_pane(direction)
     elseif is_nvim_border(direction) and options.navigation.cycle_navigation then

@@ -4,7 +4,7 @@ local keymaps = require("tmux.keymaps")
 local layout = require("tmux.layout")
 local log = require("tmux.log")
 local options = require("tmux.configuration.options")
-local wrapper = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local opposite_directions = {
     h = "l",
@@ -33,14 +33,14 @@ local function wincmd_with_cycle(direction)
     end
 end
 
-local function has_tmux_target(border)
-    if not wrapper.is_tmux then
+local function has_tmux_target(direction)
+    if not tmux.is_tmux then
         return false
     end
-    if wrapper.is_zoomed() and options.navigation.persist_zoom then
+    if tmux.is_zoomed() and options.navigation.persist_zoom then
         return false
     end
-    if not layout.is_border(border) then
+    if not layout.is_border(direction) then
         return true
     end
     return options.navigation.cycle_navigation
@@ -50,7 +50,7 @@ local function navigate_to(direction)
     log.debug("navigate_to: " .. direction)
 
     if is_nvim_border(direction) and has_tmux_target(direction) then
-        wrapper.change_pane(direction)
+        tmux.change_pane(direction)
     elseif is_nvim_border(direction) and options.navigation.cycle_navigation then
         wincmd_with_cycle(direction)
     else

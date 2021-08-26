@@ -1,6 +1,6 @@
 local log = require("tmux.log")
 local parse = require("tmux.layout.parse")
-local tmux = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local direction_checks = {
     ["h"] = function(_, pane)

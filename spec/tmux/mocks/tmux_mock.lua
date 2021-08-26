@@ -1,11 +1,11 @@
-local wrapper = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local M = {}
 function M.setup(tmux_version)
-    wrapper.is_tmux = true
-    wrapper.version = tmux_version
+    tmux.is_tmux = true
+    tmux.version = tmux_version
 
-    wrapper.setup = function() end
+    tmux.setup = function() end
 end
 
 return M

@@ -1,14 +1,14 @@
 local options = require("tmux.configuration.options")
 local keymaps = require("tmux.keymaps")
 local log = require("tmux.log")
-local wrapper = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local function rtc(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
 local function sync_register(index, buffer_name)
-    local content = wrapper.get_buffer(buffer_name)
+    local content = tmux.get_buffer(buffer_name)
     vim.fn.setreg(index, content)
 end
 
@@ -23,7 +23,7 @@ local function sync_registers(passed_key)
 
     local offset = options.copy_sync.register_offset
     local first_buffer_name = ""
-    for k, v in ipairs(wrapper.get_buffer_names()) do
+    for k, v in ipairs(tmux.get_buffer_names()) do
         if k == 1 then
             first_buffer_name = v
         end
@@ -61,7 +61,7 @@ local M = {
 }
 
 function M.setup()
-    if not wrapper.is_tmux or not options.copy_sync.enable then
+    if not tmux.is_tmux or not options.copy_sync.enable then
         return
     end
 
@@ -134,7 +134,7 @@ function M.post_yank(content)
 
     log.debug(buffer_content)
 
-    wrapper.set_buffer(buffer_content, options.copy_sync.redirect_to_clipboard)
+    tmux.set_buffer(buffer_content, options.copy_sync.redirect_to_clipboard)
 end
 
 return M

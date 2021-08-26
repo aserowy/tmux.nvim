@@ -3,7 +3,7 @@ local copy = require("tmux.copy")
 local log = require("tmux.log")
 local navigate = require("tmux.navigate")
 local resize = require("tmux.resize")
-local wrapper = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local M = {
     move_left = navigate.to_left,
@@ -23,9 +23,9 @@ local M = {
 function M.setup(options, logging)
     log.setup()
 
-    log.debug("setup wrapper")
-    if not wrapper.setup() then
-        log.information("setup for wrapper failed")
+    log.debug("setup tmux wrapper")
+    if not tmux.setup() then
+        log.information("setup for tmux wrapper failed")
         return
     end
 

@@ -3,7 +3,7 @@ local vim = vim
 local layout = require("tmux.layout")
 local keymaps = require("tmux.keymaps")
 local options = require("tmux.configuration.options")
-local wrapper = require("tmux.wrapper")
+local tmux = require("tmux.wrapper.tmux")
 
 local function winnr(direction)
     return vim.api.nvim_call_function("winnr", { direction })
@@ -23,7 +23,7 @@ local function is_only_window()
 end
 
 local function is_tmux_target(border)
-    return wrapper.is_tmux and not layout.is_border(border) or is_only_window()
+    return tmux.is_tmux and not layout.is_border(border) or is_only_window()
 end
 
 local M = {}
@@ -41,7 +41,7 @@ end
 function M.to_left()
     local is_border = winnr() == winnr("1l")
     if is_border and is_tmux_target("l") then
-        wrapper.resize("h")
+        tmux.resize("h")
     elseif is_border then
         resize("x", "+", options.resize.resize_step_x)
     else
@@ -52,7 +52,7 @@ end
 function M.to_bottom()
     local is_border = winnr() == winnr("1j")
     if is_border and is_tmux_target("j") then
-        wrapper.resize("j")
+        tmux.resize("j")
     elseif is_border and winnr() ~= winnr("1k") then
         resize("y", "-", options.resize.resize_step_y)
     else
@@ -63,7 +63,7 @@ end
 function M.to_top()
     local is_border = winnr() == winnr("1j")
     if is_border and is_tmux_target("j") then
-        wrapper.resize("k")
+        tmux.resize("k")
     elseif is_border then
         resize("y", "+", options.resize.resize_step_y)
     else
@@ -74,7 +74,7 @@ end
 function M.to_right()
     local is_border = winnr() == winnr("1l")
     if is_border and is_tmux_target("l") then
-        wrapper.resize("l")
+        tmux.resize("l")
     elseif is_border then
         resize("x", "-", options.resize.resize_step_x)
     else

@@ -1,3 +1,1 @@
-describe("navigate panes", function()
-
-end)
+describe("navigate panes", function() end)

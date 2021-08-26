@@ -27,3 +27,4 @@ jobs:
           LINTER_RULES_PATH: /
           VALIDATE_JSCPD: false
           VALIDATE_DOCKERFILE: false
+          VALIDATE_DOCKERFILE_HADOLINT: false

@@ -12,6 +12,10 @@ require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
 
     use({
+        "kyazdani42/nvim-tree.lua",
+    })
+
+    use({
         "/workspace/",
         config = function()
             require("tmux").setup({
@@ -33,3 +37,11 @@ require("packer").startup(function(use)
         end,
     })
 end)
+
+local opts = {
+    nowait = true,
+    silent = true,
+    noremap = true,
+}
+
+vim.api.nvim_set_keymap("n", "<C-e>", [[<cmd>lua require("nvim-tree").find_file(true)<cr> ]], opts)

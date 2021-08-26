@@ -23,7 +23,7 @@ local function is_only_window()
 end
 
 local function is_tmux_target(border)
-    return wrapper.is_tmux and layout.is_border(border) or is_only_window()
+    return wrapper.is_tmux and not layout.is_border(border) or is_only_window()
 end
 
 local M = {}

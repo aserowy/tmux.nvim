@@ -1,8 +1,7 @@
-local vim = vim
-
 local keymaps = require("tmux.keymaps")
 local layout = require("tmux.layout")
 local log = require("tmux.log")
+local nvim = require("tmux.wrapper.nvim")
 local options = require("tmux.configuration.options")
 local tmux = require("tmux.wrapper.tmux")
 
@@ -13,23 +12,11 @@ local opposite_directions = {
     l = "h",
 }
 
-local function winnr(direction)
-    return vim.api.nvim_call_function("winnr", { direction })
-end
-
-local function is_nvim_border(border)
-    return winnr() == winnr("1" .. border)
-end
-
-local function wincmd(direction, count)
-    return vim.api.nvim_command((count or 1) .. "wincmd " .. direction)
-end
-
 local function wincmd_with_cycle(direction)
-    if is_nvim_border(direction) then
-        wincmd(opposite_directions[direction], 999)
+    if nvim.is_nvim_border(direction) then
+        nvim.wincmd(opposite_directions[direction], 999)
     else
-        wincmd(direction)
+        nvim.wincmd(direction)
     end
 end
 
@@ -43,18 +30,18 @@ local function has_tmux_target(direction)
     if not layout.is_border(direction) then
         return true
     end
-    return options.navigation.cycle_navigation
+    return options.navigation.cycle_navigation and not layout.is_border(opposite_directions[direction])
 end
 
 local function navigate_to(direction)
     log.debug("navigate_to: " .. direction)
 
-    if is_nvim_border(direction) and has_tmux_target(direction) then
+    if nvim.is_nvim_border(direction) and has_tmux_target(direction) then
         tmux.change_pane(direction)
-    elseif is_nvim_border(direction) and options.navigation.cycle_navigation then
+    elseif nvim.is_nvim_border(direction) and options.navigation.cycle_navigation then
         wincmd_with_cycle(direction)
     else
-        wincmd(direction)
+        nvim.wincmd(direction)
     end
 end
 

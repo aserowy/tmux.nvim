@@ -38,6 +38,9 @@ describe("navigate.has_tmux_target", function()
         tmux.is_zoomed = function()
             return true
         end
+        layout.is_border = function(_)
+            return false
+        end
 
         options.navigation.persist_zoom = true
 
@@ -53,9 +56,6 @@ describe("navigate.has_tmux_target", function()
         result = navigate.has_tmux_target("l")
         assert.is_false(result)
 
-        layout.is_border = function(_)
-            return false
-        end
         options.navigation.persist_zoom = false
 
         result = navigate.has_tmux_target("h")
@@ -133,5 +133,51 @@ describe("navigate.has_tmux_target", function()
         options.navigation.cycle_navigation = true
         result = navigate.has_tmux_target("h")
         assert.is_true(result)
+    end)
+end)
+
+describe("navigate.to", function()
+    local navigate
+
+    local nvim
+    local options
+    -- local tmux
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        navigate = require("tmux.navigation.navigate")
+
+        nvim = require("tmux.wrapper.nvim")
+        options = require("tmux.configuration.options")
+        -- tmux = require("tmux.wrapper.tmux")
+    end)
+
+    it("check with no borders", function()
+        options.navigation.cycle_navigation = false
+        navigate.has_tmux_target = function()
+            return false
+        end
+        nvim.is_nvim_border = function()
+            return false
+        end
+
+        local last_called_direction = ""
+        nvim.wincmd = function(direction)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("h", last_called_direction)
+
+        navigate.to("j")
+        assert.are.same("j", last_called_direction)
+
+        navigate.to("k")
+        assert.are.same("k", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("l", last_called_direction)
     end)
 end)

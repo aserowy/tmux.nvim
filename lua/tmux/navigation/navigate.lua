@@ -28,11 +28,12 @@ end
 function M.to(direction)
     log.debug("navigate_to: " .. direction)
 
-    if nvim.is_nvim_border(direction) and M.has_tmux_target(direction) then
+    local is_nvim_border = nvim.is_nvim_border(direction)
+    if is_nvim_border and M.has_tmux_target(direction) then
         tmux.change_pane(direction)
-    elseif nvim.is_nvim_border(direction) and options.navigation.cycle_navigation then
+    elseif is_nvim_border and options.navigation.cycle_navigation then
         nvim.wincmd(opposite_directions[direction], 999)
-    else
+    elseif not is_nvim_border then
         nvim.wincmd(direction)
     end
 end

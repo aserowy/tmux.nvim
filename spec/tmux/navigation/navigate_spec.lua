@@ -141,7 +141,7 @@ describe("navigate.to", function()
 
     local nvim
     local options
-    -- local tmux
+    local tmux
 
     setup(function()
         require("spec.tmux.mocks.log_mock").setup()
@@ -151,13 +151,13 @@ describe("navigate.to", function()
 
         nvim = require("tmux.wrapper.nvim")
         options = require("tmux.configuration.options")
-        -- tmux = require("tmux.wrapper.tmux")
+        tmux = require("tmux.wrapper.tmux")
     end)
 
-    it("check with no borders", function()
+    it("check with no nvim borders", function()
         options.navigation.cycle_navigation = false
         navigate.has_tmux_target = function()
-            return false
+            return true
         end
         nvim.is_nvim_border = function()
             return false
@@ -165,6 +165,87 @@ describe("navigate.to", function()
 
         local last_called_direction = ""
         nvim.wincmd = function(direction)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("h", last_called_direction)
+
+        navigate.to("j")
+        assert.are.same("j", last_called_direction)
+
+        navigate.to("k")
+        assert.are.same("k", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("l", last_called_direction)
+    end)
+
+    it("check with nvim border and tmux border", function()
+        options.navigation.cycle_navigation = false
+        navigate.has_tmux_target = function()
+            return false
+        end
+        nvim.is_nvim_border = function()
+            return true
+        end
+
+        local last_called_direction = ""
+        nvim.wincmd = function(direction)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("", last_called_direction)
+
+        navigate.to("j")
+        assert.are.same("", last_called_direction)
+
+        navigate.to("k")
+        assert.are.same("", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("", last_called_direction)
+    end)
+
+    it("check cycle_navigation on only nvim pane", function()
+        options.navigation.cycle_navigation = true
+        navigate.has_tmux_target = function()
+            return false
+        end
+        nvim.is_nvim_border = function()
+            return true
+        end
+
+        local last_called_direction = ""
+        nvim.wincmd = function(direction, _)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("l", last_called_direction)
+
+        navigate.to("j")
+        assert.are.same("k", last_called_direction)
+
+        navigate.to("k")
+        assert.are.same("j", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("h", last_called_direction)
+    end)
+
+    it("check change tmux pane on nvim border", function()
+        options.navigation.cycle_navigation = true
+        navigate.has_tmux_target = function()
+            return true
+        end
+        nvim.is_nvim_border = function()
+            return true
+        end
+
+        local last_called_direction = ""
+        tmux.change_pane = function(direction)
             last_called_direction = direction
         end
 

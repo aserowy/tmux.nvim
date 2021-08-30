@@ -218,7 +218,8 @@ describe("navigate.to", function()
         end
 
         local last_called_direction = ""
-        nvim.wincmd = function(direction, _)
+        nvim.wincmd = function(direction, count)
+            assert.is_true(count > 500)
             last_called_direction = direction
         end
 

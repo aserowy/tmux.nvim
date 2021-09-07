@@ -1,7 +1,8 @@
 # tmux.nvim
 
-![dependabot status](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=Dependabot)
+![dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=Dependabot)
 [![ci](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml/badge.svg)](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml)
+[![coverage](https://coveralls.io/repos/github/aserowy/tmux.nvim/badge.svg?branch=main)](https://coveralls.io/github/aserowy/tmux.nvim?branch=main)
 
 ## features
 

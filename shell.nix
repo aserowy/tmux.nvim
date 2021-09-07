@@ -6,6 +6,7 @@ mkShell rec {
     lua51Packages.luacov
     lua51Packages.luacheck
     nodePackages.dockerfile-language-server-nodejs
+    nodePackages.markdownlint-cli
     nodePackages.prettier
     stylua
     sumneko-lua-language-server

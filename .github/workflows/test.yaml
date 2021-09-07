@@ -30,7 +30,7 @@ jobs:
     - name: run
       run: busted -c -v
       env:
-        LUA_PATH: "$GITHUB_WORKSPACE/?.lua;$GITHUB_WORKSPACE/lua/?/init.lua;$GITHUB_WORKSPACE/lua/?.lua;$GITHUB_WORKSPACE/spec/?/init.lua;$GITHUB_WORKSPACE/spec/?.lua;"
+        LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
 
     - name: report
       if: success()

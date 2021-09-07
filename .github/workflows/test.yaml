@@ -30,7 +30,7 @@ jobs:
     - name: run
       run: busted -c -v
       env:
-        LUA_PATH: "$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"
+        LUA_PATH: "$GITHUB_WORKSPACE/?.lua;$GITHUB_WORKSPACE/lua/?/init.lua;$GITHUB_WORKSPACE/lua/?.lua;$GITHUB_WORKSPACE/spec/?/init.lua;$GITHUB_WORKSPACE/spec/?.lua;"
 
     - name: report
       if: success()

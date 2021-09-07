@@ -29,6 +29,8 @@ jobs:
 
     - name: run
       run: busted -c -v
+      env:
+        LUA_PATH: "$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"
 
     - name: report
       if: success()

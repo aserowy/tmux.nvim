@@ -25,16 +25,17 @@ jobs:
     - name: setup dependencies
       run: |
         luarocks install busted
-        luarocks install luacov
+        luarocks install luacov-coveralls
 
     - name: run
       run: busted -c -v
       env:
         LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
 
-    - name: report to codecov
-      uses: codecov/codecov-action@v2
-      with:
-        fail_ci_if_error: true
-        files: ./luacov.stats.out
-        verbose: true
+    - name: report
+      if: success()
+      continue-on-error: true
+      run: luacov-coveralls -i tmux.nvim/lua -e .luarocks
+      env:
+        COVERALLS_REPO_TOKEN: ${{ github.token }}
+        LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"

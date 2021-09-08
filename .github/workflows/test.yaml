@@ -32,6 +32,12 @@ jobs:
       env:
         LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
 
+    - name: report to codecov
+      uses: codecov/codecov-action@v2
+      with:
+        fail_ci_if_error: true
+        verbose: true
+
     - name: report
       if: success()
       continue-on-error: true

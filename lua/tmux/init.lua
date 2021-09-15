@@ -24,10 +24,7 @@ function M.setup(options, logging)
     log.setup()
 
     log.debug("setup tmux wrapper")
-    if not tmux.setup() then
-        log.information("setup for tmux wrapper failed")
-        return
-    end
+    tmux.setup()
 
     log.debug("setup config")
     config.setup(options, logging)

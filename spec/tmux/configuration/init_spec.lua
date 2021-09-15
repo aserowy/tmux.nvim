@@ -22,4 +22,17 @@ describe("configuration", function()
         result = require("tmux.configuration")
         assert.are.same("debug", result.logging.file)
     end)
+
+    it("check tmux not set will skip validation", function()
+        require("tmux.wrapper.tmux").is_tmux = false
+
+        local validated = false
+        require("tmux.configuration.validate").options = function(_, _)
+            validated = true
+        end
+
+        config.setup()
+
+        assert.is_false(validated)
+    end)
 end)

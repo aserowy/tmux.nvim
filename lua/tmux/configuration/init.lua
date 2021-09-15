@@ -12,7 +12,9 @@ function M.setup(opts, logs)
     M.options.set(vim.tbl_deep_extend("force", {}, M.options, opts or {}))
     M.logging.set(vim.tbl_deep_extend("force", {}, M.logging, logs or {}))
 
-    validate.options(tmux.version, M.options)
+    if tmux.is_tmux then
+        validate.options(tmux.version, M.options)
+    end
 end
 
 return M

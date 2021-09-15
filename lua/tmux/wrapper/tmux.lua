@@ -38,7 +38,9 @@ local function get_version()
     return version:gsub("[^%.%w]", "")
 end
 
-local M = {}
+local M = {
+    is_tmux = false,
+}
 
 function M.setup()
     M.is_tmux = get_tmux() ~= nil

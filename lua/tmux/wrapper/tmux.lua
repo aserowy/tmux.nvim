@@ -97,11 +97,12 @@ function M.set_buffer(content, sync_clipboard)
     content = content:gsub("\\", "\\\\\\\\")
     content = content:gsub('"', '\\"')
     content = content:gsub("%$", "\\$")
+    content = content:gsub("%%", "%%%%")
 
     if sync_clipboard ~= nil and sync_clipboard then
-        execute("load-buffer -w -", string.format('echo -n "%s" | ', content))
+        execute("load-buffer -w -", string.format('printf "%s" | ', content))
     else
-        execute("load-buffer -", string.format('echo -n "%s" | ', content))
+        execute("load-buffer -", string.format('printf "%s" | ', content))
     end
 end
 

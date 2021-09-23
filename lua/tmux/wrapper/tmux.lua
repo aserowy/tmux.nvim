@@ -96,7 +96,7 @@ end
 function M.set_buffer(content, sync_clipboard)
     content = content:gsub("\\", "\\\\\\\\")
     content = content:gsub('"', '\\"')
-    content = content:gsub('`', '\\`')
+    content = content:gsub("`", "\\`")
     content = content:gsub("%$", "\\$")
     content = content:gsub("%%", "%%%%")
 

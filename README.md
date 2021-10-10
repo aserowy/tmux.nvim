@@ -83,6 +83,9 @@ The following defaults are given:
         -- do so. Nvim does not allow syncing registers 0 and 1 without
         -- overwriting the unnamed register. Thus, ddp would not be possible.
         sync_deletes = true,
+
+        -- syncs the unnamed register with the first buffer entry from tmux.
+        sync_unnamed = true,
     },
     navigation = {
         -- cycles to opposite pane while navigating into the border

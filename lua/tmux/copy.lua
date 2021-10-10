@@ -33,7 +33,9 @@ local function sync_registers(passed_key)
         sync_register(tostring(k - 1 + offset), v)
     end
 
-    sync_unnamed_register(first_buffer_name)
+    if options.copy_sync.sync_unnamed then
+        sync_unnamed_register(first_buffer_name)
+    end
 
     if passed_key ~= nil and passed_key ~= "" then
         return rtc(passed_key)

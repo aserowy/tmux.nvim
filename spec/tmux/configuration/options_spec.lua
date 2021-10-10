@@ -11,8 +11,9 @@ describe("configuration options", function()
                 enable = false,
                 redirect_to_clipboard = false,
                 register_offset = 0,
-                sync_deletes = true,
                 sync_clipboard = true,
+                sync_deletes = true,
+                sync_unnamed = true,
             },
             navigation = {
                 cycle_navigation = true,
@@ -82,5 +83,13 @@ describe("configuration options", function()
         })
         result = require("tmux.configuration.options")
         assert.are.same(false, result.copy_sync.sync_deletes)
+
+        config.set({
+            copy_sync = {
+                sync_unnamed = false,
+            },
+        })
+        result = require("tmux.configuration.options")
+        assert.are.same(false, result.copy_sync.sync_unnamed)
     end)
 end)

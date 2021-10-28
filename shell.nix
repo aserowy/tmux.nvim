@@ -2,6 +2,7 @@ with import <nixpkgs> { };
 mkShell rec {
   name = "neocode";
   buildInputs = [
+    gh
     lua51Packages.busted
     lua51Packages.luacov
     lua51Packages.luacheck

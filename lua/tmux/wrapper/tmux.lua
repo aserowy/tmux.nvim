@@ -94,11 +94,10 @@ function M.resize(direction)
 end
 
 function M.set_buffer(content, sync_clipboard)
-    content = content:gsub("\\", "\\\\\\\\")
+    content = content:gsub("\\", "\\\\")
     content = content:gsub('"', '\\"')
     content = content:gsub("`", "\\`")
     content = content:gsub("%$", "\\$")
-    content = content:gsub("%%", "%%%%")
 
     if sync_clipboard ~= nil and sync_clipboard then
         execute("load-buffer -w -", string.format('printf "%%s" "%s" | ', content))

@@ -112,11 +112,11 @@ The following defaults are given:
 
 ## usage
 
-Tmux.nvim uses only `lua` api. If you are not running the default keybindings, you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
+Tmux.nvim uses only `lua` API. If you are not running the default keybindings, you can bind the following functions to your liking. Besides the bindings in nvim you need to add configuration to tmux.
 
 ### copy sync
 
-Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux api. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instance, switch to the second and p your deletes.
+Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0` - `9` registers. The sync does NOT rely on temporary files and works just with the given tmux API. Thus, making it less insecure :). The feature enables a nvim instace overarching copy/paste process! dd in one nvim instance, switch to the second and p your deletes.
 
 If you sync your clipboard not with a standalone tmux, disable `sync_clipboard` to ensure nvim handles yanks and deletes alone.
 

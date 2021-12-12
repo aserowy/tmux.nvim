@@ -75,6 +75,7 @@ function M.setup()
             autocmd TextYankPost * call PostYank(v:event)
             autocmd CmdlineEnter * call SyncRegisters()
             autocmd CmdwinEnter : call SyncRegisters()
+            autocmd VimEnter * call SyncRegisters()
         endif
     ]])
 

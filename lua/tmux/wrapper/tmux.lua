@@ -1,4 +1,5 @@
 local vim = vim
+local options = require("tmux.configuration.options")
 
 local log = require("tmux.log")
 
@@ -71,7 +72,13 @@ function M.get_buffer_names()
 
     local result = {}
     for line in buffers:gmatch("([^\n]+)\n?") do
-        table.insert(result, line)
+        local ignore_buffers = options.copy_sync.ignore_buffers
+        for _, value in ipairs(ignore_buffers) do
+            if value == line then
+                break
+            end
+            table.insert(result, line)
+        end
     end
 
     return result

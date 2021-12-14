@@ -35,6 +35,9 @@ local M = {
         -- overwriting the unnamed register. Thus, ddp would not be possible.
         sync_deletes = true,
 
+        -- ignore specific tmux buffers
+        ignore_buffers = { "tmp" },
+
         -- syncs the unnamed register with the first buffer entry from tmux.
         sync_unnamed = true,
     },

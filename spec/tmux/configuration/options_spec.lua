@@ -13,6 +13,7 @@ describe("configuration options", function()
                 register_offset = 0,
                 sync_clipboard = true,
                 sync_deletes = true,
+                ignore_buffers = { "tmp" },
                 sync_unnamed = true,
             },
             navigation = {
@@ -91,5 +92,13 @@ describe("configuration options", function()
         })
         result = require("tmux.configuration.options")
         assert.are.same(false, result.copy_sync.sync_unnamed)
+
+        config.set({
+            copy_sync = {
+                ignore_buffers = { "tmp" },
+            },
+        })
+        result = require("tmux.configuration.options")
+        assert.are.same({ "tmp" }, result.copy_sync.ignore_buffers)
     end)
 end)

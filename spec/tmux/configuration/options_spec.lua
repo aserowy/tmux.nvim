@@ -99,7 +99,7 @@ describe("configuration options", function()
             },
         })
         result = require("tmux.configuration.options")
-        assert.are.same( {}, result.copy_sync.ignore_buffers)
+        assert.are.same({}, result.copy_sync.ignore_buffers)
 
         config.set({
             copy_sync = {

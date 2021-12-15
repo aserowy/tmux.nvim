@@ -85,7 +85,7 @@ The following defaults are given:
         sync_deletes = true,
 
         -- ignore specific tmux buffers
-        ignore_buffers = { "tmp" },
+        ignore_buffers = {},
 
         -- syncs the unnamed register with the first buffer entry from tmux.
         sync_unnamed = true,

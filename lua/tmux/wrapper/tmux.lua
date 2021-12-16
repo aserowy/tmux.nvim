@@ -1,5 +1,4 @@
 local vim = vim
-local options = require("tmux.configuration.options")
 
 local log = require("tmux.log")
 
@@ -30,16 +29,6 @@ local function execute(arg, pre)
     handle:close()
 
     return result
-end
-
-local function contains(tab, val)
-    for _, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-
-    return false
 end
 
 local function get_version()
@@ -81,11 +70,7 @@ function M.get_buffer_names()
     local buffers = execute([[ list-buffers -F "#{buffer_name}" ]])
 
     local result = {}
-    local ignore_buffers = options.copy_sync.ignore_buffers
     for line in buffers:gmatch("([^\n]+)\n?") do
-        if contains(ignore_buffers, line) then
-            break
-        end
         table.insert(result, line)
     end
 

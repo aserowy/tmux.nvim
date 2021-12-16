@@ -66,6 +66,9 @@ The following defaults are given:
         -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
         enable = false,
 
+        -- ignore specific tmux buffers
+        ignore_buffers = { "" },
+
         -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
         -- clipboard by tmux
         redirect_to_clipboard = false,
@@ -83,9 +86,6 @@ The following defaults are given:
         -- do so. Nvim does not allow syncing registers 0 and 1 without
         -- overwriting the unnamed register. Thus, ddp would not be possible.
         sync_deletes = true,
-
-        -- ignore specific tmux buffers
-        ignore_buffers = {},
 
         -- syncs the unnamed register with the first buffer entry from tmux.
         sync_unnamed = true,

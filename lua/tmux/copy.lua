@@ -7,9 +7,18 @@ local function rtc(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
+local function contains(tab, val)
+    for _, value in ipairs(tab) do
+        if value == val then
+            return true
+        end
+    end
+
+    return false
+end
+
 local function sync_register(index, buffer_name)
-    local content = tmux.get_buffer(buffer_name)
-    vim.fn.setreg(index, content)
+    vim.fn.setreg(index, tmux.get_buffer(buffer_name))
 end
 
 local function sync_unnamed_register(buffer_name)
@@ -21,16 +30,23 @@ end
 local function sync_registers(passed_key)
     log.debug(string.format("sync_registers: %s", passed_key))
 
+    local ignore_buffers = options.copy_sync.ignore_buffers
     local offset = options.copy_sync.register_offset
+
+    log.debug("ignore_buffers: ", ignore_buffers)
+
     local first_buffer_name = ""
     for k, v in ipairs(tmux.get_buffer_names()) do
-        if k == 1 then
-            first_buffer_name = v
+        log.debug("buffer to sync: ", v)
+        if not contains(ignore_buffers, v) then
+            if k == 1 then
+                first_buffer_name = v
+            end
+            if k >= 11 - offset then
+                break
+            end
+            sync_register(tostring(k - 1 + offset), v)
         end
-        if k >= 11 - offset then
-            break
-        end
-        sync_register(tostring(k - 1 + offset), v)
     end
 
     if options.copy_sync.sync_unnamed then

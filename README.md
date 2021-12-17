@@ -66,6 +66,11 @@ The following defaults are given:
         -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
         enable = false,
 
+        -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
+        -- first buffer or named_buffer_name = true to ignore a named tmux
+        -- buffer with name named_buffer_name :)
+        ignore_buffers = { empty = false },
+
         -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
         -- clipboard by tmux
         redirect_to_clipboard = false,
@@ -123,6 +128,8 @@ If you sync your clipboard not with a standalone tmux, disable `sync_clipboard` 
 This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state.
 
 To redirect copies (and deletes) to clipboard, tmux must have the capability to do so. The plugin will just set -w on set-buffer. If your tmux need more configuration check out [tmux-yank](https://github.com/tmux-plugins/tmux-yank) for an easy setup.
+
+Ignoring buffers must have the form of `buffer_name = true` to enable an unsorted list in lua. This enhances the performance of checks - if a buffer is ignored or not - meaningfull.
 
 ### navigation
 

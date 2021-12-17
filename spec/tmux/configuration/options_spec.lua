@@ -13,7 +13,7 @@ describe("configuration options", function()
                 register_offset = 0,
                 sync_clipboard = true,
                 sync_deletes = true,
-                ignore_buffers = { "" },
+                ignore_buffers = { empty = false },
                 sync_unnamed = true,
             },
             navigation = {
@@ -65,7 +65,7 @@ describe("configuration options", function()
             },
         })
         result = require("tmux.configuration.options")
-        assert.are.same({ "" }, result.copy_sync.ignore_buffers)
+        assert.are.same({ empty = false }, result.copy_sync.ignore_buffers)
     end)
 
     it("check valid value mappings", function()
@@ -103,10 +103,19 @@ describe("configuration options", function()
 
         config.set({
             copy_sync = {
-                ignore_buffers = { "tmp" },
+                ignore_buffers = { empty = true },
             },
         })
         result = require("tmux.configuration.options")
-        assert.are.same({ "tmp" }, result.copy_sync.ignore_buffers)
+        assert.are.same({ empty = true }, result.copy_sync.ignore_buffers)
+
+        config.set({
+            copy_sync = {
+                ignore_buffers = { tmp = true },
+            },
+        })
+        result = require("tmux.configuration.options")
+        local expected = { empty = true, tmp = true }
+        assert.are.same(expected, result.copy_sync.ignore_buffers)
     end)
 end)

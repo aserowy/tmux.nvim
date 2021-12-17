@@ -21,6 +21,7 @@ require("packer").startup(function(use)
             require("tmux").setup({
                 copy_sync = {
                     enable = true,
+                    ignore_buffers = { buffer0 = true },
                     redirect_to_clipboard = true,
                 },
                 navigation = {

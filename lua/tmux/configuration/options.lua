@@ -9,6 +9,11 @@ local function copy(source, target)
             source[index] = target[index]
         end
     end
+    for index, _ in pairs(target) do
+        if target[index] ~= nil and source[index] == nil then
+            source[index] = target[index]
+        end
+    end
 end
 
 local M = {
@@ -17,8 +22,10 @@ local M = {
         -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
         enable = false,
 
-        -- ignore specific tmux buffers
-        ignore_buffers = { "" },
+        -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
+        -- first buffer or named_buffer_name = true to ignore a named tmux
+        -- buffer with name named_buffer_name :)
+        ignore_buffers = { empty = false },
 
         -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
         -- clipboard by tmux

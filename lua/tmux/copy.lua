@@ -7,16 +7,6 @@ local function rtc(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end
 
-local function contains(tab, val)
-    for _, value in ipairs(tab) do
-        if value == val then
-            return true
-        end
-    end
-
-    return false
-end
-
 local function sync_register(index, buffer_name)
     vim.fn.setreg(index, tmux.get_buffer(buffer_name))
 end
@@ -38,7 +28,8 @@ local function sync_registers(passed_key)
     local first_buffer_name = ""
     for k, v in ipairs(tmux.get_buffer_names()) do
         log.debug("buffer to sync: ", v)
-        if not contains(ignore_buffers, v) then
+        if not ignore_buffers[v] then
+            log.debug("buffer is syncing: ", v)
             if k == 1 then
                 first_buffer_name = v
             end

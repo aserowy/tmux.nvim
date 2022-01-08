@@ -18,6 +18,10 @@ function M.setup()
     channels.add("file", function(sev, msg)
         require("tmux.log.channels.file").write(sev, msg)
     end)
+
+    channels.add("notify", function(sev, msg)
+        require("tmux.log.channels.notify").create().write(sev, msg)
+    end)
 end
 
 function M.debug(message, obj)

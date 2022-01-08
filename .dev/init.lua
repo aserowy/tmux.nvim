@@ -12,6 +12,13 @@ require("packer").startup(function(use)
     use("wbthomason/packer.nvim")
 
     use({
+        "rcarriga/nvim-notify",
+        config = function()
+            vim.notify = require("notify")
+        end,
+    })
+
+    use({
         "kyazdani42/nvim-tree.lua",
     })
 
@@ -34,6 +41,7 @@ require("packer").startup(function(use)
                 },
             }, {
                 file = "debug",
+                notify = "debug",
             })
         end,
     })

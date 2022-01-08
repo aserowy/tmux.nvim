@@ -1,6 +1,6 @@
 local M = {
-    nvim = "warning",
     file = "warning",
+    notify = "warning",
 }
 
 function M.set(options)

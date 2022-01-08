@@ -98,4 +98,19 @@ describe("log channels", function()
 
         assert.are.same(4, call_count)
     end)
+
+    it("failing channel does not throw exception", function()
+        local logged = false
+        channels.add("log", function(_, _)
+            logged = true
+        end)
+
+        channels.add("failing", function(_, _)
+            error("failed")
+        end)
+
+        channels.log("debug", "message")
+
+        assert.is_true(logged)
+    end)
 end)

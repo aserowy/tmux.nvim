@@ -18,7 +18,11 @@ end
 function M.log(sev, message)
     for key, value in pairs(M.current) do
         if severity.check(config[key], sev) then
-            value(sev, message)
+            xpcall(function()
+                value(sev, message)
+            end, function(error)
+                print("ERROR: Logging for channel " .. key .. " failed.", error)
+            end)
         end
     end
 end

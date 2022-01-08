@@ -131,11 +131,10 @@ function M.setup()
 end
 
 function M.post_yank(content)
-    log.debug(content)
-
     if content.regname ~= "" then
         return
     end
+
     if content.operator ~= "y" and not options.copy_sync.sync_deletes then
         return
     end

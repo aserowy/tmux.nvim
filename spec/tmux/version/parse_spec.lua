@@ -43,6 +43,9 @@ describe("version parsing", function()
         result = parse.from("01.01")
         assert.are.same({ major = 1, minor = 1, patch = 0 }, result)
 
+        result = parse.from("next1.1")
+        assert.are.same({ major = 1, minor = 1, patch = 0 }, result)
+
         result = parse.from("next-1.1")
         assert.are.same({ major = 1, minor = 1, patch = 0 }, result)
 
@@ -57,6 +60,9 @@ describe("version parsing", function()
 
         result = parse.from("1.1z")
         assert.are.same({ major = 1, minor = 1, patch = 26 }, result)
+
+        result = parse.from("next1.1a")
+        assert.are.same({ major = 1, minor = 1, patch = 1 }, result)
 
         result = parse.from("next-1.1a")
         assert.are.same({ major = 1, minor = 1, patch = 1 }, result)

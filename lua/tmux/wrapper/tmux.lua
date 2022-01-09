@@ -32,10 +32,9 @@ local function execute(arg, pre)
 end
 
 local function get_version()
-    local result = execute("-V")
-    local version = result:sub(result:find(" ") + 1)
-
-    return version:gsub("[^%.%w]", "")
+    local result = vim.split(execute("-V"), "\n")
+    local version = result[1]:gsub("tmux ", ""):match("%d.%d%w?")
+    return version
 end
 
 local M = {

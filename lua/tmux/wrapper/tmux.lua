@@ -89,8 +89,8 @@ function M.is_zoomed()
     return execute("display-message -p '#{window_zoomed_flag}'"):find("1")
 end
 
-function M.resize(direction)
-    execute(string.format("resize-pane -t '%s' -%s 1", get_tmux_pane(), tmux_directions[direction]))
+function M.resize(direction, step)
+    execute(string.format("resize-pane -t '%s' -%s %d", get_tmux_pane(), tmux_directions[direction], step))
 end
 
 function M.set_buffer(content, sync_clipboard)

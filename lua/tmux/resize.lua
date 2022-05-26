@@ -31,7 +31,7 @@ end
 function M.to_left()
     local is_border = nvim.is_nvim_border("l")
     if is_border and is_tmux_target("l") then
-        tmux.resize("h")
+        tmux.resize("h", options.resize.resize_step_x)
     elseif is_border then
         nvim.resize("x", "+", options.resize.resize_step_x)
     else
@@ -42,7 +42,7 @@ end
 function M.to_bottom()
     local is_border = nvim.is_nvim_border("j")
     if is_border and is_tmux_target("j") then
-        tmux.resize("j")
+        tmux.resize("j", options.resize.resize_step_y)
     elseif is_border and nvim.winnr() ~= nvim.winnr("1k") then
         nvim.resize("y", "-", options.resize.resize_step_y)
     else
@@ -53,7 +53,7 @@ end
 function M.to_top()
     local is_border = nvim.is_nvim_border("j")
     if is_border and is_tmux_target("j") then
-        tmux.resize("k")
+        tmux.resize("k", options.resize.resize_step_y)
     elseif is_border then
         nvim.resize("y", "+", options.resize.resize_step_y)
     else
@@ -64,7 +64,7 @@ end
 function M.to_right()
     local is_border = nvim.is_nvim_border("l")
     if is_border and is_tmux_target("l") then
-        tmux.resize("l")
+        tmux.resize("l", options.resize.resize_step_x)
     elseif is_border then
         nvim.resize("x", "-", options.resize.resize_step_x)
     else

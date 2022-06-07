@@ -175,7 +175,7 @@ set -g @plugin 'christoomey/vim-tmux-navigator'
 run '~/.tmux/plugins/tpm/tpm'
 ```
 
-To run custom bindings in nvim, make sure to not set `enable_default_keybindings` to `true`. The following functions are used to navigate around windows and panes:
+To run custom bindings in nvim, make sure to set `enable_default_keybindings` to `false`. The following functions are used to navigate around windows and panes:
 
 ```lua
 {

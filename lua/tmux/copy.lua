@@ -119,8 +119,8 @@ function M.setup()
         vim.g.clipboard = {
             name = "tmuxclipboard",
             copy = {
-                ["+"] = "tmux load-buffer -",
-                ["*"] = "tmux load-buffer -",
+                ["+"] = "tmux load-buffer -w -",
+                ["*"] = "tmux load-buffer -w -",
             },
             paste = {
                 ["+"] = "tmux save-buffer -",

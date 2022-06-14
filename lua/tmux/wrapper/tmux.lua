@@ -31,7 +31,7 @@ local function execute(arg, pre)
     return result
 end
 
-local version_cache = vim.fn.stdpath('cache')..'/tmux.nvim-tmux_version'
+local version_cache = vim.fn.stdpath("cache").."/tmux.nvim-tmux_version"
 
 local function load_cached_version()
     local stat = vim.loop.fs_stat(version_cache)
@@ -39,7 +39,7 @@ local function load_cached_version()
         return
     end
 
-    local exe = vim.fn.exepath('tmux')
+    local exe = vim.fn.exepath("tmux")
     local exe_stat = vim.loop.fs_stat(exe)
 
     if stat.mtime.sec < exe_stat.mtime.sec then
@@ -55,7 +55,7 @@ local function load_cached_version()
     end
 
     local ok, cache = pcall(function()
-        return vim.mpack.decode(cachef:read('*a'))
+        return vim.mpack.decode(cachef:read("*a"))
     end)
 
     if not ok then
@@ -68,7 +68,7 @@ local function load_cached_version()
 end
 
 local function save_cached_version(version)
-    local f = assert(io.open(version_cache, 'w+b'))
+    local f = assert(io.open(version_cache, "w+b"))
     f:write(vim.mpack.encode(version))
     f:flush()
 end

@@ -1,22 +1,7 @@
-local function copy(source, target)
-    if source == nil or target == nil then
-        return
-    end
-    for index, _ in pairs(source) do
-        if target[index] ~= nil and type(source[index]) == "table" and type(target[index]) == "table" then
-            copy(source[index], target[index])
-        elseif target[index] ~= nil and type(source[index]) == type(target[index]) then
-            source[index] = target[index]
-        end
-    end
-    for index, _ in pairs(target) do
-        if target[index] ~= nil and source[index] == nil then
-            source[index] = target[index]
-        end
-    end
-end
 
-local M = {
+local M = {}
+
+M.options = {
     copy_sync = {
         -- enables copy sync and overwrites all register actions to
         -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
@@ -70,11 +55,29 @@ local M = {
     },
 }
 
-function M.set(options)
-    if options == nil or options == "" then
+local function copy(source, target)
+    if source == nil or target == nil then
         return
     end
-    copy(M, options)
+    for index, _ in pairs(source) do
+        if target[index] ~= nil and type(source[index]) == "table" and type(target[index]) == "table" then
+            copy(source[index], target[index])
+        elseif target[index] ~= nil and type(source[index]) == type(target[index]) then
+            source[index] = target[index]
+        end
+    end
+    for index, _ in pairs(target) do
+        if target[index] ~= nil and source[index] == nil then
+            source[index] = target[index]
+        end
+    end
+end
+
+function M.setup(opts)
+    if opts == nil then
+        return
+    end
+    copy(M.options, opts)
 end
 
 return M

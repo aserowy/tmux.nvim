@@ -1,7 +1,5 @@
-local options = require("tmux.configuration.options")
-local keymaps = require("tmux.keymaps")
-local log = require("tmux.log")
-local tmux = require("tmux.wrapper.tmux")
+local options = require("tmux.configuration").options
+local tmux = require("tmux.tmux")
 
 local function rtc(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
@@ -18,18 +16,12 @@ local function sync_unnamed_register(buffer_name)
 end
 
 local function sync_registers(passed_key)
-    log.debug(string.format("sync_registers: %s", passed_key))
-
     local ignore_buffers = options.copy_sync.ignore_buffers
     local offset = options.copy_sync.register_offset
 
-    log.debug("ignore_buffers: ", ignore_buffers)
-
     local first_buffer_name = ""
     for k, v in ipairs(tmux.get_buffer_names()) do
-        log.debug("buffer to sync: ", v)
         if not ignore_buffers[v] then
-            log.debug("buffer is syncing: ", v)
             if k == 1 then
                 first_buffer_name = v
             end
@@ -74,46 +66,41 @@ function M.setup()
         return
     end
 
-    vim.cmd([[
-        if !exists("tmux_autocommands_loaded")
-            let tmux_autocommands_loaded = 1
-            let PostYank = luaeval('require("tmux").post_yank')
-            let SyncRegisters = luaeval('require("tmux").sync_registers')
-            autocmd TextYankPost * call PostYank(v:event)
-            autocmd CmdlineEnter * call SyncRegisters()
-            autocmd CmdwinEnter : call SyncRegisters()
-            autocmd VimEnter * call SyncRegisters()
-        endif
-    ]])
+    local agroup = vim.api.nvim_create_augroup('tmux', {})
 
-    _G.tmux = {
-        sync_registers = sync_registers,
-    }
-
-    keymaps.register("n", {
-        ['"'] = [[v:lua.tmux.sync_registers('"')]],
-        ["p"] = [[v:lua.tmux.sync_registers('p')]],
-        ["P"] = [[v:lua.tmux.sync_registers('P')]],
-    }, {
-        expr = true,
-        noremap = true,
+    vim.api.nvim_create_autocmd('TextYankPost', {
+        group = agroup,
+        callback = function()
+            M.post_yank(vim.v.event)
+        end
     })
+
+    vim.api.nvim_create_autocmd({'CmdlineEnter', 'VimEnter'}, {
+        group = agroup,
+        callback = function()
+            M.sync_registers()
+        end
+    })
+
+    vim.api.nvim_create_autocmd('CmdwinEnter', {
+        group = agroup,
+        pattern = ':',
+        callback = function()
+            M.sync_registers()
+        end
+    })
+
+    local function map(m, l, r)
+        vim.keymap.set(m, l, r, { expr = true })
+    end
+
+    map('n', '"', function() M.sync_registers('"') end)
+    map('n', "p", function() M.sync_registers('p') end)
+    map('n', "P", function() M.sync_registers('P') end)
 
     -- double C-r to prevent injection:
     -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
-    keymaps.register("i", {
-        ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-    }, {
-        expr = true,
-        noremap = true,
-    })
-
-    keymaps.register("c", {
-        ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-    }, {
-        expr = true,
-        noremap = true,
-    })
+    map({'i', 'c'}, "<C-r>", function() M.sync_registers("<C-r><C-r>") end)
 
     if options.copy_sync.sync_clipboard then
         vim.g.clipboard = {
@@ -140,8 +127,6 @@ function M.post_yank(content)
     end
 
     local buffer_content = resolve_content(content.regtype, content.regcontents)
-
-    log.debug(buffer_content)
 
     tmux.set_buffer(buffer_content, options.copy_sync.redirect_to_clipboard)
 end

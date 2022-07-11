@@ -1,7 +1,5 @@
 local vim = vim
 
-local log = require("tmux.log")
-
 local tmux_directions = {
     h = "L",
     j = "D",
@@ -31,61 +29,6 @@ local function execute(arg, pre)
     return result
 end
 
-local version_cache = vim.fn.stdpath("cache").."/tmux.nvim-tmux_version"
-
-local function load_cached_version()
-    local stat = vim.loop.fs_stat(version_cache)
-    if not stat then
-        return
-    end
-
-    local exe = vim.fn.exepath("tmux")
-    local exe_stat = vim.loop.fs_stat(exe)
-
-    if stat.mtime.sec < exe_stat.mtime.sec then
-        -- Cache too old, invalidate
-        os.remove(version_cache)
-        return
-    end
-
-    local cachef = assert(io.open(version_cache))
-
-    if not cachef then
-        return
-    end
-
-    local ok, cache = pcall(function()
-        return vim.mpack.decode(cachef:read("*a"))
-    end)
-
-    if not ok then
-        -- Bad cache
-        os.remove(version_cache)
-        return
-    end
-
-    return cache
-end
-
-local function save_cached_version(version)
-    local f = assert(io.open(version_cache, "w+b"))
-    f:write(vim.mpack.encode(version))
-    f:flush()
-end
-
-local function get_version()
-    local version = load_cached_version()
-
-    if not version then
-        local result = execute("-V")
-        version = result:sub(result:find(" ") + 1)
-        version = version:gsub("[^%.%w]", "")
-        save_cached_version(version)
-    end
-
-    return version
-end
-
 local M = {
     is_tmux = false,
 }
@@ -93,15 +36,9 @@ local M = {
 function M.setup()
     M.is_tmux = get_tmux() ~= nil
 
-    log.debug(M.is_tmux)
-
     if not M.is_tmux then
         return false
     end
-
-    M.version = get_version()
-
-    log.debug(M.version)
 
     return true
 end

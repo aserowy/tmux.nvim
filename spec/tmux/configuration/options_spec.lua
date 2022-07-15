@@ -12,6 +12,7 @@ describe("configuration options", function()
                 redirect_to_clipboard = false,
                 register_offset = 0,
                 sync_clipboard = true,
+                sync_registers = true,
                 sync_deletes = true,
                 ignore_buffers = { empty = false },
                 sync_unnamed = true,
@@ -84,6 +85,14 @@ describe("configuration options", function()
         })
         result = require("tmux.configuration.options")
         assert.are.same(false, result.copy_sync.sync_clipboard)
+
+        config.set({
+            copy_sync = {
+                sync_registers = false,
+            },
+        })
+        result = require("tmux.configuration.options")
+        assert.are.same(false, result.copy_sync.sync_registers)
 
         config.set({
             copy_sync = {

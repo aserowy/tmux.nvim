@@ -18,8 +18,8 @@ end
 
 local M = {
     copy_sync = {
-        -- enables copy sync and overwrites all register actions to
-        -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+        -- enables copy sync. by default, all registers are synchronized.
+        -- to control which registers are synced, see the `sync_*` options.
         enable = false,
 
         -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
@@ -27,7 +27,7 @@ local M = {
         -- buffer with name named_buffer_name :)
         ignore_buffers = { empty = false },
 
-        -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
+        -- TMUX >= 3.2: all yanks (and deletes) will get redirected to system
         -- clipboard by tmux
         redirect_to_clipboard = false,
 
@@ -35,10 +35,13 @@ local M = {
         -- e.g. offset 2 lets registers 0 and 1 untouched
         register_offset = 0,
 
-        -- sync clipboard overwrites vim.g.clipboard to handle * and +
-        -- registers. If you sync your system clipboard without tmux, disable
-        -- this option!
+        -- overwrites vim.g.clipboard to redirect * and + to the system
+        -- clipboard using tmux. If you sync your system clipboard without tmux,
+        -- disable this option!
         sync_clipboard = true,
+
+        -- synchronizes registers *, +, unnamed, and 0 till 9 with tmux buffers.
+        sync_registers = true,
 
         -- syncs deletes with tmux clipboard as well, it is adviced to
         -- do so. Nvim does not allow syncing registers 0 and 1 without

@@ -74,46 +74,48 @@ function M.setup()
         return
     end
 
-    vim.cmd([[
-        if !exists("tmux_autocommands_loaded")
-            let tmux_autocommands_loaded = 1
-            let PostYank = luaeval('require("tmux").post_yank')
-            let SyncRegisters = luaeval('require("tmux").sync_registers')
-            autocmd TextYankPost * call PostYank(v:event)
-            autocmd CmdlineEnter * call SyncRegisters()
-            autocmd CmdwinEnter : call SyncRegisters()
-            autocmd VimEnter * call SyncRegisters()
-        endif
-    ]])
+    if options.copy_sync.sync_registers then
+        vim.cmd([[
+            if !exists("tmux_autocommands_loaded")
+                let tmux_autocommands_loaded = 1
+                let PostYank = luaeval('require("tmux").post_yank')
+                let SyncRegisters = luaeval('require("tmux").sync_registers')
+                autocmd TextYankPost * call PostYank(v:event)
+                autocmd CmdlineEnter * call SyncRegisters()
+                autocmd CmdwinEnter : call SyncRegisters()
+                autocmd VimEnter * call SyncRegisters()
+            endif
+        ]])
 
-    _G.tmux = {
-        sync_registers = sync_registers,
-    }
+        _G.tmux = {
+            sync_registers = sync_registers,
+        }
 
-    keymaps.register("n", {
-        ['"'] = [[v:lua.tmux.sync_registers('"')]],
-        ["p"] = [[v:lua.tmux.sync_registers('p')]],
-        ["P"] = [[v:lua.tmux.sync_registers('P')]],
-    }, {
-        expr = true,
-        noremap = true,
-    })
+        keymaps.register("n", {
+            ['"'] = [[v:lua.tmux.sync_registers('"')]],
+            ["p"] = [[v:lua.tmux.sync_registers('p')]],
+            ["P"] = [[v:lua.tmux.sync_registers('P')]],
+        }, {
+            expr = true,
+            noremap = true,
+        })
 
-    -- double C-r to prevent injection:
-    -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
-    keymaps.register("i", {
-        ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-    }, {
-        expr = true,
-        noremap = true,
-    })
+        -- double C-r to prevent injection:
+        -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
+        keymaps.register("i", {
+            ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+        }, {
+            expr = true,
+            noremap = true,
+        })
 
-    keymaps.register("c", {
-        ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-    }, {
-        expr = true,
-        noremap = true,
-    })
+        keymaps.register("c", {
+            ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+        }, {
+            expr = true,
+            noremap = true,
+        })
+    end
 
     if options.copy_sync.sync_clipboard then
         vim.g.clipboard = {

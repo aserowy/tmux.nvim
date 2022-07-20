@@ -62,8 +62,8 @@ The following defaults are given:
 ```lua
 {
     copy_sync = {
-        -- enables copy sync and overwrites all register actions to
-        -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
+        -- enables copy sync. by default, all registers are synchronized.
+        -- to control which registers are synced, see the `sync_*` options.
         enable = false,
 
         -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
@@ -71,7 +71,7 @@ The following defaults are given:
         -- buffer with name named_buffer_name :)
         ignore_buffers = { empty = false },
 
-        -- TMUX >= 3.2: yanks (and deletes) will get redirected to system
+        -- TMUX >= 3.2: all yanks (and deletes) will get redirected to system
         -- clipboard by tmux
         redirect_to_clipboard = false,
 
@@ -79,10 +79,13 @@ The following defaults are given:
         -- e.g. offset 2 lets registers 0 and 1 untouched
         register_offset = 0,
 
-        -- sync clipboard overwrites vim.g.clipboard to handle * and +
-        -- registers. If you sync your system clipboard without tmux, disable
-        -- this option!
+        -- overwrites vim.g.clipboard to redirect * and + to the system
+        -- clipboard using tmux. If you sync your system clipboard without tmux,
+        -- disable this option!
         sync_clipboard = true,
+
+        -- synchronizes registers *, +, unnamed, and 0 till 9 with tmux buffers.
+        sync_registers = true,
 
         -- syncs deletes with tmux clipboard as well, it is adviced to
         -- do so. Nvim does not allow syncing registers 0 and 1 without
@@ -125,7 +128,7 @@ Copy sync uses tmux buffers as master clipboard for `*`, `+`, `unnamed`, and `0`
 
 If you sync your clipboard not with a standalone tmux, disable `sync_clipboard` to ensure nvim handles yanks and deletes alone.
 
-This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state.
+This has some downsites, on really slow machines, calling registers or pasting will eventually produce minimal input lag by syncing registers in advance to ensure the correctness of state. To avoid this, disabling `sync_registers` will only redirect the `*` and `+` registers.
 
 To redirect copies (and deletes) to clipboard, tmux must have the capability to do so. The plugin will just set -w on set-buffer. If your tmux need more configuration check out [tmux-yank](https://github.com/tmux-plugins/tmux-yank) for an easy setup.
 

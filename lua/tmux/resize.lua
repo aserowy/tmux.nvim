@@ -4,8 +4,15 @@ local nvim = require("tmux.wrapper.nvim")
 local options = require("tmux.configuration.options")
 local tmux = require("tmux.wrapper.tmux")
 
-local function is_only_window()
-    return (nvim.winnr("1h") == nvim.winnr("1l")) and (nvim.winnr("1j") == nvim.winnr("1k"))
+--return true if there is no other nvim window in the direction of @border
+local function is_only_window(border)
+    if border == "h" or border == "l" then
+        --check for other horizontal window
+        return (nvim.winnr("1h") == nvim.winnr("1l"))
+    else
+        --check for other vertical window
+        return (nvim.winnr("1j") == nvim.winnr("1k"))
+    end
 end
 
 local function is_tmux_target(border)
@@ -13,7 +20,7 @@ local function is_tmux_target(border)
         return false
     end
 
-    return not layout.is_border(border) or is_only_window()
+    return not layout.is_border(border) or is_only_window(border)
 end
 
 local M = {}

@@ -21,7 +21,7 @@ jobs:
           args: --check .
 
       - name: lint
-        uses: github/super-linter@v4.9.5
+        uses: github/super-linter@v4.9.6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: /

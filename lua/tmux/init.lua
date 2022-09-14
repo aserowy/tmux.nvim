@@ -5,6 +5,18 @@ local navigation = require("tmux.navigation")
 local resize = require("tmux.resize")
 local tmux = require("tmux.wrapper.tmux")
 
+local options = {
+    copy_sync = {
+        enable = true,
+    },
+    navigation = {
+        enable_default_keybindings = true,
+    },
+    resize = {
+        enable_default_keybindings = true,
+    },
+}
+
 local M = {
     move_left = navigation.to_left,
     move_bottom = navigation.to_bottom,
@@ -20,7 +32,13 @@ local M = {
     resize_right = resize.to_right,
 }
 
-function M.setup(options, logging)
+function M.setup(options_, logging)
+    if options_ then
+        for k, v in pairs(options_) do
+            options[k] = v
+        end
+    end
+
     log.setup()
 
     log.debug("setup tmux wrapper")

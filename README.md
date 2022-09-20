@@ -28,34 +28,18 @@ The plugin and `.tmux.conf` scripts are battle tested with
 
 ## installation
 
-Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.nvim). The config step is only necessary to overwrite configuration defaults.
+Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.nvim) and run the `setup` function:
 
 ```lua
 use({
     "aserowy/tmux.nvim",
-    config = function()
-        require("tmux").setup({
-            -- overwrite default configuration
-            -- here, e.g. to enable default bindings
-            copy_sync = {
-                -- enables copy sync and overwrites all register actions to
-                -- sync registers *, +, unnamed, and 0 till 9 from tmux in advance
-                enable = true,
-            },
-            navigation = {
-                -- enables default keybindings (C-hjkl) for normal mode
-                enable_default_keybindings = true,
-            },
-            resize = {
-                -- enables default keybindings (A-hjkl) for normal mode
-                enable_default_keybindings = true,
-            }
-        })
-    end
+    config = function() require("tmux").setup() end
 })
 ```
 
 ## configuration
+
+The config step is only necessary to overwrite configuration defaults.
 
 The following defaults are given:
 
@@ -64,7 +48,7 @@ The following defaults are given:
     copy_sync = {
         -- enables copy sync. by default, all registers are synchronized.
         -- to control which registers are synced, see the `sync_*` options.
-        enable = false,
+        enable = true,
 
         -- ignore specific tmux buffers e.g. buffer0 = true to ignore the
         -- first buffer or named_buffer_name = true to ignore a named tmux
@@ -100,14 +84,14 @@ The following defaults are given:
         cycle_navigation = true,
 
         -- enables default keybindings (C-hjkl) for normal mode
-        enable_default_keybindings = false,
+        enable_default_keybindings = true,
 
         -- prevents unzoom tmux when navigating beyond vim border
         persist_zoom = false,
     },
     resize = {
         -- enables default keybindings (A-hjkl) for normal mode
-        enable_default_keybindings = false,
+        enable_default_keybindings = true,
 
         -- sets resize steps for x axis
         resize_step_x = 1,

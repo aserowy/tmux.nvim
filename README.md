@@ -33,7 +33,7 @@ Install tmux.nvim with e.g. [packer.nvim](https://github.com/wbthomason/packer.n
 ```lua
 use({
     "aserowy/tmux.nvim",
-    config = function() require("tmux").setup() end
+    config = function() return require("tmux").setup() end
 })
 ```
 

@@ -42,7 +42,7 @@ function M.to_left()
     elseif is_border then
         nvim.resize("x", "+", options.resize.resize_step_x)
     else
-        nvim.resize("x", "-", options.resize.resize_step_x)
+        vim.fn.win_move_separator(0, -options.resize.resize_step_x)
     end
 end
 
@@ -50,10 +50,10 @@ function M.to_bottom()
     local is_border = nvim.is_nvim_border("j")
     if is_border and is_tmux_target("j") then
         tmux.resize("j", options.resize.resize_step_y)
-    elseif is_border and nvim.winnr() ~= nvim.winnr("1k") then
+    elseif is_border then
         nvim.resize("y", "-", options.resize.resize_step_y)
     else
-        nvim.resize("y", "+", options.resize.resize_step_y)
+        vim.fn.win_move_statusline(0, options.resize.resize_step_y)
     end
 end
 
@@ -64,7 +64,7 @@ function M.to_top()
     elseif is_border then
         nvim.resize("y", "+", options.resize.resize_step_y)
     else
-        nvim.resize("y", "-", options.resize.resize_step_y)
+        vim.fn.win_move_statusline(0, -options.resize.resize_step_y)
     end
 end
 
@@ -75,7 +75,7 @@ function M.to_right()
     elseif is_border then
         nvim.resize("x", "-", options.resize.resize_step_x)
     else
-        nvim.resize("x", "+", options.resize.resize_step_x)
+        vim.fn.win_move_separator(0, options.resize.resize_step_x)
     end
 end
 

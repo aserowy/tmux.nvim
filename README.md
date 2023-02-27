@@ -154,14 +154,6 @@ bind-key -T copy-mode-vi 'C-k' select-pane -U
 bind-key -T copy-mode-vi 'C-l' select-pane -R
 ```
 
-If you are using [tmux plugin manager](https://github.com/tmux-plugins/tpm), you can add the following plugin. On a side note: This plugin sets the default keybindings and does not support cycle-free navigation:
-
-```tmux
-set -g @plugin 'christoomey/vim-tmux-navigator'
-
-run '~/.tmux/plugins/tpm/tpm'
-```
-
 To run custom bindings in nvim, make sure to set `enable_default_keybindings` to `false`. The following functions are used to navigate around windows and panes:
 
 ```lua
@@ -202,6 +194,41 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
     [[<cmd>lua require("tmux").resize_top()<cr>]],
     [[<cmd>lua require("tmux").resize_right()<cr>]],
 }
+```
+
+## tpm
+
+If you are using [tmux plugin manager](https://github.com/tmux-plugins/tpm), you can add the following plugin.
+
+```tmux
+set -g @plugin 'aserowy/tmux.nvim'
+
+run '~/.tmux/plugins/tpm/tpm'
+```
+
+Available options for the plugin and their defaults are:
+
+```tmux
+set -g @plugin 'aserowy/tmux.nvim'
+
+# navigation
+set -g @tmux-nvim-navigation true
+set -g @tmux-nvim-navigation-cycle true
+set -g @tmux-nvim-navigation-keybinding-left 'C-h' 
+set -g @tmux-nvim-navigation-keybinding-down 'C-j' 
+set -g @tmux-nvim-navigation-keybinding-up 'C-k' 
+set -g @tmux-nvim-navigation-keybinding-right 'C-l' 
+
+# resize
+set -g @tmux-nvim-resize true
+set -g @tmux-nvim-resize-step-x 1
+set -g @tmux-nvim-resize-step-y 1
+set -g @tmux-nvim-resize-keybinding-left 'M-h' 
+set -g @tmux-nvim-resize-keybinding-down 'M-j' 
+set -g @tmux-nvim-resize-keybinding-up 'M-k' 
+set -g @tmux-nvim-resize-keybinding-right 'M-l' 
+
+run '~/.tmux/plugins/tpm/tpm'
 ```
 
 ## contribute

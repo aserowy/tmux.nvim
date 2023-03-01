@@ -61,10 +61,10 @@ resize_kb_up=$(get_tmux_option "@tmux-nvim-resize-keybinding-up" 'M-k')
 resize_kb_right=$(get_tmux_option "@tmux-nvim-resize-keybinding-right" 'M-l')
 
 if $resize_enabled; then
-  tmux bind -n "$resize_kb_left" if-shell "$is_vim" "send-keys "$resize_kb_left" "resize-pane -L "$resize_step_x"
-  tmux bind -n "$resize_kb_down" if-shell "$is_vim" "send-keys "$resize_kb_down" "resize-pane -D "$resize_step_y"
-  tmux bind -n "$resize_kb_up" if-shell "$is_vim" "send-keys "$resize_kb_up" "resize-pane -U "$resize_step_y"
-  tmux bind -n "$resize_kb_right" if-shell "$is_vim" "send-keys "$resize_kb_right" "resize-pane -R "$resize_step_x"
+  tmux bind -n "$resize_kb_left" if-shell "$is_vim" "send-keys $resize_kb_left" "resize-pane -L $resize_step_x"
+  tmux bind -n "$resize_kb_down" if-shell "$is_vim" "send-keys $resize_kb_down" "resize-pane -D $resize_step_y"
+  tmux bind -n "$resize_kb_up" if-shell "$is_vim" "send-keys $resize_kb_up" "resize-pane -U $resize_step_y"
+  tmux bind -n "$resize_kb_right" if-shell "$is_vim" "send-keys $resize_kb_right" "resize-pane -R $resize_step_x"
 
   tmux bind-key -T copy-mode-vi "$resize_kb_left" resize-pane -L "$resize_step_x"
   tmux bind-key -T copy-mode-vi "$resize_kb_down" resize-pane -D "$resize_step_y"

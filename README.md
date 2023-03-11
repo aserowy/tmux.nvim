@@ -231,6 +231,24 @@ set -g @tmux-nvim-resize-keybinding-right 'M-l'
 run '~/.tmux/plugins/tpm/tpm'
 ```
 
+## troubleshoot
+
+### Window switching stops working in python virtual environment
+
+> [christoomey/vim-tmux-navigator#295](https://github.com/christoomey/vim-tmux-navigator/issues/295)
+
+To enable searching for nvim in subshells, you need to change the 'is_vim' part in the tmux plugin. This will make searching for nested nvim instances result in positive resolutions.
+
+Found by @duongapollo
+
+### Compatibility with vim-yoink or other yank-related tmux-plugins
+
+> [aserowy/tmux.nvim#88](https://github.com/aserowy/tmux.nvim/issues/88)
+
+The configuration in the given issue integrates tmux.nvim with yanky.nvim and which-key.nvim so we get the benefits of all yank-related plugins.
+
+Found by @kiyoon
+
 ## contribute
 
 Contributed code must pass [luacheck](https://github.com/mpeterv/luacheck) and be formatted with [stylua](https://github.com/johnnymorganz/stylua). Besides formatting, all tests have to pass. Tests are written for [busted](https://github.com/Olivine-Labs/busted).

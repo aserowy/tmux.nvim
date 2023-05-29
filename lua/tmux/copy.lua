@@ -18,7 +18,7 @@ local function sync_unnamed_register(buffer_name)
 end
 
 local function sync_registers(passed_key)
-    log.debug(string.format("sync_registers: %s", passed_key))
+    log.debug(string.format("sync_registers: %s", tostring(passed_key)))
 
     local ignore_buffers = options.copy_sync.ignore_buffers
     local offset = options.copy_sync.register_offset

@@ -125,7 +125,7 @@ To enable cycle-free navigation beyond nvim, add the following to your `~/.tmux.
 > It is important to note, that your bindings in nvim must match the defined bindings in tmux! Otherwise the pass through will not have the seamless effect!
 
 ```tmux
-is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?\.?(view|n?vim?x?)(-wrapped)?(diff)?$'"
 
 bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' { if -F '#{pane_at_left}' '' 'select-pane -L' }
 bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' { if -F '#{pane_at_bottom}' '' 'select-pane -D' }
@@ -141,7 +141,7 @@ bind-key -T copy-mode-vi 'C-l' if -F '#{pane_at_right}' '' 'select-pane -R'
 Otherwise you can add:
 
 ```tmux
-is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?\.?(view|n?vim?x?)(-wrapped)?(diff)?$'"
 
 bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
 bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' 'select-pane -D'

@@ -1,9 +1,9 @@
 # tmux.nvim
 
-> Here is the English translation of the text after the colon: "As my workflow
-> has changed over time, I no longer use tmux. This means that while I will
-> continue to maintain this plugin, I will no longer implement fixes, features,
-> or maintenance. PRs are always welcome and will be merged upon review."
+> As my workflow has changed over time, I no longer use tmux. This means that
+> while I will continue to maintain this plugin, I will no longer implement
+> fixes, features, or maintenance. PRs are always welcome and will be merged upon
+> review.
 
 ![dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=Dependabot)
 [![ci](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml/badge.svg)](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml)

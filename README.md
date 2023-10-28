@@ -1,5 +1,10 @@
 # tmux.nvim
 
+> Here is the English translation of the text after the colon: "As my workflow
+> has changed over time, I no longer use tmux. This means that while I will
+> continue to maintain this plugin, I will no longer implement fixes, features,
+> or maintenance. PRs are always welcome and will be merged upon review."
+
 ![dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=Dependabot)
 [![ci](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml/badge.svg)](https://github.com/aserowy/tmux.nvim/actions/workflows/ci.yaml)
 [![coverage](https://coveralls.io/repos/github/aserowy/tmux.nvim/badge.svg?branch=main)](https://coveralls.io/github/aserowy/tmux.nvim?branch=main)
@@ -214,19 +219,19 @@ set -g @plugin 'aserowy/tmux.nvim'
 # navigation
 set -g @tmux-nvim-navigation true
 set -g @tmux-nvim-navigation-cycle true
-set -g @tmux-nvim-navigation-keybinding-left 'C-h' 
-set -g @tmux-nvim-navigation-keybinding-down 'C-j' 
-set -g @tmux-nvim-navigation-keybinding-up 'C-k' 
-set -g @tmux-nvim-navigation-keybinding-right 'C-l' 
+set -g @tmux-nvim-navigation-keybinding-left 'C-h'
+set -g @tmux-nvim-navigation-keybinding-down 'C-j'
+set -g @tmux-nvim-navigation-keybinding-up 'C-k'
+set -g @tmux-nvim-navigation-keybinding-right 'C-l'
 
 # resize
 set -g @tmux-nvim-resize true
 set -g @tmux-nvim-resize-step-x 1
 set -g @tmux-nvim-resize-step-y 1
-set -g @tmux-nvim-resize-keybinding-left 'M-h' 
-set -g @tmux-nvim-resize-keybinding-down 'M-j' 
-set -g @tmux-nvim-resize-keybinding-up 'M-k' 
-set -g @tmux-nvim-resize-keybinding-right 'M-l' 
+set -g @tmux-nvim-resize-keybinding-left 'M-h'
+set -g @tmux-nvim-resize-keybinding-down 'M-j'
+set -g @tmux-nvim-resize-keybinding-up 'M-k'
+set -g @tmux-nvim-resize-keybinding-right 'M-l'
 
 run '~/.tmux/plugins/tpm/tpm'
 ```

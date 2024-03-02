@@ -34,7 +34,7 @@ function M.to(direction)
     elseif is_nvim_border and options.navigation.cycle_navigation then
         nvim.wincmd(opposite_directions[direction], 999)
     elseif not is_nvim_border then
-        nvim.wincmd(direction)
+        nvim.wincmd(direction, vim.v.count)
     end
 end
 

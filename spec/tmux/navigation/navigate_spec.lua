@@ -15,6 +15,12 @@ describe("navigate.has_tmux_target", function()
         layout = require("tmux.layout")
         options = require("tmux.configuration.options")
         tmux = require("tmux.wrapper.tmux")
+
+        _G.vim = {
+            v = {
+                count = 1,
+            },
+        }
     end)
 
     it("check is_tmux false", function()

@@ -10,32 +10,38 @@ jobs:
     name: tests
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
     steps:
-    - name: checkout
-      uses: actions/checkout@v4
+      - name: checkout
+        uses: actions/checkout@v4
 
-    - name: setup ‘lua’
-      uses: leafo/gh-actions-lua@v10.0.0
-      with:
-        luaVersion: "5.1"
+      - name: setup ‘lua’
+        uses: leafo/gh-actions-lua@v10.0.0
+        with:
+          luaVersion: "5.1"
 
-    - name: setup ‘luarocks’
-      uses: leafo/gh-actions-luarocks@v4
+      - name: setup ‘luarocks’
+        uses: leafo/gh-actions-luarocks@v4
 
-    - name: setup dependencies
-      run: |
-        luarocks install busted
-        luarocks install luacov-coveralls
+      - name: setup dependencies
+        run: |
+          luarocks install busted
+          luarocks install luacov-coveralls
 
-    - name: run
-      run: busted -c -v
-      env:
-        LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
+      - name: run
+        run: busted -c -v
+        env:
+          LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
 
-    - name: report
-      if: success()
-      continue-on-error: true
-      run: luacov-coveralls -i tmux.nvim/lua -e .luarocks
-      env:
-        COVERALLS_REPO_TOKEN: ${{ github.token }}
-        LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"
+      - name: report
+        if: success()
+        continue-on-error: true
+        run: luacov-coveralls -i tmux.nvim/lua -e .luarocks
+        env:
+          COVERALLS_REPO_TOKEN: ${{ github.token }}
+          LUA_PATH: "/home/runner/work/tmux.nvim/tmux.nvim/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/lua/?.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?/init.lua;/home/runner/work/tmux.nvim/tmux.nvim/spec/?.lua;"

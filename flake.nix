@@ -26,6 +26,7 @@
               nodePackages.dockerfile-language-server-nodejs
               nodePackages.markdownlint-cli
               nodePackages.prettier
+              shfmt
               stylua
               sumneko-lua-language-server
             ];

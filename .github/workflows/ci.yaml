@@ -5,14 +5,26 @@ on:
   pull_request:
     branches: main
 
+permissions: { }
+
 jobs:
   build:
     name: checks
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      packages: read
+      # To report GitHub Actions status checks
+      statuses: write
+
     steps:
       - name: checkout
         uses: actions/checkout@v4
+        with:
+          # super-linter needs the full git history to get the
+          # list of files that changed across commits
+          fetch-depth: 0
 
       - name: fmt
         uses: JohnnyMorganz/stylua-action@v4.0.0
@@ -22,7 +34,7 @@ jobs:
           args: --check .
 
       - name: lint
-        uses: github/super-linter@v5.0.0
+        uses: github/super-linter@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           LINTER_RULES_PATH: /

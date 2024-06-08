@@ -60,6 +60,7 @@ end
 
 function M.change_pane(direction)
     execute(string.format("select-pane -t '%s' -%s", get_tmux_pane(), tmux_directions[direction]))
+    vim.o.laststatus = vim.o.laststatus -- reset statusline as it sometimes disappear (#105)
 end
 
 function M.get_buffer(name)

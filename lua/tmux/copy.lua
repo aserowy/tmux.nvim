@@ -91,30 +91,40 @@ function M.setup()
             sync_registers = sync_registers,
         }
 
-        keymaps.register("n", {
-            ['"'] = [[v:lua.tmux.sync_registers('"')]],
-            ["p"] = [[v:lua.tmux.sync_registers('p')]],
-            ["P"] = [[v:lua.tmux.sync_registers('P')]],
-        }, {
-            expr = true,
-            noremap = true,
-        })
+        if options.copy_sync.sync_registers_keymap_put then
+            keymaps.register("n", {
+                ["p"] = [[v:lua.tmux.sync_registers('p')]],
+                ["P"] = [[v:lua.tmux.sync_registers('P')]],
+            }, {
+                expr = true,
+                noremap = true,
+            })
+        end
 
-        -- double C-r to prevent injection:
-        -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
-        keymaps.register("i", {
-            ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-        }, {
-            expr = true,
-            noremap = true,
-        })
+        if options.copy_sync.sync_registers_keymap_reg then
+            keymaps.register("n", {
+                ['"'] = [[v:lua.tmux.sync_registers('"')]],
+            }, {
+                expr = true,
+                noremap = true,
+            })
 
-        keymaps.register("c", {
-            ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
-        }, {
-            expr = true,
-            noremap = true,
-        })
+            -- double C-r to prevent injection:
+            -- https://vim.fandom.com/wiki/Pasting_registers#In_insert_and_command-line_modes
+            keymaps.register("i", {
+                ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+            }, {
+                expr = true,
+                noremap = true,
+            })
+
+            keymaps.register("c", {
+                ["<C-r>"] = [[v:lua.tmux.sync_registers("<C-r><C-r>")]],
+            }, {
+                expr = true,
+                noremap = true,
+            })
+        end
     end
 
     if options.copy_sync.sync_clipboard then

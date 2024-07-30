@@ -43,6 +43,12 @@ local M = {
         -- synchronizes registers *, +, unnamed, and 0 till 9 with tmux buffers.
         sync_registers = true,
 
+        -- synchronizes registers when pressing p and P.
+        sync_registers_keymap_put = true,
+
+        -- synchronizes registers when pressing (C-r) and ".
+        sync_registers_keymap_reg = true,
+
         -- syncs deletes with tmux clipboard as well, it is adviced to
         -- do so. Nvim does not allow syncing registers 0 and 1 without
         -- overwriting the unnamed register. Thus, ddp would not be possible.

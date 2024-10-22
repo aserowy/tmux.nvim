@@ -35,47 +35,51 @@ function M.setup()
     end
 end
 
-function M.to_left()
+function M.to_left(step)
+    step = step or options.resize.resize_step_x
     local is_border = nvim.is_nvim_border("l")
     if is_border and is_tmux_target("l") then
-        tmux.resize("h", options.resize.resize_step_x)
+        tmux.resize("h", step)
     elseif is_border then
-        nvim.resize("x", "+", options.resize.resize_step_x)
+        nvim.resize("x", "+", step)
     else
-        vim.fn.win_move_separator(0, -options.resize.resize_step_x)
+        vim.fn.win_move_separator(0, -step)
     end
 end
 
-function M.to_bottom()
+function M.to_bottom(step)
+    step = step or options.resize.resize_step_y
     local is_border = nvim.is_nvim_border("j")
     if is_border and is_tmux_target("j") then
-        tmux.resize("j", options.resize.resize_step_y)
+        tmux.resize("j", step)
     elseif is_border then
-        nvim.resize("y", "-", options.resize.resize_step_y)
+        nvim.resize("y", "-", step)
     else
-        vim.fn.win_move_statusline(0, options.resize.resize_step_y)
+        vim.fn.win_move_statusline(0, step)
     end
 end
 
-function M.to_top()
+function M.to_top(step)
+    step = step or options.resize.resize_step_y
     local is_border = nvim.is_nvim_border("j")
     if is_border and is_tmux_target("j") then
-        tmux.resize("k", options.resize.resize_step_y)
+        tmux.resize("k", step)
     elseif is_border then
-        nvim.resize("y", "+", options.resize.resize_step_y)
+        nvim.resize("y", "+", step)
     else
-        vim.fn.win_move_statusline(0, -options.resize.resize_step_y)
+        vim.fn.win_move_statusline(0, -step)
     end
 end
 
-function M.to_right()
+function M.to_right(step)
+    step = step or options.resize.resize_step_x
     local is_border = nvim.is_nvim_border("l")
     if is_border and is_tmux_target("l") then
-        tmux.resize("l", options.resize.resize_step_x)
+        tmux.resize("l", step)
     elseif is_border then
-        nvim.resize("x", "-", options.resize.resize_step_x)
+        nvim.resize("x", "-", step)
     else
-        vim.fn.win_move_separator(0, options.resize.resize_step_x)
+        vim.fn.win_move_separator(0, step)
     end
 end
 

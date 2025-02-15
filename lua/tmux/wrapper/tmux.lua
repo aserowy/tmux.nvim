@@ -2,12 +2,8 @@ local vim = vim
 
 local log = require("tmux.log")
 
-local tmux_directions = {
-    h = "L",
-    j = "D",
-    k = "U",
-    l = "R",
-}
+local tmux_directions = { h = "L", j = "D", k = "U", l = "R" }
+local tmux_swap_directions = { h = "left", j = "down", k = "up", l = "right" }
 
 local function get_tmux()
     return os.getenv("TMUX")
@@ -92,6 +88,10 @@ end
 
 function M.resize(direction, step)
     execute(string.format("resize-pane -t '%s' -%s %d", get_tmux_pane(), tmux_directions[direction], step))
+end
+
+function M.swap(direction)
+    execute(string.format("swap-pane -t '%s' -s '{%s-of}'", get_tmux_pane(), tmux_swap_directions[direction]))
 end
 
 function M.set_buffer(content, sync_clipboard)

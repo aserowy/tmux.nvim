@@ -3,6 +3,7 @@ local navigate = require("tmux.navigation.navigate")
 local options = require("tmux.configuration.options")
 
 local M = {}
+
 function M.setup()
     if options.navigation.enable_default_keybindings then
         keymaps.register("n", {

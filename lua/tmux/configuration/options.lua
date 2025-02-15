@@ -77,6 +77,13 @@ local M = {
         -- sets resize steps for y axis
         resize_step_y = 1,
     },
+    swap = {
+        -- cycles to opposite pane while navigating into the border
+        cycle_navigation = false,
+
+        -- enables default keybindings (C-M-hjkl) for normal mode
+        enable_default_keybindings = false,
+    },
 }
 
 function M.set(options)

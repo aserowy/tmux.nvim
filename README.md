@@ -109,6 +109,13 @@ The following defaults are given:
 
         -- sets resize steps for y axis
         resize_step_y = 1,
+    },
+    swap = {
+        -- cycles to opposite pane while navigating into the border
+        cycle_navigation = false,
+
+        -- enables default keybindings (C-A-hjkl) for normal mode
+        enable_default_keybindings = true,
     }
 }
 ```
@@ -204,6 +211,37 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
     [[<cmd>lua require("tmux").resize_bottom()<cr>]],
     [[<cmd>lua require("tmux").resize_top()<cr>]],
     [[<cmd>lua require("tmux").resize_right()<cr>]],
+}
+```
+
+### swap
+
+Add the following bindings to your `~/.tmux.conf`:
+
+> It is important to note, that your bindings in nvim must match the defined bindings in tmux! Otherwise the pass through will not have the seamless effect!
+
+```tmux
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+
+bind -n 'C-M-h' if-shell "$is_vim" 'send-keys C-M-h' 'swap-pane -s "{left-of}"'
+bind -n 'C-M-j' if-shell "$is_vim" 'send-keys C-M-j' 'swap-pane -s "{down-of}"'
+bind -n 'C-M-k' if-shell "$is_vim" 'send-keys C-M-k' 'swap-pane -s "{up-of}"'
+bind -n 'C-M-l' if-shell "$is_vim" 'send-keys C-M-l' 'swap-pane -s "{right-of}"'
+
+bind-key -T copy-mode-vi C-M-h swap-pane -s "{left-of}"
+bind-key -T copy-mode-vi C-M-j swap-pane -s "{down-of}"
+bind-key -T copy-mode-vi C-M-k swap-pane -s "{up-of}"
+bind-key -T copy-mode-vi C-M-l swap-pane -s "{right-of}"
+```
+
+To run custom bindings in nvim, make sure to not set `enable_default_keybindings` to `true`. The following functions are used to resize windows:
+
+```lua
+{
+    [[<cmd>lua require("tmux").swap_left()<cr>]],
+    [[<cmd>lua require("tmux").swap_bottom()<cr>]],
+    [[<cmd>lua require("tmux").swap_top()<cr>]],
+    [[<cmd>lua require("tmux").swap_right()<cr>]],
 }
 ```
 

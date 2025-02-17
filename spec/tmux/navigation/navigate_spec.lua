@@ -168,6 +168,9 @@ describe("navigate.to", function()
         nvim.is_nvim_border = function()
             return false
         end
+        nvim.is_nvim_float = function()
+            return false
+        end
 
         local last_called_direction = ""
         nvim.wincmd = function(direction)
@@ -194,6 +197,9 @@ describe("navigate.to", function()
         end
         nvim.is_nvim_border = function()
             return true
+        end
+        nvim.is_nvim_float = function()
+            return false
         end
 
         local last_called_direction = ""
@@ -222,6 +228,9 @@ describe("navigate.to", function()
         nvim.is_nvim_border = function()
             return true
         end
+        nvim.is_nvim_float = function()
+            return false
+        end
 
         local last_called_direction = ""
         nvim.wincmd = function(direction, count)
@@ -248,6 +257,39 @@ describe("navigate.to", function()
             return true
         end
         nvim.is_nvim_border = function()
+            return true
+        end
+        nvim.is_nvim_float = function()
+            return false
+        end
+
+        local last_called_direction = ""
+        tmux.change_pane = function(direction)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("h", last_called_direction)
+
+        navigate.to("j")
+        assert.are.same("j", last_called_direction)
+
+        navigate.to("k")
+        assert.are.same("k", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("l", last_called_direction)
+    end)
+
+    it("check with nvim float win", function()
+        options.navigation.cycle_navigation = true
+        navigate.has_tmux_target = function()
+            return true
+        end
+        nvim.is_nvim_border = function()
+            return false
+        end
+        nvim.is_nvim_float = function()
             return true
         end
 

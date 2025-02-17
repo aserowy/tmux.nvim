@@ -3,6 +3,10 @@ function M.is_nvim_border(border)
     return M.winnr() == M.winnr("1" .. border)
 end
 
+function M.is_nvim_float()
+    return vim.api.nvim_win_get_config(0).relative ~= ""
+end
+
 function M.resize(axis, direction, step_size)
     local command = "resize "
     if axis == "x" then

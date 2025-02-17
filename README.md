@@ -270,6 +270,13 @@ If you are using nix-shell, you can start a nix-shell and run `fac` (format and 
 stylua lua/ && luacheck lua/ && busted --verbose
 ```
 
+If you're not using nix-shell, don't forget to set the `LUA_PATH` environment variable before running `bursted`.
+
+```sh
+export LUA_PATH="$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"
+busted --verbose -c
+```
+
 ## inspiration
 
 ### clipboard harmonization

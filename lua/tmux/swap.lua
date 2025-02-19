@@ -1,8 +1,8 @@
 local keymaps = require("tmux.keymaps")
-local nvim = require("tmux.wrapper.nvim")
 local options = require("tmux.configuration.options")
+local layout = require("tmux.layout")
+local nvim = require("tmux.wrapper.nvim")
 local tmux = require("tmux.wrapper.tmux")
-local utils = require("tmux.utils")
 
 local M = {}
 
@@ -20,11 +20,11 @@ end
 function M.to(direction)
     local is_nvim_border = nvim.is_nvim_border(direction)
     local persist_zoom = true -- tmux swap-pane when zoomed causes error
-    local has_tmux_target = utils.has_tmux_target(direction, persist_zoom, options.swap.cycle_navigation)
+    local has_tmux_target = layout.has_tmux_target(direction, persist_zoom, options.swap.cycle_navigation)
     if (nvim.is_nvim_float() or is_nvim_border) and has_tmux_target then
         tmux.swap(direction)
     elseif is_nvim_border and options.swap.cycle_navigation then
-        nvim.swap(utils.opposite_direction(direction), 999)
+        nvim.swap(nvim.opposite_direction(direction), 999)
     elseif not is_nvim_border then
         nvim.swap(direction, vim.v.count)
     end

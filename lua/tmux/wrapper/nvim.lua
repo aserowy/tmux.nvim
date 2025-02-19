@@ -1,3 +1,5 @@
+local opposite_directions = { h = "l", j = "k", k = "j", l = "h" }
+
 local M = {}
 
 function M.is_nvim_border(border)
@@ -34,6 +36,10 @@ end
 
 function M.winnr(direction)
     return vim.api.nvim_call_function("winnr", { direction })
+end
+
+function M.opposite_direction(direction)
+    return opposite_directions[direction]
 end
 
 return M

@@ -2,10 +2,10 @@
 describe("navigate.to", function()
     local navigate
 
+    local layout
     local nvim
     local options
     local tmux
-    local utils
 
     setup(function()
         require("spec.tmux.mocks.log_mock").setup()
@@ -13,17 +13,17 @@ describe("navigate.to", function()
 
         navigate = require("tmux.navigation.navigate")
 
+        layout = require("tmux.layout")
         nvim = require("tmux.wrapper.nvim")
         options = require("tmux.configuration.options")
         tmux = require("tmux.wrapper.tmux")
-        utils = require("tmux.utils")
 
         _G.vim = { v = { count = 1 } }
     end)
 
     it("check with no nvim borders", function()
         options.navigation.cycle_navigation = false
-        utils.has_tmux_target = function()
+        layout.has_tmux_target = function()
             return true
         end
         nvim.is_nvim_border = function()
@@ -53,7 +53,7 @@ describe("navigate.to", function()
 
     it("check with nvim border and tmux border", function()
         options.navigation.cycle_navigation = false
-        utils.has_tmux_target = function()
+        layout.has_tmux_target = function()
             return false
         end
         nvim.is_nvim_border = function()
@@ -83,7 +83,7 @@ describe("navigate.to", function()
 
     it("check cycle_navigation on only nvim pane", function()
         options.navigation.cycle_navigation = true
-        utils.has_tmux_target = function()
+        layout.has_tmux_target = function()
             return false
         end
         nvim.is_nvim_border = function()
@@ -114,7 +114,7 @@ describe("navigate.to", function()
 
     it("check change tmux pane on nvim border", function()
         options.navigation.cycle_navigation = true
-        utils.has_tmux_target = function()
+        layout.has_tmux_target = function()
             return true
         end
         nvim.is_nvim_border = function()
@@ -144,7 +144,7 @@ describe("navigate.to", function()
 
     it("check with nvim float win", function()
         options.navigation.cycle_navigation = true
-        utils.has_tmux_target = function()
+        layout.has_tmux_target = function()
             return true
         end
         nvim.is_nvim_border = function()

@@ -1,5 +1,6 @@
 local log = require("tmux.log")
 local parse = require("tmux.layout.parse")
+local nvim = require("tmux.wrapper.nvim")
 local tmux = require("tmux.wrapper.tmux")
 
 local direction_checks = {
@@ -53,6 +54,17 @@ local function check_is_border(display, id, direction)
     return nil
 end
 
+--return true if there is no other nvim window in the direction of @border
+local function is_only_window(border)
+    if border == "h" or border == "l" then
+        --check for other horizontal window
+        return (nvim.winnr("1h") == nvim.winnr("1l"))
+    else
+        --check for other vertical window
+        return (nvim.winnr("1j") == nvim.winnr("1k"))
+    end
+end
+
 local M = {}
 
 function M.is_border(direction)
@@ -65,6 +77,27 @@ function M.is_border(direction)
     log.debug("is_border > ", result or "false")
 
     return result
+end
+
+function M.is_tmux_target(border)
+    if not tmux.is_tmux then
+        return false
+    end
+
+    return not M.is_border(border) or is_only_window(border)
+end
+
+function M.has_tmux_target(direction, persist_zoom, cycle_navigation)
+    if not tmux.is_tmux then
+        return false
+    end
+    if tmux.is_zoomed() and persist_zoom then
+        return false
+    end
+    if not M.is_border(direction) then
+        return true
+    end
+    return cycle_navigation and not M.is_border(nvim.opposite_direction(direction))
 end
 
 return M

@@ -19,6 +19,11 @@ describe("navigate.to", function()
         tmux = require("tmux.wrapper.tmux")
 
         _G.vim = { v = { count = 1 } }
+        _G.vim.fn = {
+            getcmdwintype = function()
+                return ""
+            end
+        }
     end)
 
     it("check with no nvim borders", function()
@@ -170,5 +175,34 @@ describe("navigate.to", function()
 
         navigate.to("l")
         assert.are.same("l", last_called_direction)
+    end)
+
+    it("check no navigation in command mode", function()
+        _G.vim.fn = {
+            getcmdwintype = function()
+                return "="
+            end
+        }
+        options.navigation.cycle_navigation = false
+        layout.has_tmux_target = function()
+            return false
+        end
+        nvim.is_nvim_border = function()
+            return false
+        end
+        nvim.is_nvim_float = function()
+            return false
+        end
+
+        local last_called_direction = ""
+        nvim.wincmd = function(direction)
+            last_called_direction = direction
+        end
+
+        navigate.to("h")
+        assert.are.same("", last_called_direction)
+
+        navigate.to("l")
+        assert.are.same("", last_called_direction)
     end)
 end)

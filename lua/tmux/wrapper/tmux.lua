@@ -75,7 +75,8 @@ function M.get_buffer_names()
 end
 
 function M.get_current_pane_id()
-    return tonumber(get_tmux_pane():sub(2))
+    local pane = get_tmux_pane()
+    return pane and tonumber(pane:sub(2)) or nil
 end
 
 function M.get_window_layout()

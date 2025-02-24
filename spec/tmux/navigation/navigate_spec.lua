@@ -22,7 +22,7 @@ describe("navigate.to", function()
         _G.vim.fn = {
             getcmdwintype = function()
                 return ""
-            end
+            end,
         }
     end)
 
@@ -181,7 +181,7 @@ describe("navigate.to", function()
         _G.vim.fn = {
             getcmdwintype = function()
                 return "="
-            end
+            end,
         }
         options.navigation.cycle_navigation = false
         layout.has_tmux_target = function()

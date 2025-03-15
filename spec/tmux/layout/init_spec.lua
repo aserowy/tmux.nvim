@@ -284,3 +284,60 @@ describe("layout.has_tmux_target", function()
         assert.is_true(result)
     end)
 end)
+
+describe("layout.has_tmux_window", function()
+    local layout
+    local tmux
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        layout = require("tmux.layout")
+        tmux = require("tmux.wrapper.tmux")
+    end)
+
+    it("no tmux", function()
+        tmux.is_tmux = false
+        assert.is_false(layout.has_tmux_window("n"))
+        assert.is_false(layout.has_tmux_window("p"))
+    end)
+
+    it("end true", function()
+        tmux.is_tmux = true
+        tmux.window_end_flag = function()
+            return false
+        end
+        assert.is_false(layout.has_tmux_window("n"))
+    end)
+
+    it("end false", function()
+        tmux.is_tmux = true
+        tmux.window_end_flag = function()
+            return true
+        end
+        assert.is_true(layout.has_tmux_window("n"))
+    end)
+
+    it("base index zero", function()
+        tmux.is_tmux = true
+        tmux.window_index = function()
+            return 1
+        end
+        tmux.base_index = function()
+            return 0
+        end
+        assert.is_true(layout.has_tmux_window("p"))
+    end)
+
+    it("base index one", function()
+        tmux.is_tmux = true
+        tmux.window_index = function()
+            return 1
+        end
+        tmux.base_index = function()
+            return 1
+        end
+        assert.is_false(layout.has_tmux_window("p"))
+    end)
+end)

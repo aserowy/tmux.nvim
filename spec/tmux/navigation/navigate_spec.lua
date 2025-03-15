@@ -206,3 +206,121 @@ describe("navigate.to", function()
         assert.are.same("", last_called_direction)
     end)
 end)
+
+describe("navigate.window", function()
+    local navigate
+
+    local nvim
+    local options
+    local tmux
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        navigate = require("tmux.navigation.navigate")
+
+        nvim = require("tmux.wrapper.nvim")
+        options = require("tmux.configuration.options")
+        tmux = require("tmux.wrapper.tmux")
+
+        _G.vim = { v = { count = 1 } }
+        _G.vim.fn = {
+            getcmdwintype = function()
+                return ""
+            end,
+        }
+    end)
+
+    it("next cycle", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        options.navigation.cycle_navigation = true
+        assert.is_nil(navigate.window("n"))
+        assert.equal("n", last_called_direction)
+    end)
+
+    it("previous cycle", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        options.navigation.cycle_navigation = true
+        assert.is_nil(navigate.window("p"))
+        assert.equal("p", last_called_direction)
+    end)
+
+    it("next completing", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function nvim.is_completing()
+            return true
+        end
+        assert.equal("<c-n>", navigate.window("n"))
+        assert.is_nil(last_called_direction)
+    end)
+
+    it("previous completing", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function nvim.is_completing()
+            return true
+        end
+        assert.equal("<c-p>", navigate.window("p"))
+        assert.is_nil(last_called_direction)
+    end)
+
+    it("next not cycle in center", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function tmux.window_end_flag()
+            return false
+        end
+        assert.is_nil(navigate.window("n"))
+        assert.equal("n", last_called_direction)
+    end)
+
+    it("previous not cycle in center", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function tmux.window_start_flag()
+            return false
+        end
+        assert.is_nil(navigate.window("p"))
+        assert.equal("p", last_called_direction)
+    end)
+
+    it("next not cycle on border", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function tmux.window_end_flag()
+            return true
+        end
+        assert.equal("<c-n>", navigate.window("n"))
+        assert.is_nil(last_called_direction)
+    end)
+
+    it("previous not cycle on border", function()
+        local last_called_direction
+        function tmux.select_window(direction)
+            last_called_direction = direction
+        end
+        function tmux.window_start_flag()
+            return true
+        end
+        assert.equal("<c-p>", navigate.window("p"))
+        assert.is_nil(last_called_direction)
+    end)
+end)

@@ -6,33 +6,9 @@ local tmux = require("tmux.wrapper.tmux")
 
 local M = {}
 
-function M.has_tmux_target(direction)
-    if not tmux.is_tmux then
-        return false
-    end
-    if tmux.is_zoomed() and options.navigation.persist_zoom then
-        return false
-    end
-    if not layout.is_border(direction) then
-        return true
-    end
-    return options.navigation.cycle_navigation and not layout.is_border(opposite_directions[direction])
-end
-
-function M.has_tmux_window(direction)
-    if not tmux.is_tmux then
-        return false
-    end
-    if direction == "n" then
-        return not tmux.window_end_flag()
-    else
-        return not tmux.window_start_flag()
-    end
-end
-
 function M.window(direction)
     log.debug("navigate.window: " .. direction)
-    if nvim.is_completing() or (not options.navigation.cycle_navigation and not M.has_tmux_window(direction)) then
+    if nvim.is_completing() or (not options.navigation.cycle_navigation and not layout.has_tmux_window(direction)) then
         return "<c-" .. direction .. ">"
     else
         tmux.select_window(direction)

@@ -1,4 +1,3 @@
-local mock = require("luassert.mock")
 ---@diagnostic disable: duplicate-set-field
 describe("navigate.to", function()
     local navigate

@@ -76,7 +76,8 @@ function M.window_start_flag()
 end
 
 function M.select_window(direction)
-    return execute(string.format("select-window -%s", direction))
+    execute(string.format("select-window -%s", direction))
+    vim.o.laststatus = vim.o.laststatus -- reset statusline as it sometimes disappear (#105)
 end
 
 function M.get_buffer(name)

@@ -2,6 +2,10 @@ local opposite_directions = { h = "l", j = "k", k = "j", l = "h" }
 
 local M = {}
 
+function M.is_completing()
+    return vim.fn.pumvisible() == 1
+end
+
 function M.is_nvim_border(border)
     return M.winnr() == M.winnr("1" .. border)
 end

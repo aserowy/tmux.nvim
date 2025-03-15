@@ -27,6 +27,9 @@ local M = {
     move_top = navigation.to_top,
     move_right = navigation.to_right,
 
+    next_window = navigation.next_window,
+    previous_window = navigation.previous_window,
+
     post_yank = copy.post_yank,
     sync_registers = copy.sync_registers,
 

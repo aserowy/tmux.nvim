@@ -59,6 +59,26 @@ function M.change_pane(direction)
     vim.o.laststatus = vim.o.laststatus -- reset statusline as it sometimes disappear (#105)
 end
 
+function M.window_index()
+    return execute("display-message -p '#{window_index}'")
+end
+
+function M.base_index()
+    return execute("display-message -p '#{base-index}'")
+end
+
+function M.window_end_flag()
+    return execute("display-message -p '#{window_end_flag}'") == "0"
+end
+
+function M.window_start_flag()
+    return M.window_index() == M.base_index()
+end
+
+function M.select_window(direction)
+    return execute(string.format("select-window -%s", direction))
+end
+
 function M.get_buffer(name)
     return execute(string.format("show-buffer -b %s", name))
 end

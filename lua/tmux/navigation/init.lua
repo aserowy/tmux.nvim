@@ -11,14 +11,9 @@ function M.setup()
             ["<C-j>"] = [[<cmd>lua require'tmux'.move_bottom()<cr>]],
             ["<C-k>"] = [[<cmd>lua require'tmux'.move_top()<cr>]],
             ["<C-l>"] = [[<cmd>lua require'tmux'.move_right()<cr>]],
+            ["<C-n>"] = [[<cmd>lua require'tmux'.next_window()<cr>]],
+            ["<C-p>"] = [[<cmd>lua require'tmux'.previous_window()<cr>]],
         })
-        local opts = { expr = true, silent = true, nowait = true }
-        vim.keymap.set("n", "<C-n>", function()
-            return require("tmux").next_window()
-        end, opts)
-        vim.keymap.set("n", "<C-p>", function()
-            return require("tmux").previous_window()
-        end, opts)
     end
 end
 
@@ -39,11 +34,11 @@ function M.to_right()
 end
 
 function M.next_window()
-    return navigate.window("n")
+    navigate.window("n")
 end
 
 function M.previous_window()
-    return navigate.window("p")
+    navigate.window("p")
 end
 
 return M

@@ -209,118 +209,95 @@ end)
 
 describe("navigate.window", function()
     local navigate
-
-    local nvim
     local options
     local tmux
+    local select_window
+    local window_end_flag
+    local window_index
+    local base_index
+    local window_index_value = 1
+    local base_index_value = 0
+    local window_end_flag_value = false
 
     setup(function()
         require("spec.tmux.mocks.log_mock").setup()
         require("spec.tmux.mocks.tmux_mock").setup("3.2a")
-
         navigate = require("tmux.navigation.navigate")
-
-        nvim = require("tmux.wrapper.nvim")
         options = require("tmux.configuration.options")
         tmux = require("tmux.wrapper.tmux")
-
-        _G.vim = { v = { count = 1 } }
-        _G.vim.fn = {
-            getcmdwintype = function()
-                return ""
-            end,
-        }
     end)
 
-    it("next cycle", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        options.navigation.cycle_navigation = true
-        assert.is_nil(navigate.window("n"))
-        assert.equal("n", last_called_direction)
+    before_each(function()
+        select_window = mock(tmux.select_window)
+        window_end_flag = mock(tmux.window_end_flag, false, function()
+            return window_end_flag_value
+        end)
+        window_index = mock(tmux.window_index, false, function()
+            return window_index_value
+        end)
+        base_index = mock(tmux.base_index, false, function()
+            return base_index_value
+        end)
     end)
 
-    it("previous cycle", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        options.navigation.cycle_navigation = true
-        assert.is_nil(navigate.window("p"))
-        assert.equal("p", last_called_direction)
+    after_each(function()
+        mock.revert(select_window)
+        mock.revert(window_end_flag)
+        mock.revert(window_index)
+        mock.revert(base_index)
     end)
 
-    it("next completing", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function nvim.is_completing()
-            return true
-        end
-        assert.equal("<c-n>", navigate.window("n"))
-        assert.is_nil(last_called_direction)
+    describe("cycle", function()
+        before_each(function()
+            options.navigation.cycle_navigation = true
+        end)
+
+        it("next", function()
+            navigate.window("n")
+            assert.stub(select_window).was_not.called_with("p")
+            assert.stub(select_window).was.called_with("n")
+        end)
+
+        it("previous", function()
+            navigate.window("p")
+            assert.stub(select_window).was_not.called_with("n")
+            assert.stub(select_window).was.called_with("p")
+        end)
     end)
 
-    it("previous completing", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function nvim.is_completing()
-            return true
-        end
-        assert.equal("<c-p>", navigate.window("p"))
-        assert.is_nil(last_called_direction)
-    end)
+    describe("no cycle", function()
+        before_each(function()
+            options.navigation.cycle_navigation = false
+        end)
 
-    it("next not cycle in center", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function tmux.window_end_flag()
-            return false
-        end
-        assert.is_nil(navigate.window("n"))
-        assert.equal("n", last_called_direction)
-    end)
+        describe("center", function()
+            it("next", function()
+                navigate.window("n")
+                assert.stub(select_window).was_not.called_with("p")
+                assert.stub(select_window).was.called_with("n")
+            end)
 
-    it("previous not cycle in center", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function tmux.window_start_flag()
-            return false
-        end
-        assert.is_nil(navigate.window("p"))
-        assert.equal("p", last_called_direction)
-    end)
+            it("previous", function()
+                navigate.window("p")
+                assert.stub(select_window).was_not.called_with("n")
+                assert.stub(select_window).was.called_with("p")
+            end)
+        end)
 
-    it("next not cycle on border", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function tmux.window_end_flag()
-            return true
-        end
-        assert.equal("<c-n>", navigate.window("n"))
-        assert.is_nil(last_called_direction)
-    end)
+        it("next not cycle on border", function()
+            window_end_flag_value = true
+            navigate.window("n")
+            window_end_flag_value = false
+            assert.stub(select_window).was_not.called_with("n")
+            assert.stub(select_window).was_not.called_with("p")
+        end)
 
-    it("previous not cycle on border", function()
-        local last_called_direction
-        function tmux.select_window(direction)
-            last_called_direction = direction
-        end
-        function tmux.window_start_flag()
-            return true
-        end
-        assert.equal("<c-p>", navigate.window("p"))
-        assert.is_nil(last_called_direction)
+        it("previous not cycle on border", function()
+            window_index_value = 0
+            navigate.window("p")
+            window_index_value = 1
+            assert.stub(select_window).was_not.called_with("n")
+            assert.stub(select_window).was_not.called_with("p")
+        end)
     end)
 end)

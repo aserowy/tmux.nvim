@@ -8,9 +8,7 @@ local M = {}
 
 function M.window(direction)
     log.debug("navigate.window: " .. direction)
-    if nvim.is_completing() or (not options.navigation.cycle_navigation and not layout.has_tmux_window(direction)) then
-        return "<c-" .. direction .. ">"
-    else
+    if options.navigation.cycle_navigation or layout.has_tmux_window(direction) then
         tmux.select_window(direction)
     end
 end

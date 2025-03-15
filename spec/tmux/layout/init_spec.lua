@@ -303,24 +303,25 @@ describe("layout.has_tmux_window", function()
         assert.is_false(layout.has_tmux_window("p"))
     end)
 
-    it("end true", function()
+    before_each(function()
         tmux.is_tmux = true
-        tmux.window_end_flag = function()
-            return false
-        end
-        assert.is_false(layout.has_tmux_window("n"))
     end)
 
-    it("end false", function()
-        tmux.is_tmux = true
+    it("end true", function()
         tmux.window_end_flag = function()
-            return true
+            return false
         end
         assert.is_true(layout.has_tmux_window("n"))
     end)
 
+    it("end false", function()
+        tmux.window_end_flag = function()
+            return true
+        end
+        assert.is_false(layout.has_tmux_window("n"))
+    end)
+
     it("base index zero", function()
-        tmux.is_tmux = true
         tmux.window_index = function()
             return 1
         end
@@ -331,7 +332,6 @@ describe("layout.has_tmux_window", function()
     end)
 
     it("base index one", function()
-        tmux.is_tmux = true
         tmux.window_index = function()
             return 1
         end

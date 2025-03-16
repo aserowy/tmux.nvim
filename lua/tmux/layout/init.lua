@@ -100,4 +100,15 @@ function M.has_tmux_target(direction, persist_zoom, cycle_navigation)
     return cycle_navigation and not M.is_border(nvim.opposite_direction(direction))
 end
 
+function M.has_tmux_window(direction)
+    if not tmux.is_tmux then
+        return false
+    end
+    if direction == "n" then
+        return not tmux.window_end_flag()
+    else
+        return not tmux.window_start_flag()
+    end
+end
+
 return M

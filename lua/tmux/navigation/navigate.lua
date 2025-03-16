@@ -6,6 +6,13 @@ local tmux = require("tmux.wrapper.tmux")
 
 local M = {}
 
+function M.window(direction)
+    log.debug("navigate.window: " .. direction)
+    if options.navigation.cycle_navigation or layout.has_tmux_window(direction) then
+        tmux.select_window(direction)
+    end
+end
+
 function M.to(direction)
     log.debug("navigate_to: " .. direction)
 

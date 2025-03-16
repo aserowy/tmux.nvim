@@ -1,12 +1,11 @@
+_G.vim = { o = { laststatus = 2 } }
 ---@diagnostic disable: duplicate-set-field
 describe("tmux wrapper", function()
     local tmux
 
     setup(function()
         require("spec.tmux.mocks.log_mock").setup()
-
         tmux = require("tmux.wrapper.tmux")
-        _G.vim = { o = { laststatus = 2 } }
     end)
 
     it("check get_tmux_pane with nil env", function()
@@ -37,5 +36,36 @@ describe("tmux wrapper", function()
         assert.are.same(12, result)
 
         os.getenv = orig_getenv
+    end)
+
+    describe("execute", function()
+        before_each(function()
+            tmux.execute = stub(tmux, "execute")
+        end)
+
+        it("select next window", function()
+            tmux.select_window("n")
+            assert.stub(tmux.execute).was.called_with("select-window -n")
+        end)
+
+        it("select previous window", function()
+            tmux.select_window("p")
+            assert.stub(tmux.execute).was.called_with("select-window -p")
+        end)
+
+        it("window_end_flag", function()
+            tmux.window_end_flag()
+            assert.stub(tmux.execute).was.called_with("display-message -p '#{window_end_flag}'")
+        end)
+
+        it("window_index", function()
+            tmux.window_index()
+            assert.stub(tmux.execute).was.called_with("display-message -p '#{window_index}'")
+        end)
+
+        it("base_index", function()
+            tmux.base_index()
+            assert.stub(tmux.execute).was.called_with("display-message -p '#{base-index}'")
+        end)
     end)
 end)

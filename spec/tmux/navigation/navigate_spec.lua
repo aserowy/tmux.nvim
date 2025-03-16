@@ -206,3 +206,101 @@ describe("navigate.to", function()
         assert.are.same("", last_called_direction)
     end)
 end)
+
+describe("navigate.window", function()
+    local navigate
+    local options
+    local tmux
+    local flag_value = true
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+        navigate = require("tmux.navigation.navigate")
+        options = require("tmux.configuration.options")
+        tmux = require("tmux.wrapper.tmux")
+    end)
+
+    before_each(function()
+        tmux = mock(tmux, true, function()
+            return flag_value
+        end)
+    end)
+
+    after_each(function()
+        mock.revert(tmux)
+    end)
+
+    describe("cycle", function()
+        before_each(function()
+            options.navigation.cycle_navigation = true
+        end)
+
+        it("next", function()
+            navigate.window("n")
+            assert.stub(tmux.window_start_flag).was_not.called()
+            assert.stub(tmux.window_end_flag).was_not.called()
+            assert.stub(tmux.select_window).was_not.called_with("p")
+            assert.stub(tmux.select_window).was.called_with("n")
+        end)
+
+        it("previous", function()
+            navigate.window("p")
+            assert.stub(tmux.window_start_flag).was_not.called()
+            assert.stub(tmux.window_end_flag).was_not.called()
+            assert.stub(tmux.select_window).was_not.called_with("n")
+            assert.stub(tmux.select_window).was.called_with("p")
+        end)
+    end)
+
+    describe("no cycle", function()
+        before_each(function()
+            options.navigation.cycle_navigation = false
+            tmux.is_tmux = true
+        end)
+
+        describe("center", function()
+            before_each(function()
+                flag_value = false
+            end)
+
+            it("next", function()
+                navigate.window("n")
+                assert.stub(tmux.window_end_flag).was.called()
+                assert.stub(tmux.window_start_flag).was_not.called()
+                assert.stub(tmux.select_window).was_not.called_with("p")
+                assert.stub(tmux.select_window).was.called_with("n")
+            end)
+
+            it("previous", function()
+                navigate.window("p")
+                assert.stub(tmux.window_end_flag).was_not.called()
+                assert.stub(tmux.window_start_flag).was.called()
+                assert.stub(tmux.select_window).was_not.called_with("n")
+                assert.stub(tmux.select_window).was.called_with("p")
+            end)
+        end)
+
+        describe("border", function()
+            before_each(function()
+                flag_value = true
+            end)
+
+            it("next", function()
+                navigate.window("n")
+                assert.stub(tmux.window_end_flag).was.called()
+                assert.stub(tmux.window_start_flag).was_not.called()
+                assert.stub(tmux.select_window).was_not.called_with("n")
+                assert.stub(tmux.select_window).was_not.called_with("p")
+            end)
+
+            it("previous", function()
+                navigate.window("p")
+                assert.stub(tmux.window_end_flag).was_not.called()
+                assert.stub(tmux.window_start_flag).was.called()
+                assert.stub(tmux.select_window).was_not.called_with("n")
+                assert.stub(tmux.select_window).was_not.called_with("p")
+            end)
+        end)
+    end)
+end)

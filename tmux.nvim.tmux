@@ -23,8 +23,8 @@ navigation_kb_left=$(get_tmux_option "@tmux-nvim-navigation-keybinding-left" 'C-
 navigation_kb_down=$(get_tmux_option "@tmux-nvim-navigation-keybinding-down" 'C-j')
 navigation_kb_up=$(get_tmux_option "@tmux-nvim-navigation-keybinding-up" 'C-k')
 navigation_kb_right=$(get_tmux_option "@tmux-nvim-navigation-keybinding-right" 'C-l')
-navigation_kb_next=$(get_tmux_option "@tmux-nvim-navigation-keybinding-next" 'C-n')
-navigation_kb_previous=$(get_tmux_option "@tmux-nvim-navigation-keybinding-previous" 'C-p')
+navigation_kb_next=$(get_tmux_option "@tmux-nvim-navigation-keybinding-next" '')
+navigation_kb_previous=$(get_tmux_option "@tmux-nvim-navigation-keybinding-previous" '')
 navigation_cmd_left='select-pane -L'
 navigation_cmd_down='select-pane -D'
 navigation_cmd_up='select-pane -U'
@@ -54,15 +54,19 @@ if $navigation_enabled; then
 			"send-keys $navigation_kb_right" \
 			"$navigation_cmd_right"
 
-		tmux bind-key -n "$navigation_kb_next" \
-			if-shell "$is_vim" \
-			"send-keys $navigation_kb_next" \
-			"$navigation_cmd_next"
+		if [ -n "$navigation_kb_next" ]; then
+			tmux bind-key -n "$navigation_kb_next" \
+				if-shell "$is_vim" \
+				"send-keys $navigation_kb_next" \
+				"$navigation_cmd_next"
+		fi
 
-		tmux bind-key -n "$navigation_kb_previous" \
-			if-shell "$is_vim" \
-			"send-keys $navigation_kb_previous" \
-			"$navigation_cmd_previous"
+		if [ -n "$navigation_kb_previous" ]; then
+			tmux bind-key -n "$navigation_kb_previous" \
+				if-shell "$is_vim" \
+				"send-keys $navigation_kb_previous" \
+				"$navigation_cmd_previous"
+		fi
 
 		tmux bind-key -T copy-mode-vi "$navigation_kb_left" \
 			"$navigation_cmd_left"
@@ -106,17 +110,21 @@ if $navigation_enabled; then
 			"if -F '#{pane_at_right}' '' \
 				'$navigation_cmd_right'"
 
-		tmux bind-key -n "$navigation_kb_next" \
-			if-shell "$is_vim" \
-			"send-keys $navigation_kb_next" \
-			"if -F '#{window_end_flag}' '' \
-				'$navigation_cmd_next'"
+		if [ -n "$navigation_kb_next" ]; then
+			tmux bind-key -n "$navigation_kb_next" \
+				if-shell "$is_vim" \
+				"send-keys $navigation_kb_next" \
+				"if -F '#{window_end_flag}' '' \
+					'$navigation_cmd_next'"
+		fi
 
-		tmux bind-key -n "$navigation_kb_previous" \
-			if-shell "$is_vim" \
-			"send-keys $navigation_kb_previous" \
-			"if 'test #{window_index} -gt  #{base-index}' \
-				'$navigation_cmd_previous'"
+		if [ -n "$navigation_kb_previous" ]; then
+			tmux bind-key -n "$navigation_kb_previous" \
+				if-shell "$is_vim" \
+				"send-keys $navigation_kb_previous" \
+				"if 'test #{window_index} -gt  #{base-index}' \
+					'$navigation_cmd_previous'"
+		fi
 
 		tmux bind-key -T copy-mode-vi "$navigation_kb_left" \
 			if -F '#{pane_at_left}' '' \
@@ -134,13 +142,17 @@ if $navigation_enabled; then
 			if -F '#{pane_at_right}' '' \
 			"$navigation_cmd_right"
 
-		tmux bind-key -T copy-mode-vi "$navigation_kb_next" \
-			if -F '#{window_end_flag}' '' \
-			"$navigation_cmd_next"
+		if [ -n "$navigation_kb_next" ]; then
+			tmux bind-key -T copy-mode-vi "$navigation_kb_next" \
+				if -F '#{window_end_flag}' '' \
+				"$navigation_cmd_next"
+		fi
 
-		tmux bind-key -T copy-mode-vi "$navigation_kb_previous" \
-			if 'test #{window_index} -gt  #{base-index}' \
-			"$navigation_cmd_previous"
+		if [ -n "$navigation_kb_previous" ]; then
+			tmux bind-key -T copy-mode-vi "$navigation_kb_previous" \
+				if 'test #{window_index} -gt  #{base-index}' \
+				"$navigation_cmd_previous"
+		fi
 	fi
 fi
 

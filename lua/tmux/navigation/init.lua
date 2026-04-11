@@ -3,6 +3,7 @@ local navigate = require("tmux.navigation.navigate")
 local options = require("tmux.configuration.options")
 
 local M = {}
+
 function M.setup()
     if options.navigation.enable_default_keybindings then
         keymaps.register("n", {
@@ -28,6 +29,14 @@ end
 
 function M.to_right()
     navigate.to("l")
+end
+
+function M.next_window()
+    navigate.window("n")
+end
+
+function M.previous_window()
+    navigate.window("p")
 end
 
 return M

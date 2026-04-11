@@ -3,6 +3,7 @@ local copy = require("tmux.copy")
 local log = require("tmux.log")
 local navigation = require("tmux.navigation")
 local resize = require("tmux.resize")
+local swap = require("tmux.swap")
 local tmux = require("tmux.wrapper.tmux")
 
 local options = {
@@ -15,6 +16,9 @@ local options = {
     resize = {
         enable_default_keybindings = true,
     },
+    swap = {
+        enable_default_keybindings = true,
+    },
 }
 
 local M = {
@@ -23,6 +27,9 @@ local M = {
     move_top = navigation.to_top,
     move_right = navigation.to_right,
 
+    next_window = navigation.next_window,
+    previous_window = navigation.previous_window,
+
     post_yank = copy.post_yank,
     sync_registers = copy.sync_registers,
 
@@ -30,6 +37,11 @@ local M = {
     resize_bottom = resize.to_bottom,
     resize_top = resize.to_top,
     resize_right = resize.to_right,
+
+    swap_left = swap.to_left,
+    swap_bottom = swap.to_bottom,
+    swap_top = swap.to_top,
+    swap_right = swap.to_right,
 }
 
 function M.setup(options_, logging)
@@ -55,6 +67,9 @@ function M.setup(options_, logging)
 
     log.debug("setup resize")
     resize.setup()
+
+    log.debug("setup swap")
+    swap.setup()
 end
 
 return M

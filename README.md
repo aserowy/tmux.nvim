@@ -109,6 +109,13 @@ The following defaults are given:
 
         -- sets resize steps for y axis
         resize_step_y = 1,
+    },
+    swap = {
+        -- cycles to opposite pane while navigating into the border
+        cycle_navigation = false,
+
+        -- enables default keybindings (C-A-hjkl) for normal mode
+        enable_default_keybindings = true,
     }
 }
 ```
@@ -142,11 +149,15 @@ bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' { if -F '#{pane_at_left}' '
 bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' { if -F '#{pane_at_bottom}' '' 'select-pane -D' }
 bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k' { if -F '#{pane_at_top}' '' 'select-pane -U' }
 bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l' { if -F '#{pane_at_right}' '' 'select-pane -R' }
+bind-key -n 'C-n' if-shell "$is_vim" 'send-keys C-n' { if -F '#{window_end_flag}' '' 'select-window -n' }
+bind-key -n 'C-p' if-shell "$is_vim" 'send-keys C-p' { if 'test #{window_index} -gt #{base-index}' 'select-window -p' }
 
 bind-key -T copy-mode-vi 'C-h' if -F '#{pane_at_left}' '' 'select-pane -L'
 bind-key -T copy-mode-vi 'C-j' if -F '#{pane_at_bottom}' '' 'select-pane -D'
 bind-key -T copy-mode-vi 'C-k' if -F '#{pane_at_top}' '' 'select-pane -U'
 bind-key -T copy-mode-vi 'C-l' if -F '#{pane_at_right}' '' 'select-pane -R'
+bind-key -T copy-mode-vi 'C-n' if -F '#{window_end_flag}' '' 'select-window -n'
+bind-key -T copy-mode-vi 'C-p' if 'test #{window_index} -gt #{base-index}' 'select-window -p'
 ```
 
 Otherwise you can add:
@@ -158,11 +169,15 @@ bind-key -n 'C-h' if-shell "$is_vim" 'send-keys C-h' 'select-pane -L'
 bind-key -n 'C-j' if-shell "$is_vim" 'send-keys C-j' 'select-pane -D'
 bind-key -n 'C-k' if-shell "$is_vim" 'send-keys C-k' 'select-pane -U'
 bind-key -n 'C-l' if-shell "$is_vim" 'send-keys C-l' 'select-pane -R'
+bind-key -n 'C-n' if-shell "$is_vim" 'send-keys C-n' 'select-window -n'
+bind-key -n 'C-p' if-shell "$is_vim" 'send-keys C-p' 'select-window -p'
 
 bind-key -T copy-mode-vi 'C-h' select-pane -L
 bind-key -T copy-mode-vi 'C-j' select-pane -D
 bind-key -T copy-mode-vi 'C-k' select-pane -U
 bind-key -T copy-mode-vi 'C-l' select-pane -R
+bind-key -T copy-mode-vi 'C-n' select-window -n
+bind-key -T copy-mode-vi 'C-p' select-window -p
 ```
 
 To run custom bindings in nvim, make sure to set `enable_default_keybindings` to `false`. The following functions are used to navigate around windows and panes:
@@ -173,6 +188,8 @@ To run custom bindings in nvim, make sure to set `enable_default_keybindings` to
     [[<cmd>lua require("tmux").move_bottom()<cr>]],
     [[<cmd>lua require("tmux").move_top()<cr>]],
     [[<cmd>lua require("tmux").move_right()<cr>]],
+    [[<cmd>lua require("tmux").next_window()<cr>]],
+    [[<cmd>lua require("tmux").previous_window()<cr>]],
 }
 ```
 
@@ -204,6 +221,37 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
     [[<cmd>lua require("tmux").resize_bottom()<cr>]],
     [[<cmd>lua require("tmux").resize_top()<cr>]],
     [[<cmd>lua require("tmux").resize_right()<cr>]],
+}
+```
+
+### swap
+
+Add the following bindings to your `~/.tmux.conf`:
+
+> It is important to note, that your bindings in nvim must match the defined bindings in tmux! Otherwise the pass through will not have the seamless effect!
+
+```tmux
+is_vim="ps -o state= -o comm= -t '#{pane_tty}' | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|n?vim?x?)(diff)?$'"
+
+bind -n 'C-M-h' if-shell "$is_vim" 'send-keys C-M-h' 'swap-pane -s "{left-of}"'
+bind -n 'C-M-j' if-shell "$is_vim" 'send-keys C-M-j' 'swap-pane -s "{down-of}"'
+bind -n 'C-M-k' if-shell "$is_vim" 'send-keys C-M-k' 'swap-pane -s "{up-of}"'
+bind -n 'C-M-l' if-shell "$is_vim" 'send-keys C-M-l' 'swap-pane -s "{right-of}"'
+
+bind-key -T copy-mode-vi C-M-h swap-pane -s "{left-of}"
+bind-key -T copy-mode-vi C-M-j swap-pane -s "{down-of}"
+bind-key -T copy-mode-vi C-M-k swap-pane -s "{up-of}"
+bind-key -T copy-mode-vi C-M-l swap-pane -s "{right-of}"
+```
+
+To run custom bindings in nvim, make sure to not set `enable_default_keybindings` to `true`. The following functions are used to resize windows:
+
+```lua
+{
+    [[<cmd>lua require("tmux").swap_left()<cr>]],
+    [[<cmd>lua require("tmux").swap_bottom()<cr>]],
+    [[<cmd>lua require("tmux").swap_top()<cr>]],
+    [[<cmd>lua require("tmux").swap_right()<cr>]],
 }
 ```
 
@@ -268,6 +316,13 @@ If you are using nix-shell, you can start a nix-shell and run `fac` (format and 
 
 ```sh
 stylua lua/ && luacheck lua/ && busted --verbose
+```
+
+If you're not using nix-shell, don't forget to set the `LUA_PATH` environment variable before running `bursted`.
+
+```sh
+export LUA_PATH="$PWD/?.lua;$PWD/lua/?/init.lua;$PWD/lua/?.lua;$LUA_PATH"
+busted --verbose -c
 ```
 
 ## inspiration

@@ -26,6 +26,7 @@ local M = {
     move_bottom = navigation.to_bottom,
     move_top = navigation.to_top,
     move_right = navigation.to_right,
+    move_to = navigation.to,
 
     next_window = navigation.next_window,
     previous_window = navigation.previous_window,
@@ -37,11 +38,13 @@ local M = {
     resize_bottom = resize.to_bottom,
     resize_top = resize.to_top,
     resize_right = resize.to_right,
+    resize_to = resize.to,
 
     swap_left = swap.to_left,
     swap_bottom = swap.to_bottom,
     swap_top = swap.to_top,
     swap_right = swap.to_right,
+    swap_to = swap.to,
 }
 
 function M.setup(options_, logging)

@@ -1,6 +1,7 @@
 local keymaps = require("tmux.keymaps")
 local navigate = require("tmux.navigation.navigate")
 local options = require("tmux.configuration.options")
+local log = require("tmux.log")
 
 local M = {}
 
@@ -29,6 +30,16 @@ end
 
 function M.to_right()
     navigate.to("l")
+end
+
+function M.to(direction)
+    local direction_map = { left = "h", right = "l", top = "k", bottom = "j" }
+    local res_direction = direction_map[direction]
+    if res_direction then
+        navigate.to(res_direction)
+    else
+        log.error("Invalid direction: " .. tostring(direction))
+    end
 end
 
 function M.next_window()

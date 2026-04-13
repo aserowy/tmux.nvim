@@ -188,6 +188,7 @@ To run custom bindings in nvim, make sure to set `enable_default_keybindings` to
     [[<cmd>lua require("tmux").move_bottom()<cr>]],
     [[<cmd>lua require("tmux").move_top()<cr>]],
     [[<cmd>lua require("tmux").move_right()<cr>]],
+    [[<cmd>lua require("tmux").move_to(direction)<cr>]], -- direction is "left", "right", "top", "bottom".
     [[<cmd>lua require("tmux").next_window()<cr>]],
     [[<cmd>lua require("tmux").previous_window()<cr>]],
 }
@@ -217,10 +218,11 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
 
 ```lua
 {
-    [[<cmd>lua require("tmux").resize_left()<cr>]],
-    [[<cmd>lua require("tmux").resize_bottom()<cr>]],
-    [[<cmd>lua require("tmux").resize_top()<cr>]],
-    [[<cmd>lua require("tmux").resize_right()<cr>]],
+    [[<cmd>lua require("tmux").resize_left(step)<cr>]], -- step by default is opts.resize.resize_step_x.
+    [[<cmd>lua require("tmux").resize_bottom(step)<cr>]], -- step by default is opts.resize.resize_step_y.
+    [[<cmd>lua require("tmux").resize_top(step)<cr>]],
+    [[<cmd>lua require("tmux").resize_right(step)<cr>]],
+    [[<cmd>lua require("tmux").resize_to(direction, step)<cr>]], -- direction is "left", "right", "top", "bottom".
 }
 ```
 
@@ -252,6 +254,7 @@ To run custom bindings in nvim, make sure to not set `enable_default_keybindings
     [[<cmd>lua require("tmux").swap_bottom()<cr>]],
     [[<cmd>lua require("tmux").swap_top()<cr>]],
     [[<cmd>lua require("tmux").swap_right()<cr>]],
+    [[<cmd>lua require("tmux").swap_to(direction)<cr>]], -- direction is "left", "right", "top", "bottom".
 }
 ```
 

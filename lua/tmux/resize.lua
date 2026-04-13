@@ -3,6 +3,7 @@ local keymaps = require("tmux.keymaps")
 local nvim = require("tmux.wrapper.nvim")
 local options = require("tmux.configuration.options")
 local tmux = require("tmux.wrapper.tmux")
+local log = require("tmux.log")
 
 local M = {}
 
@@ -62,6 +63,15 @@ function M.to_right(step)
         nvim.resize("x", "-", step)
     else
         vim.fn.win_move_separator(0, step)
+    end
+end
+
+function M.to(direction, step)
+    local func = M["to_" .. direction]
+    if func then
+        func(step)
+    else
+        log.error("Invalid direction: " .. tostring(direction))
     end
 end
 

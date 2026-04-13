@@ -436,3 +436,82 @@ describe("navigate.window", function()
         end)
     end)
 end)
+
+describe("navigation.to", function()
+    local navigation
+    local navigate
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        navigation = require("tmux.navigation")
+        navigate = require("tmux.navigation.navigate")
+    end)
+
+    before_each(function()
+        navigate.to = stub(navigate, "to")
+    end)
+
+    it("left maps to h", function()
+        navigation.to("left")
+        assert.stub(navigate.to).was.called_with("h")
+    end)
+
+    it("right maps to l", function()
+        navigation.to("right")
+        assert.stub(navigate.to).was.called_with("l")
+    end)
+
+    it("top maps to k", function()
+        navigation.to("top")
+        assert.stub(navigate.to).was.called_with("k")
+    end)
+
+    it("bottom maps to j", function()
+        navigation.to("bottom")
+        assert.stub(navigate.to).was.called_with("j")
+    end)
+
+    it("invalid direction does not call navigate.to", function()
+        navigation.to("invalid")
+        assert.stub(navigate.to).was_not.called()
+    end)
+end)
+
+describe("navigation.to_left/bottom/top/right", function()
+    local navigation
+    local navigate
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        navigation = require("tmux.navigation")
+        navigate = require("tmux.navigation.navigate")
+    end)
+
+    before_each(function()
+        navigate.to = stub(navigate, "to")
+    end)
+
+    it("to_left calls navigate.to with h", function()
+        navigation.to_left()
+        assert.stub(navigate.to).was.called_with("h")
+    end)
+
+    it("to_bottom calls navigate.to with j", function()
+        navigation.to_bottom()
+        assert.stub(navigate.to).was.called_with("j")
+    end)
+
+    it("to_top calls navigate.to with k", function()
+        navigation.to_top()
+        assert.stub(navigate.to).was.called_with("k")
+    end)
+
+    it("to_right calls navigate.to with l", function()
+        navigation.to_right()
+        assert.stub(navigate.to).was.called_with("l")
+    end)
+end)

@@ -15,6 +15,7 @@ function M.from(value)
     end
 
     value = value:gsub("next%-?", "")
+    value = value:gsub("rc%d*$", "")
     if value:match("^%d+%.%d+[a-z]?$") == nil then
         log.error(value .. " could not get parsed!")
         return {}

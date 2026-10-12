@@ -18,7 +18,11 @@ local function collect_panes(node, panes)
     end
 end
 
--- tmux >= 3.8 returns the layout as JSON
+-- tmux >= 3.8 returns the layout in a JSON format (v2).
+-- tmux < 3.8 returns the layout in a legacy format.
+-- The legacy format will be removed in the future.
+-- See https://github.com/tmux/tmux/blob/f980ef6427d2d4ee9b1461819f8ccf041622691d/layout-custom.c#L31-L32.
+
 local function parse_json(display)
     local decoded = vim.json.decode(display)
     if type(decoded) ~= "table" or type(decoded.L) ~= "table" then
@@ -43,9 +47,6 @@ local function parse_json(display)
     return result
 end
 
--- tmux < 3.8 returns the layout as a custom string format.
--- This format will be removed in the future.
--- See https://github.com/tmux/tmux/blob/f980ef6427d2d4ee9b1461819f8ccf041622691d/layout-custom.c#L31-L32.
 local function parse_legacy(display)
     local panes = {}
     for pane in display:gmatch("(%d+x%d+,%d+,%d+,%d+)") do

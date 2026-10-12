@@ -192,8 +192,8 @@ describe("layout.has_tmux_target", function()
 
     it("check is_zoomed true", function()
         tmux.is_tmux = true
-        tmux.is_zoomed = function()
-            return true
+        tmux.get_window_zoom_and_layout = function()
+            return true, ""
         end
         layout.is_border = function(_)
             return false
@@ -226,8 +226,8 @@ describe("layout.has_tmux_target", function()
 
     it("check is_border false", function()
         tmux.is_tmux = true
-        tmux.is_zoomed = function()
-            return false
+        tmux.get_window_zoom_and_layout = function()
+            return false, ""
         end
         layout.is_border = function(_)
             return false
@@ -248,8 +248,8 @@ describe("layout.has_tmux_target", function()
 
     it("check is_border true", function()
         tmux.is_tmux = true
-        tmux.is_zoomed = function()
-            return false
+        tmux.get_window_zoom_and_layout = function()
+            return false, ""
         end
         layout.is_border = function(_)
             return true
@@ -270,8 +270,8 @@ describe("layout.has_tmux_target", function()
 
     it("check cycle_navigation true", function()
         tmux.is_tmux = true
-        tmux.is_zoomed = function()
-            return false
+        tmux.get_window_zoom_and_layout = function()
+            return false, ""
         end
         layout.is_border = function(direction)
             return direction == "h"
@@ -339,5 +339,36 @@ describe("layout.has_tmux_window", function()
             return 1
         end
         assert.is_false(layout.has_tmux_window("p"))
+    end)
+end)
+
+describe("layout.has_tmux_target tmux calls", function()
+    local layout
+    local tmux
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        -- earlier specs replace functions on the cached module, so load a fresh copy
+        package.loaded["tmux.layout"] = nil
+        layout = require("tmux.layout")
+        tmux = require("tmux.wrapper.tmux")
+    end)
+
+    it("makes one tmux call when checking zoom and both directions", function()
+        local calls = 0
+        tmux.is_tmux = true
+        tmux.get_window_zoom_and_layout = function()
+            calls = calls + 1
+            return false, "623b,311x61,0,0{234x61,0,0,11,76x61,235,0[76x49,235,0,20,76x11,235,50,25]}"
+        end
+        tmux.get_current_pane_id = function()
+            return 11
+        end
+
+        -- pane 11 is at the left border but not the right one, so "l" is checked next
+        assert.is_true(layout.has_tmux_target("h", true, true))
+        assert.are.same(1, calls)
     end)
 end)

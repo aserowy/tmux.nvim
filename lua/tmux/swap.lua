@@ -28,8 +28,10 @@ function M.to(direction)
 
     local is_nvim_border = nvim.is_nvim_border(res_direction)
     local persist_zoom = true -- tmux swap-pane when zoomed causes error
-    local has_tmux_target = layout.has_tmux_target(res_direction, persist_zoom, options.swap.cycle_navigation)
-    if (nvim.is_nvim_float() or is_nvim_border) and has_tmux_target then
+    -- only ask tmux (which spawns a process) when we could actually leave nvim
+    local has_tmux_target = (nvim.is_nvim_float() or is_nvim_border)
+        and layout.has_tmux_target(res_direction, persist_zoom, options.swap.cycle_navigation)
+    if has_tmux_target then
         tmux.swap(res_direction)
     elseif is_nvim_border and options.swap.cycle_navigation then
         nvim.swap(nvim.opposite_direction(res_direction), 999)

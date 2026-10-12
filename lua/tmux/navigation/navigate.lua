@@ -17,9 +17,10 @@ function M.to(direction)
     log.debug("navigate_to: " .. direction)
 
     local is_nvim_border = nvim.is_nvim_border(direction)
-    local has_tmux_target =
-        layout.has_tmux_target(direction, options.navigation.persist_zoom, options.navigation.cycle_navigation)
-    if (nvim.is_nvim_float() or is_nvim_border) and has_tmux_target then
+    -- only ask tmux (which spawns a process) when we could actually leave nvim
+    local has_tmux_target = (nvim.is_nvim_float() or is_nvim_border)
+        and layout.has_tmux_target(direction, options.navigation.persist_zoom, options.navigation.cycle_navigation)
+    if has_tmux_target then
         tmux.change_pane(direction)
     elseif vim.fn.getcmdwintype() == "" then -- if not in command mode
         if is_nvim_border and options.navigation.cycle_navigation then

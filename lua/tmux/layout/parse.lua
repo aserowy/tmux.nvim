@@ -43,17 +43,10 @@ local function parse_json(display)
     return result
 end
 
-function M.parse(display)
-    log.debug("parse: ", display or "nil")
-
-    if display == "" or display == nil then
-        return nil
-    end
-
-    if display:sub(1, 1) == "{" then
-        return parse_json(display)
-    end
-
+-- tmux < 3.8 returns the layout as a custom string format.
+-- This format will be removed in the future.
+-- See https://github.com/tmux/tmux/blob/f980ef6427d2d4ee9b1461819f8ccf041622691d/layout-custom.c#L31-L32.
+local function parse_legacy(display)
     local panes = {}
     for pane in display:gmatch("(%d+x%d+,%d+,%d+,%d+)") do
         table.insert(panes, {
@@ -86,6 +79,20 @@ function M.parse(display)
     log.debug("parse > ", result)
 
     return result
+end
+
+function M.parse(display)
+    log.debug("parse: ", display or "nil")
+
+    if display == "" or display == nil then
+        return nil
+    end
+
+    if display:sub(1, 1) == "{" then
+        return parse_json(display)
+    end
+
+    return parse_legacy(display)
 end
 
 return M

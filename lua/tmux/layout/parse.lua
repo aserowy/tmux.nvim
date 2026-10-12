@@ -2,11 +2,56 @@ local log = require("tmux.log")
 
 local M = {}
 
+local function collect_panes(node, panes)
+    if type(node) ~= "table" then
+        return
+    end
+    if node.t == "p" then
+        local id = type(node.I) == "string" and tonumber(node.I:match("^%%?(%d+)$")) or nil
+        if id and node.x and node.y and node.w and node.h then
+            table.insert(panes, { id = id, x = node.x, y = node.y, width = node.w, height = node.h })
+        end
+    elseif type(node.c) == "table" then
+        for _, child in ipairs(node.c) do
+            collect_panes(child, panes)
+        end
+    end
+end
+
+-- tmux >= 3.8 returns the layout as JSON
+local function parse_json(display)
+    local decoded = vim.json.decode(display)
+    if type(decoded) ~= "table" or type(decoded.L) ~= "table" then
+        log.error("window_layout returned invalid format")
+        return nil
+    end
+
+    local panes = {}
+    collect_panes(decoded.L, panes)
+    if #panes == 0 then
+        log.error("window_layout returned no valid panes")
+        return nil
+    end
+
+    if not decoded.L.w or not decoded.L.h then
+        log.error("window_layout returned invalid format")
+        return nil
+    end
+
+    local result = { width = decoded.L.w, height = decoded.L.h, panes = panes }
+    log.debug("parse > ", result)
+    return result
+end
+
 function M.parse(display)
     log.debug("parse: ", display or "nil")
 
     if display == "" or display == nil then
         return nil
+    end
+
+    if display:sub(1, 1) == "{" then
+        return parse_json(display)
     end
 
     local panes = {}

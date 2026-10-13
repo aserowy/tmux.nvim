@@ -100,12 +100,28 @@ function M.get_current_pane_id()
     return pane and tonumber(pane:sub(2)) or nil
 end
 
+-- tmux >= 3.7 prints #{window_layout} as JSON; rebuild the legacy "csum,WxH,x,y{WxH,x,y,id,...}"
+-- string from list-panes.
 function M.get_window_layout()
-    return M.execute("display-message -p '#{window_layout}'")
+    local out = M.execute(
+        "list-panes -t '"
+            .. get_tmux_pane()
+            .. "' -F '#{window_width}x#{window_height} "
+            .. "#{pane_width}x#{pane_height},#{pane_left},#{pane_top},#{pane_id}'"
+    )
+    local size, panes = nil, {}
+    for ws, pane in out:gmatch("(%d+x%d+) ([^\n]+)") do
+        size = ws
+        table.insert(panes, (pane:gsub("%%", "")))
+    end
+    if not size then
+        return nil
+    end
+    return string.format("0000,%s,0,0{%s}", size, table.concat(panes, ","))
 end
 
 function M.is_zoomed()
-    return M.execute("display-message -p '#{window_zoomed_flag}'"):find("1")
+    return M.execute("display-message -t '" .. get_tmux_pane() .. "' -p '#{window_zoomed_flag}'"):find("1")
 end
 
 function M.resize(direction, step)

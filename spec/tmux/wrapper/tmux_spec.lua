@@ -8,6 +8,21 @@ describe("tmux wrapper", function()
         tmux = require("tmux.wrapper.tmux")
     end)
 
+    it("check get_window_layout builds legacy layout from list-panes", function()
+        local orig_execute, orig_getenv = tmux.execute, os.getenv
+        os.getenv = function(var)
+            return var == "TMUX_PANE" and "%15" or orig_getenv(var)
+        end
+        tmux.execute = function()
+            return "238x61 119x61,0,0,%13\n238x61 118x61,120,0,%15\n"
+        end
+
+        assert.are.same("0000,238x61,0,0{119x61,0,0,13,118x61,120,0,15}", tmux.get_window_layout())
+
+        tmux.execute = orig_execute
+        os.getenv = orig_getenv
+    end)
+
     it("check get_tmux_pane with nil env", function()
         local orig_getenv = os.getenv
         os.getenv = function(var)

@@ -21,18 +21,16 @@ local M = {
     is_tmux = false,
 }
 
-function M.execute(arg, pre)
-    local command = string.format("%s tmux -S %s %s", pre or "", get_socket(), arg)
+-- run tmux directly, as spawning a shell for every call is noticeably slow
+function M.execute(args, stdin)
+    local command = { "tmux", "-S", get_socket() }
+    vim.list_extend(command, args)
 
-    local handle = assert(io.popen(command), string.format("unable to M.execute: [%s]", command))
-    local result = handle:read("*a")
-    handle:close()
-
-    return result
+    return vim.system(command, { text = true, stdin = stdin }):wait().stdout
 end
 
 local function get_version()
-    local result = M.execute("-V")
+    local result = M.execute({ "-V" })
     local version = result:sub(result:find(" ") + 1)
 
     return version:gsub("[^%.%w]", "")
@@ -55,20 +53,20 @@ function M.setup()
 end
 
 function M.change_pane(direction)
-    M.execute(string.format("select-pane -t '%s' -%s", get_tmux_pane(), tmux_directions[direction]))
+    M.execute({ "select-pane", "-t", get_tmux_pane(), "-" .. tmux_directions[direction] })
     vim.o.laststatus = vim.o.laststatus -- reset statusline as it sometimes disappear (#105)
 end
 
 function M.window_index()
-    return M.execute("display-message -p '#{window_index}'")
+    return M.execute({ "display-message", "-p", "#{window_index}" })
 end
 
 function M.base_index()
-    return M.execute("display-message -p '#{base-index}'")
+    return M.execute({ "display-message", "-p", "#{base-index}" })
 end
 
 function M.window_end_flag()
-    return M.execute("display-message -p '#{window_end_flag}'") == "0"
+    return M.execute({ "display-message", "-p", "#{window_end_flag}" }) == "0"
 end
 
 function M.window_start_flag()
@@ -76,16 +74,16 @@ function M.window_start_flag()
 end
 
 function M.select_window(direction)
-    M.execute(string.format("select-window -%s", direction))
+    M.execute({ "select-window", "-" .. direction })
     vim.o.laststatus = vim.o.laststatus -- reset statusline as it sometimes disappear (#105)
 end
 
 function M.get_buffer(name)
-    return M.execute(string.format("show-buffer -b %s", name))
+    return M.execute({ "show-buffer", "-b", name })
 end
 
 function M.get_buffer_names()
-    local buffers = M.execute([[ list-buffers -F "#{buffer_name}" ]])
+    local buffers = M.execute({ "list-buffers", "-F", "#{buffer_name}" })
 
     local result = {}
     for line in buffers:gmatch("([^\n]+)\n?") do
@@ -101,31 +99,28 @@ function M.get_current_pane_id()
 end
 
 function M.get_window_layout()
-    return M.execute("display-message -p '#{window_layout}'")
+    return M.execute({ "display-message", "-p", "#{window_layout}" })
 end
 
-function M.is_zoomed()
-    return M.execute("display-message -p '#{window_zoomed_flag}'"):find("1")
+-- one call for both, as spawning tmux is the slow part
+function M.get_window_zoom_and_layout()
+    local output = M.execute({ "display-message", "-p", "#{window_zoomed_flag} #{window_layout}" })
+    return output:sub(1, 1) == "1", output:sub(3)
 end
 
 function M.resize(direction, step)
-    M.execute(string.format("resize-pane -t '%s' -%s %d", get_tmux_pane(), tmux_directions[direction], step))
+    M.execute({ "resize-pane", "-t", get_tmux_pane(), "-" .. tmux_directions[direction], tostring(step) })
 end
 
 function M.swap(direction)
-    M.execute(string.format("swap-pane -t '%s' -s '{%s-of}'", get_tmux_pane(), tmux_swap_directions[direction]))
+    M.execute({ "swap-pane", "-t", get_tmux_pane(), "-s", "{" .. tmux_swap_directions[direction] .. "-of}" })
 end
 
 function M.set_buffer(content, sync_clipboard)
-    content = content:gsub("\\", "\\\\")
-    content = content:gsub('"', '\\"')
-    content = content:gsub("`", "\\`")
-    content = content:gsub("%$", "\\$")
-
-    if sync_clipboard ~= nil and sync_clipboard then
-        M.execute("load-buffer -w -", string.format('printf "%%s" "%s" | ', content))
+    if sync_clipboard then
+        M.execute({ "load-buffer", "-w", "-" }, content)
     else
-        M.execute("load-buffer -", string.format('printf "%%s" "%s" | ', content))
+        M.execute({ "load-buffer", "-" }, content)
     end
 end
 

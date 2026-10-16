@@ -68,4 +68,69 @@ describe("parse layout", function()
         assert.are.same(76, layout.panes[3].width)
         assert.are.same(11, layout.panes[3].height)
     end)
+
+    describe("json layout", function()
+        local original_vim
+
+        before_each(function()
+            original_vim = _G.vim
+        end)
+
+        after_each(function()
+            _G.vim = original_vim
+        end)
+
+        it("parses tmux 3.8 json layout", function()
+            -- vim.json.decode is stubbed with the decoded form of the real tmux 3.8 output
+            _G.vim = {
+                json = {
+                    decode = function()
+                        return {
+                            V = 2,
+                            L = {
+                                t = "v",
+                                w = 150,
+                                h = 73,
+                                x = 0,
+                                y = 0,
+                                c = {
+                                    { t = "p", w = 150, h = 36, x = 0, y = 0, a = true, i = 0, I = "%4" },
+                                    {
+                                        t = "h",
+                                        w = 150,
+                                        h = 36,
+                                        x = 0,
+                                        y = 37,
+                                        c = {
+                                            { t = "p", w = 75, h = 36, x = 0, y = 37, l = 0, i = 1, I = "%5" },
+                                            { t = "p", w = 74, h = 36, x = 76, y = 37, l = 1, i = 2, I = "%16" },
+                                        },
+                                    },
+                                },
+                            },
+                        }
+                    end,
+                },
+            }
+
+            local layout = parser.parse('{"V":2,"L":{}}')
+
+            assert.are.same(150, layout.width)
+            assert.are.same(73, layout.height)
+            assert.are.same(3, #layout.panes)
+            assert.are.same({ id = 5, x = 0, y = 37, width = 75, height = 36 }, layout.panes[2])
+            assert.are.same(16, layout.panes[3].id)
+        end)
+
+        it("rejects json without a layout", function()
+            _G.vim = {
+                json = {
+                    decode = function()
+                        return { V = 2 }
+                    end,
+                },
+            }
+            assert.are.same(nil, parser.parse('{"V":2}'))
+        end)
+    end)
 end)

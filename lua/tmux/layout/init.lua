@@ -67,10 +67,12 @@ end
 
 local M = {}
 
-function M.is_border(direction)
+---@param direction string
+---@param display? string window layout, fetched from tmux when not given
+function M.is_border(direction, display)
     log.debug("is_border: ", direction or "nil")
 
-    local display = tmux.get_window_layout()
+    display = display or tmux.get_window_layout()
     local id = tmux.get_current_pane_id()
     local result = check_is_border(display, id, direction)
 
@@ -91,13 +93,15 @@ function M.has_tmux_target(direction, persist_zoom, cycle_navigation)
     if not tmux.is_tmux then
         return false
     end
-    if tmux.is_zoomed() and persist_zoom then
+    local is_zoomed, display = tmux.get_window_zoom_and_layout()
+    if persist_zoom and is_zoomed then
         return false
     end
-    if not M.is_border(direction) then
+
+    if not M.is_border(direction, display) then
         return true
     end
-    return cycle_navigation and not M.is_border(nvim.opposite_direction(direction))
+    return cycle_navigation and not M.is_border(nvim.opposite_direction(direction), display)
 end
 
 function M.has_tmux_window(direction)

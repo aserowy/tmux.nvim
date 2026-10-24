@@ -56,6 +56,25 @@ describe("navigate.to", function()
         assert.are.same("l", last_called_direction)
     end)
 
+    it("does not query tmux when moving inside nvim", function()
+        options.navigation.cycle_navigation = false
+        local tmux_queries = 0
+        layout.has_tmux_target = function()
+            tmux_queries = tmux_queries + 1
+            return true
+        end
+        nvim.is_nvim_border = function()
+            return false
+        end
+        nvim.is_nvim_float = function()
+            return false
+        end
+        nvim.wincmd = function() end
+
+        navigate.to("h")
+        assert.are.same(0, tmux_queries)
+    end)
+
     it("check with nvim border and tmux border", function()
         options.navigation.cycle_navigation = false
         layout.has_tmux_target = function()

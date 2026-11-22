@@ -267,6 +267,9 @@ describe("navigate.to with snacks picker", function()
                 nvim_win_get_config = function(_)
                     return { relative = "" }
                 end,
+                nvim_get_current_win = function()
+                    return 1000
+                end,
                 nvim_command = function(_) end,
                 nvim_call_function = function(_, _)
                     return 1
@@ -355,6 +358,119 @@ describe("navigate.to with snacks picker", function()
         navigate.to("l")
 
         assert.are.same("l", wincmd_direction)
+    end)
+end)
+
+describe("navigate.to out of and back into a float", function()
+    local navigate
+    local layout
+    local nvim
+    local options
+
+    local float_win = 1000
+    local split_win = 1001
+    local current_win
+    local valid_wins
+    local wincmd_directions
+
+    setup(function()
+        require("spec.tmux.mocks.log_mock").setup()
+        require("spec.tmux.mocks.tmux_mock").setup("3.2a")
+
+        layout = require("tmux.layout")
+        options = require("tmux.configuration.options")
+    end)
+
+    before_each(function()
+        package.loaded["tmux.wrapper.nvim"] = nil
+        package.loaded["tmux.navigation.navigate"] = nil
+        nvim = require("tmux.wrapper.nvim")
+        navigate = require("tmux.navigation.navigate")
+
+        current_win = float_win
+        valid_wins = { [float_win] = true, [split_win] = true }
+        wincmd_directions = {}
+
+        _G.vim = {
+            v = { count = 1 },
+            api = {
+                nvim_get_current_win = function()
+                    return current_win
+                end,
+                nvim_set_current_win = function(win)
+                    current_win = win
+                end,
+                nvim_win_is_valid = function(win)
+                    return valid_wins[win] == true
+                end,
+            },
+            fn = {
+                getcmdwintype = function()
+                    return ""
+                end,
+            },
+        }
+
+        options.navigation.cycle_navigation = false
+        layout.has_tmux_target = function()
+            return false
+        end
+        nvim.is_nvim_border = function()
+            return current_win == split_win
+        end
+        nvim.is_nvim_float = function()
+            return current_win == float_win
+        end
+        nvim.wincmd = function(direction)
+            table.insert(wincmd_directions, direction)
+            if current_win == float_win then
+                current_win = split_win
+            end
+        end
+    end)
+
+    it("goes back into the float in the opposite direction", function()
+        navigate.to("h")
+        assert.are.same(split_win, current_win)
+
+        navigate.to("l")
+        assert.are.same(float_win, current_win)
+        assert.are.same({ "h" }, wincmd_directions)
+    end)
+
+    it("prefers the float over a tmux pane in the opposite direction", function()
+        navigate.to("h")
+
+        local tmux = require("tmux.wrapper.tmux")
+        local pane_direction = ""
+        layout.has_tmux_target = function()
+            return true
+        end
+        tmux.change_pane = function(direction)
+            pane_direction = direction
+        end
+
+        navigate.to("l")
+        assert.are.same(float_win, current_win)
+        assert.are.same("", pane_direction)
+    end)
+
+    it("does not go back once the float is closed", function()
+        navigate.to("h")
+        valid_wins[float_win] = nil
+
+        navigate.to("l")
+        assert.are.same(split_win, current_win)
+    end)
+
+    it("does not go back in any other direction", function()
+        navigate.to("h")
+
+        navigate.to("j")
+        assert.are.same(split_win, current_win)
+
+        navigate.to("l")
+        assert.are.same(split_win, current_win)
     end)
 end)
 
